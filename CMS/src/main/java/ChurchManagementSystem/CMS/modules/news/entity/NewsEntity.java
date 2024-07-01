@@ -1,6 +1,7 @@
 package ChurchManagementSystem.CMS.modules.news.entity;
 
 import ChurchManagementSystem.CMS.core.enums.Category;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class NewsEntity {
     @Column(name = "id")
     private Long id;
 
+    @Nullable
     @Column(name = "thumbnail", columnDefinition = "text")
     private String thumbnail; //image .png
 

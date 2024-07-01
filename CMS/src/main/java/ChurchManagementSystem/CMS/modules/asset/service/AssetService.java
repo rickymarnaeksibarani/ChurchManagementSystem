@@ -33,8 +33,8 @@ public class AssetService {
         data.setAssetCategory(request.getAssetCategory());
         data.setAssetDescription(request.getAssetDescription());
         data.setQuantity(request.getQuantity());
+        data.setType(request.getType());
         return assetRepository.save(data);
-
     }
 
     //Getting by pagination

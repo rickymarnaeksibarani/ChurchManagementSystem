@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @NoArgsConstructor
@@ -24,6 +25,9 @@ public class IncomeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_income")
     private long idIncome;
+
+    @Column(name = "income_date")
+    private Date incomeDate;
 
     @Column(name = "income_give")
     @Nullable
@@ -46,6 +50,7 @@ public class IncomeEntity {
     private BigDecimal incomeDonate;
 
     @Column(name = "income_other")
+    @Nullable
     private BigDecimal incomeOther;
 
     @CreationTimestamp

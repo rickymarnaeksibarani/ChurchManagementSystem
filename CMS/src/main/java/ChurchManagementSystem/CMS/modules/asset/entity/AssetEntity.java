@@ -2,6 +2,7 @@ package ChurchManagementSystem.CMS.modules.asset.entity;
 
 import ChurchManagementSystem.CMS.core.enums.AssetCategory;
 import ChurchManagementSystem.CMS.core.enums.Fungsi;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,6 +27,10 @@ public class AssetEntity {
     @Column(name = "asset_category", nullable = false)
     @Enumerated(EnumType.STRING)
     private AssetCategory assetCategory;
+
+    @Nullable
+    @Column(name = "type") //merk
+    private String type;
 
     @Column(name = "asset_description", columnDefinition = "text")
     private String assetDescription;

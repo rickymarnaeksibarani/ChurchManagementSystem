@@ -31,7 +31,7 @@ public class BoardEntity {
     @Column(name = "age")
     private int age;
 
-    @Column(name = "birthDate")
+    @Column(name = "birth_date")
     private Date birthDate;
 
     @Column(name = "phone_number")

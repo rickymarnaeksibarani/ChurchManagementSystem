@@ -11,11 +11,8 @@ import java.util.UUID;
 
 @Data
 public class ActivityDto {
-    @JsonProperty("idActivity")
-    private long idActivity;
-
-    @JsonProperty("uuid")
-    private UUID uuid;
+    @JsonProperty("id")
+    private long id;
 
     @JsonProperty("activityTitle")
     private String activityTitle;

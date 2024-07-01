@@ -1,8 +1,6 @@
 package ChurchManagementSystem.CMS.modules.news.service;
 
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
-import ChurchManagementSystem.CMS.modules.congregration.dto.CongregrationRequestDto;
-import ChurchManagementSystem.CMS.modules.congregration.entities.CongregrationEntity;
 import ChurchManagementSystem.CMS.modules.news.dto.ApplicationFileDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsRequestDto;
@@ -19,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
@@ -31,7 +28,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Time;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -92,6 +88,41 @@ public class NewsService {
         Page<NewsEntity> pagedResult = newsRepository.findAll(specification, pageRequest);
 
         return new PaginationUtil<>(pagedResult, NewsEntity.class);
+    }
+
+    public NewsResponDto getNewsById(Long id) throws Exception {
+        NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+        return toNewsRespone(news);
+    }
+
+    @Transactional
+    public NewsResponDto updateNews(Long id, NewsDto request) throws Exception{
+//        boolean existsByTitleName = newsRepository.existsByTitle(request.getTitle());
+//        if (existsByTitleName){
+//            throw new ResponseStatusException(HttpStatus.CONFLICT, "Title news already exists");
+//        }
+        List<ApplicationFileDto> thumbnail = uploadImage(request.getThumbnail());
+
+        NewsEntity news = new NewsEntity();
+        NewsEntity payload = newsAppPayload(request, news, thumbnail);
+        newsRepository.save(payload);
+
+        return toNewsRespone(payload);
+    }
+
+    @Transactional
+    public void deleteById(Long id) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+        NewsEntity data = newsRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+
+        // Remove old image
+        List<ApplicationFileDto> docs = objectMapper.readValue(data.getThumbnail(), new TypeReference<ArrayList<ApplicationFileDto>>() {});
+        List<String> docList = docs.stream().map(ApplicationFileDto::getFilename).toList();
+        if (!docList.isEmpty()) {
+            storageService.deleteAllFileS3(docList);
+        }
+
+        newsRepository.deleteById(id);
     }
 
     private NewsEntity newsAppPayload(NewsDto request, NewsEntity news, List<ApplicationFileDto> thumbnail)throws JsonProcessingException{

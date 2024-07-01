@@ -26,10 +26,10 @@ public class ActivityService {
 
     //Created
     public ActivityEntity createActivity(ActivityDto request){
-        boolean existsByActivityTitle = activityRepository.existsByActivityTitle(request.getActivityTitle());
-        if (existsByActivityTitle){
-            throw new CustomRequestException("Title Activity already exists, please check title", HttpStatus.CONFLICT);
-        }
+//        boolean existsByActivityTitle = activityRepository.existsByActivityTitle(request.getActivityTitle());
+//        if (existsByActivityTitle){
+//            throw new CustomRequestException("Title Activity already exists, please check title", HttpStatus.CONFLICT);
+//        }
         ActivityEntity data = new ActivityEntity();
         data.setActivityTitle(request.getActivityTitle());
         data.setDescription(request.getDescription());

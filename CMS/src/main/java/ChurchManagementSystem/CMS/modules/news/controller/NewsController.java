@@ -22,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,17 +66,40 @@ public class NewsController {
                 .build();
     }
 
-    //Getting by Id
-//    @GetMapping(value = "/{idCongregration}", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> getCongregrationById(
-//            @PathVariable("idCongregration") Long idCongregration
-//    ){
-//        try {
-//            CongregrationEntity result = congregrationService.getCongregrationById(idCongregration);
-//            ApiResponse<CongregrationEntity> response = new ApiResponse<>(HttpStatus.OK, "Success retrievedd data people", result);
-//            return new ResponseEntity<>(response, response.getStatus());
-//        }catch (CustomRequestException error){
-//            return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
-//        }
-//    }
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<NewsResponDto> getNewsById(@PathVariable Long id) throws Exception {
+        NewsResponDto news = newsService.getNewsById(id);
+        return ApiResponse.<NewsResponDto>builder()
+                .message("Success get data")
+                .status(HttpStatus.OK)
+                .result(news)
+                .build();
+    }
+
+    @PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<NewsResponDto> updateNewsById(
+            @PathVariable Long id,
+            @RequestPart @Valid NewsDto request,
+            @RequestPart(value = "image", required = false) List<MultipartFile> thumbnail
+    ) throws Exception {
+        if (Objects.nonNull(thumbnail)) {
+            request.setThumbnail(thumbnail);
+        }
+        NewsResponDto news = newsService.updateNews(id, request);
+        return ApiResponse.<NewsResponDto>builder()
+                .message("Success update data")
+                .status(HttpStatus.OK)
+                .result(news)
+                .build();
+    }
+
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<String> deleteById(@PathVariable Long id) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+        newsService.deleteById(id);
+        return ApiResponse.<String>builder()
+                .result("Deleted")
+                .status(HttpStatus.NO_CONTENT)
+                .message("Success delete data")
+                .build();
+    }
 }

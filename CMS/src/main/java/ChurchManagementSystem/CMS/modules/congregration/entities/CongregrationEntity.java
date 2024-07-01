@@ -26,7 +26,7 @@ public class CongregrationEntity {
     @Column(name = "age")
     private int age;
 
-    @Column(name = "birthDate")
+    @Column(name = "birth_date")
     private Date birthDate;
 
     @Column(name = "phoneNumber")

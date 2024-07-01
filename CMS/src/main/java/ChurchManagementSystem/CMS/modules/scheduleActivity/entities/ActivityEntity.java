@@ -18,8 +18,8 @@ import java.util.Date;
 public class ActivityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_activity")
-    private Long idActivity;
+    @Column(name = "id")
+    private Long id;
 
 //    @UuidGenerator
 //    @GeneratedValue(strategy = GenerationType.UUID)

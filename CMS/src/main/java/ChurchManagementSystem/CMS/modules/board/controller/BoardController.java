@@ -20,7 +20,7 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createBoard(
             @Valid @RequestBody BoardDto request
     ){
@@ -33,7 +33,7 @@ public class BoardController {
         }
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> searchBoard(BoardRequestDto searchDTO){
         try {
             PaginationUtil<BoardEntity, BoardEntity> result = boardService.getAllBoardByPagination(searchDTO);
