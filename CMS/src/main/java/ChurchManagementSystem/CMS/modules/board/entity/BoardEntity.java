@@ -1,0 +1,58 @@
+package ChurchManagementSystem.CMS.modules.board.entity;
+
+import ChurchManagementSystem.CMS.core.enums.Fungsi;
+import ChurchManagementSystem.CMS.core.enums.Status;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Table(name = "master_Board")
+public class BoardEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "age")
+    private int age;
+
+    @Column(name = "birthDate")
+    private Date birthDate;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "address", columnDefinition = "text")
+    private String address;
+
+    @Column(name = "fungsi", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Fungsi fungsi;
+
+    @Column(nullable = false, length = 50)
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+}

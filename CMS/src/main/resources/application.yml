@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_hkbpCMS?stringtype=unspecified
+    username: postgres
+    password: HKBP_CMS
+  profiles:
+    active: local
+  application:
+    name: CMS
+    version: 1.0.0
+  frontend: "*"
+  devtools:
+    add-properties: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        id:
+          uuid:
+            generator: org.hibernate.id.UUIDGenerator
+        jdbc:
+          lob:
+            non_contextual_creation: true
+minio:
+  url: http://192.168.43.211
+  port: 9000
+  access_key: cSbGLc9gnavEV8MDmXgy
+  secret-key: Plpd09P7RFrUuY0P7cofZE9NoO8jhyKTcsnDCUx5
+  bucket: cms-project
+
+
+
