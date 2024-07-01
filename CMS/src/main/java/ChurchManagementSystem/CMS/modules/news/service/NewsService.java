@@ -139,11 +139,12 @@ public class NewsService {
         List<ApplicationFileDto> thumbnailPaths = new ArrayList<>();
         String generatedString = genereateRandomString();
         thumbnail.forEach(img ->{
-            if (!Objects.equals(img.getContentType(), "image/png")){
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image must be png file");
+            String contentType = img.getContentType();
+            if (!isValidImageType(contentType)) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid image format. Only PNG, JPG, and JPEG are allowed.");
             }
             try {
-                String imgFileName = time + generatedString + "_" + Objects.requireNonNull(img.getOriginalFilename()).replace(" ", "_");
+                String imgFileName = System.currentTimeMillis() + generatedString + "_" + Objects.requireNonNull(img.getOriginalFilename()).replace(" ", "_");
                 String filePath = LocalDate.now().getYear() + "/img/" + imgFileName;
                 ObjectWriteResponse objectWriteResponse = storageService.storeToS3(filePath, img);
 
@@ -159,6 +160,10 @@ public class NewsService {
             }
         });
         return thumbnailPaths;
+    }
+
+    private boolean isValidImageType(String contentType) {
+        return "image/png".equals(contentType) || "image/jpeg".equals(contentType) || "image/jpg".equals(contentType);
     }
 
     private String genereateRandomString(){
