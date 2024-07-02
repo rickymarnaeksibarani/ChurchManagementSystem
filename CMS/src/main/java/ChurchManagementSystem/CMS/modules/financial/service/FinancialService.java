@@ -52,11 +52,23 @@ public class FinancialService {
         ).reduce(BigDecimal.ZERO, BigDecimal::add);
         return new FinancialEntity(totalIncome, totalOutcome);
     }
+    //Getting income by month
+    public List<IncomeEntity> getIncomeByMonth(int month, int year) {
+        return incomeRepository.findByMonth(month, year);
+    }
 
+    //Getting outcome by month
+    public List<OutcomeEntity> getOutcomeByMonth(int month, int year){
+        return outcomeRepository.findByMonth(month, year);
+    }
     public IncomeEntity saveIncome(IncomeEntity income){
         return incomeRepository.save(income);
     }
     public OutcomeEntity saveOutcome(OutcomeEntity outcome){
         return outcomeRepository.save(outcome);
     }
+
+    //TODO : PAGINATION, REALATION TABLE INCOME & OUTCOME MAKE A ARRAY LIST.
 }
+
+

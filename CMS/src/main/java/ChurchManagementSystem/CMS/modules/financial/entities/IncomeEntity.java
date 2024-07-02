@@ -26,7 +26,7 @@ public class IncomeEntity {
     @Column(name = "id_income")
     private long idIncome;
 
-    @Column(name = "income_date")
+    @Column(name = "income_date") //yyyy-MM-dd
     private Date incomeDate;
 
     @Column(name = "income_give")
@@ -52,6 +52,10 @@ public class IncomeEntity {
     @Column(name = "income_other")
     @Nullable
     private BigDecimal incomeOther = BigDecimal.ZERO;
+
+    @Column(name = "description", columnDefinition = "text")
+    @Nullable
+    private String description;
 
     @CreationTimestamp
     @Column(name = "created_at")

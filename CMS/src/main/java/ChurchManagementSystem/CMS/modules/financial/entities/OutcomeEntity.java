@@ -26,7 +26,7 @@ public class OutcomeEntity {
     @Column(name = "id_outcome")
     private long idOutcome;
 
-    @Column(name = "outcome_date")
+    @Column(name = "outcome_date") //yyyy-MM-dd
     private Date outcomeDate;
 
     @Column(name = "outcome_deposit")
@@ -56,6 +56,10 @@ public class OutcomeEntity {
     @Column(name = "outcome_other")
     @Nullable
     private BigDecimal outcomeOther = BigDecimal.ZERO;
+
+    @Column(name = "description", columnDefinition = "text")
+    @Nullable
+    private String description;
 
     @CreationTimestamp
     @Column(name = "created_at")
