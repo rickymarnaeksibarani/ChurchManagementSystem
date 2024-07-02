@@ -1,7 +1,12 @@
 package ChurchManagementSystem.CMS.modules.financial.controller;
 
+import ChurchManagementSystem.CMS.modules.financial.entities.FinancialEntity;
+import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
+import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.service.FinancialService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,22 +16,19 @@ public class FinancialController {
     @Autowired
     private FinancialService financialService;
 
+    @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
+    public FinancialEntity getBalance(){
+        return financialService.calculateBalance();
+    }
 
-    //Created Financial
-//    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> createFinancial(
-//            @RequestBody FinancialDto request
-//            ){
-//        try {
-//            IncomeEntity income =  request.getTotalIncome();
-//            OutcomeEntity outcome = request.getTotalOutcome();
-//            FinancialEntity balance = financialService.calculateBalance(income, outcome);
-//            ApiResponse<FinancialEntity> response = new ApiResponse<>(HttpStatus.CREATED, "Balance calculated successfull", balance);
-//            return new ResponseEntity<>(response, response.getStatus());
-//        }catch (CustomRequestException err){
-//            return err.GlobalCustomRequestException(err.getMessage(), err.getStatus());
-//        }
-//    }
+    @PostMapping(value = "/income", produces = MediaType.APPLICATION_JSON_VALUE)
+    public IncomeEntity addIncome(@RequestBody IncomeEntity income){
+        return financialService.saveIncome(income);
+    }
 
+    @PostMapping(value = "/outcome", produces = MediaType.APPLICATION_JSON_VALUE)
+    public OutcomeEntity addOutcome(@RequestBody OutcomeEntity outcome){
+        return financialService.saveOutcome(outcome);
+    }
 
 }

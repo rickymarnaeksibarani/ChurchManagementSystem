@@ -31,27 +31,27 @@ public class IncomeEntity {
 
     @Column(name = "income_give")
     @Nullable
-    private BigDecimal incomeGive;
+    private BigDecimal incomeGive = BigDecimal.ZERO;
 
     @Column(name = "income_tenth")
     @Nullable
-    private BigDecimal incomeTenth;
+    private BigDecimal incomeTenth = BigDecimal.ZERO;
 
     @Column(name = "income_building")
     @Nullable
-    private BigDecimal incomeBuilding;
+    private BigDecimal incomeBuilding =  BigDecimal.ZERO;
 
     @Column(name = "income_service")
     @Nullable
-    private BigDecimal incomeService;
+    private BigDecimal incomeService = BigDecimal.ZERO;
 
     @Column(name = "income_donate")
     @Nullable
-    private BigDecimal incomeDonate;
+    private BigDecimal incomeDonate = BigDecimal.ZERO;
 
     @Column(name = "income_other")
     @Nullable
-    private BigDecimal incomeOther;
+    private BigDecimal incomeOther = BigDecimal.ZERO;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -61,9 +61,5 @@ public class IncomeEntity {
     @Column(name = "update_at" )
     private LocalDateTime updateAt;
 
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinColumn(name = "financial_entity_id_financial", foreignKey = @ForeignKey(name = "fk_income_financial"))
-    @JsonBackReference
-    private FinancialEntity financialEntity;
 
 }

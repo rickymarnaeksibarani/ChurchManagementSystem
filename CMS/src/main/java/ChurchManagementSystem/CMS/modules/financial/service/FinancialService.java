@@ -3,37 +3,60 @@ package ChurchManagementSystem.CMS.modules.financial.service;
 import ChurchManagementSystem.CMS.modules.financial.entities.FinancialEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
+import ChurchManagementSystem.CMS.modules.financial.repository.FinancialRepository;
+import ChurchManagementSystem.CMS.modules.financial.repository.IncomeRepository;
+import ChurchManagementSystem.CMS.modules.financial.repository.OutcomeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class FinancialService {
-    private BigDecimal calculateTotalIncome(IncomeEntity income) {
-        return Optional.ofNullable(income.getIncomeGive()).orElse(BigDecimal.ZERO).add
-                (Optional.ofNullable(income.getIncomeTenth()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(income.getIncomeBuilding()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(income.getIncomeService()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(income.getIncomeDonate()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(income.getIncomeOther()).orElse(BigDecimal.ZERO));
+    @Autowired
+    private FinancialRepository financialRepository;
+    @Autowired
+    private IncomeRepository incomeRepository;
+    @Autowired
+    private OutcomeRepository outcomeRepository;
+
+    public FinancialEntity calculateBalance(){
+        List<IncomeEntity> incomes = incomeRepository.findAll();
+        List<OutcomeEntity> outcomes = outcomeRepository.findAll();
+
+        BigDecimal totalIncome = incomes.stream().map(
+                income -> {
+                    assert income.getIncomeDonate() != null;
+                    return income.getIncomeDonate()
+                            .add(income.getIncomeBuilding())
+                            .add(income.getIncomeGive())
+                            .add(income.getIncomeService())
+                            .add(income.getIncomeTenth())
+                            .add(income.getIncomeOther());
+                }
+        ).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalOutcome = outcomes.stream().map(
+                outcome -> {
+                    assert outcome.getOutcomeBuilding() != null;
+                    return outcome.getOutcomeBuilding()
+                            .add(outcome.getOutcomeDeposit())
+                            .add(outcome.getOutcomeDiakonia())
+                            .add(outcome.getOutcomeEvent())
+                            .add(outcome.getOutcomeGuest())
+                            .add(outcome.getOutcomeOperational())
+                            .add(outcome.getOutcomeOther());
+                }
+        ).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return new FinancialEntity(totalIncome, totalOutcome);
     }
 
-    private BigDecimal calculateTotalOutcome(OutcomeEntity outcome){
-        return Optional.ofNullable(outcome.getOutcomeDeposit()).orElse(BigDecimal.ZERO).add
-                (Optional.ofNullable(outcome.getOutcomeBuilding()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(outcome.getOutcomeDiakonia()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(outcome.getOutcomeGuest()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(outcome.getOutcomeOperational()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(outcome.getOutcomeEvent()).orElse(BigDecimal.ZERO)).add
-                (Optional.ofNullable(outcome.getOutcomeOther()).orElse(BigDecimal.ZERO));
+    public IncomeEntity saveIncome(IncomeEntity income){
+        return incomeRepository.save(income);
     }
-
-    public FinancialEntity calculateBalance(IncomeEntity income, OutcomeEntity outcome) {
-        BigDecimal totalIncome = calculateTotalIncome(income);
-        BigDecimal totalOutcome = calculateTotalOutcome(outcome);
-        BigDecimal balance = totalIncome.subtract(totalOutcome);
-
-        return new FinancialEntity(balance);
+    public OutcomeEntity saveOutcome(OutcomeEntity outcome){
+        return outcomeRepository.save(outcome);
     }
 }

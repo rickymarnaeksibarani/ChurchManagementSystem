@@ -1,14 +1,20 @@
 package ChurchManagementSystem.CMS.modules.financial.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Data
 public class OutcomeDto {
     @JsonProperty("idOutcome")
     private long idOutcome;
+
+    @JsonProperty("outcomeDate")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date outcomeDate;
 
     @JsonProperty("outcomeDeposit")
     private BigDecimal outcomeDeposit; //setor

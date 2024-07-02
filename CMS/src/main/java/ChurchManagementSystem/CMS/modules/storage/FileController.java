@@ -30,10 +30,12 @@ public class FileController {
 
         if (filename.contains(".png")) {
             contentType = "image/png";
-        } else if (filename.contains(".jpg") || filename.contains("jpeg")){
+        } else if (filename.contains(".jpg") || filename.contains(".jpeg")){
             contentType = "image/jpeg";
         } else if (filename.contains(".csv")){
             contentType = "application/csv";
+        } else if (filename.contains(".xlsx")){
+            contentType = "application/xlsx";
         }
 
         return ResponseEntity

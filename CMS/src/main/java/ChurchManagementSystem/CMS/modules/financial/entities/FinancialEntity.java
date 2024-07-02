@@ -35,25 +35,10 @@ public class FinancialEntity {
     @Column(name = "total_outcome")
     private BigDecimal totalOutcome;
 
-    @CreationTimestamp
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "update_at" )
-    private LocalDateTime updateAt;
-
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @OneToMany(mappedBy = "financialEntity", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<IncomeEntity> incomeList;
-
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
-    @OneToMany(mappedBy = "financialEntity", fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<OutcomeEntity> outcomeList;
-
-    public FinancialEntity(BigDecimal balance) {
+    public FinancialEntity(BigDecimal totalIncome, BigDecimal totalOutcome) {
+        this.totalIncome = totalIncome;
+        this.totalOutcome = totalOutcome;
+        this.balance = totalIncome.subtract(totalOutcome);
     }
 }
 
