@@ -15,4 +15,7 @@ import java.util.List;
 public interface OutcomeRepository extends JpaRepository<OutcomeEntity, Long>, JpaSpecificationExecutor<OutcomeRepository> {
     @Query("SELECT i FROM OutcomeEntity i WHERE MONTH(i.outcomeDate) = :month AND YEAR(i.outcomeDate) = :year")
     List<OutcomeEntity> findByMonth(@Param("month") int month, @Param("year") int year);
+
+    @Query("SELECT SUM(i.outcomeDeposit + i.outcomeBuilding + i.outcomeDiakonia + i.outcomeEvent + i.outcomeGuest + i.outcomeOperational + i.outcomeOther) FROM OutcomeEntity i WHERE MONTH(i.outcomeDate) = :month AND YEAR(i.outcomeDate) = :year")
+    BigDecimal findTotalOutcomeByMonth(@Param("month") int month, @Param("year") int year);
 }

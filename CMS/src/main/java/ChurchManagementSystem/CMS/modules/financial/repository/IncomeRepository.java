@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Repository
 public interface IncomeRepository extends JpaRepository<IncomeEntity, Long>, JpaSpecificationExecutor<IncomeEntity> {
     @Query("SELECT i FROM IncomeEntity i WHERE MONTH(i.incomeDate) = :month AND YEAR(i.incomeDate) = :year")
     List<IncomeEntity> findByMonth(@Param("month") int month, @Param("year") int year);
+
+    @Query("SELECT SUM(i.incomeGive + i.incomeTenth + i.incomeBuilding + i.incomeService + i.incomeDonate + i.incomeOther) FROM IncomeEntity i WHERE MONTH(i.incomeDate) = :month AND YEAR(i.incomeDate) = :year")
+    BigDecimal findTotalIncomeByMonth(@Param("month") int month, @Param("year") int year);
 }

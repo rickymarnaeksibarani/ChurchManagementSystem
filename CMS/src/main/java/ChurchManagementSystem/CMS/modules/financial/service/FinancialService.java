@@ -52,15 +52,26 @@ public class FinancialService {
         ).reduce(BigDecimal.ZERO, BigDecimal::add);
         return new FinancialEntity(totalIncome, totalOutcome);
     }
-    //Getting income by month
+    //Getting summary income by month
     public List<IncomeEntity> getIncomeByMonth(int month, int year) {
         return incomeRepository.findByMonth(month, year);
     }
 
-    //Getting outcome by month
+    //Getting total income by month
+    public BigDecimal getTotalIncomeByMonth(int month, int year) {
+        return incomeRepository.findTotalIncomeByMonth(month, year);
+    }
+
+    //Getting total outcome by month
+    public BigDecimal getTotalOutcomeByMonth(int month, int year){
+        return outcomeRepository.findTotalOutcomeByMonth(month, year);
+    }
+
+    //Getting summary outcome by month
     public List<OutcomeEntity> getOutcomeByMonth(int month, int year){
         return outcomeRepository.findByMonth(month, year);
     }
+
     public IncomeEntity saveIncome(IncomeEntity income){
         return incomeRepository.save(income);
     }
@@ -68,7 +79,9 @@ public class FinancialService {
         return outcomeRepository.save(outcome);
     }
 
-    //TODO : PAGINATION, REALATION TABLE INCOME & OUTCOME MAKE A ARRAY LIST.
+    //TODO : PAGINATION
+    //TODO : Getting total income by month
+    //TODO : Getting total outcome by month
 }
 
 

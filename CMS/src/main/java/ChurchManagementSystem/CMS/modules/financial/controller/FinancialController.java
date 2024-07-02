@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.attribute.standard.Media;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -30,6 +32,17 @@ public class FinancialController {
         return financialService.getIncomeByMonth(month, year);
     }
 
+    //Getting total income by month
+    @GetMapping(value = "/income/total", produces = MediaType.APPLICATION_JSON_VALUE)
+    public BigDecimal getTotalIncomeByMonth(@RequestParam int month, @RequestParam int year) {
+        return financialService.getTotalIncomeByMonth(month, year);
+    }
+
+    //Getting total outcome by month
+    @GetMapping(value = "/outcome/total", produces = MediaType.APPLICATION_JSON_VALUE)
+    public BigDecimal getTotalOutcomeByMonth(@RequestParam int month, @RequestParam int year){
+        return financialService.getTotalOutcomeByMonth(month, year);
+    }
     //Getting Outcome summary by mounth
     @GetMapping(value = "/outcome", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<OutcomeEntity> getOutcomeByMonth(@RequestParam int month, @RequestParam int year){
