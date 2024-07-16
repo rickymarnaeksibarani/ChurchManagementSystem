@@ -1,6 +1,6 @@
 package ChurchManagementSystem.CMS.modules.asset.dto;
 
-import ChurchManagementSystem.CMS.core.enums.AssetCategory;
+import ChurchManagementSystem.CMS.core.enums.AssetStatus;
 import lombok.Data;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public class AssetRequestDto {
     private Integer page;
     private Integer size;
     private String searchTerm;
-    private List<AssetCategory> assetCategories;
+    private List<AssetStatus> assetCategories;
 
     AssetRequestDto(){
         if (this.getPage()==null){

@@ -1,6 +1,6 @@
 package ChurchManagementSystem.CMS.modules.asset.dto;
 
-import ChurchManagementSystem.CMS.core.enums.AssetCategory;
+import ChurchManagementSystem.CMS.core.enums.AssetStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Enumerated;
@@ -15,12 +15,14 @@ public class AssetsDto {
     private String assetName;
 
     @Nullable
-    private String type;
-    @Enumerated
-    private AssetCategory assetCategory;
+    @JsonProperty("brand")
+    private String brand;
 
-    @JsonProperty("assetDescription")
-    private String assetDescription;
+    @Enumerated
+    private AssetStatus status;
+
+    @JsonProperty("description")
+    private String description;
 
     @JsonProperty("quantity")
     private int quantity;

@@ -28,13 +28,18 @@ public class AssetService {
 
     //create
     public AssetEntity createAsset(AssetsDto request){
-        AssetEntity data = new AssetEntity();
-        data.setAssetName(request.getAssetName());
-        data.setAssetCategory(request.getAssetCategory());
-        data.setAssetDescription(request.getAssetDescription());
-        data.setQuantity(request.getQuantity());
-        data.setType(request.getType());
-        return assetRepository.save(data);
+        try {
+            AssetEntity data = new AssetEntity();
+            data.setAssetName(request.getAssetName());
+            data.setStatus(request.getStatus());
+            data.setDescription(request.getDescription());
+            data.setQuantity(request.getQuantity());
+            data.setBrand(request.getBrand());
+            return assetRepository.save(data);
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     //Getting by pagination
@@ -65,13 +70,17 @@ public class AssetService {
 
     @Transactional
     public AssetEntity updateAsset(Long idAsset, AssetsDto request){
-        AssetEntity asset = assetRepository.findById(idAsset).orElseThrow(()-> new CustomRequestException("Asset does not exists", HttpStatus.CONFLICT));
-        asset.setAssetName(request.getAssetName());
-        asset.setAssetCategory(request.getAssetCategory());
-        asset.setAssetDescription(request.getAssetDescription());
-        asset.setQuantity(request.getQuantity());
-
-        return assetRepository.save(asset);
+        try {
+            AssetEntity asset = assetRepository.findById(idAsset).orElseThrow(()-> new CustomRequestException("Asset does not exists", HttpStatus.CONFLICT));
+            asset.setAssetName(request.getAssetName());
+            asset.setStatus(request.getStatus());
+            asset.setDescription(request.getDescription());
+            asset.setBrand(request.getBrand());
+            asset.setQuantity(request.getQuantity());
+            return assetRepository.save(asset);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional
