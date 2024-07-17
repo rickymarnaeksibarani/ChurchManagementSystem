@@ -28,15 +28,19 @@ public class BoardService {
 
     //Create
     public BoardEntity createBoard(BoardDto request){
-        BoardEntity data = new BoardEntity();
-        data.setName(request.getName());
-        data.setBirthDate(request.getBirhDate());
-        data.setAge(request.getAge());
-        data.setAddress(request.getAddress());
-        data.setPhoneNumber(request.getPhoneNumber());
-        data.setFungsi(request.getFungsi());
-        data.setStatus(request.getStatus());
-        return boardRepository.save(data);
+        try {
+            BoardEntity data = new BoardEntity();
+            data.setName(request.getName());
+            data.setBirthDate(request.getBirhDate());
+            data.setAge(request.getAge());
+            data.setAddress(request.getAddress());
+            data.setPhoneNumber(request.getPhoneNumber());
+            data.setFungsi(request.getFungsi());
+            data.setStatus(request.getStatus());
+            return boardRepository.save(data);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     //Getting by pagination
@@ -85,16 +89,19 @@ public class BoardService {
     //Update by Id
     @Transactional
     public BoardEntity updateBoard(Long idBoard, BoardDto request){
-        BoardEntity board = boardRepository.findById(idBoard).orElseThrow(()-> new CustomRequestException("People does nit exists", HttpStatus.CONFLICT));
-        board.setName(request.getName());
-        board.setBirthDate(request.getBirhDate());
-        board.setAge(request.getAge());
-        board.setAddress(request.getAddress());
-        board.setPhoneNumber(request.getPhoneNumber());
-        board.setFungsi(request.getFungsi());
-        board.setStatus(request.getStatus());
-
-        return boardRepository.save(board);
+        try {
+            BoardEntity board = boardRepository.findById(idBoard).orElseThrow(()-> new CustomRequestException("People does nit exists", HttpStatus.CONFLICT));
+            board.setName(request.getName());
+            board.setBirthDate(request.getBirhDate());
+            board.setAge(request.getAge());
+            board.setAddress(request.getAddress());
+            board.setPhoneNumber(request.getPhoneNumber());
+            board.setFungsi(request.getFungsi());
+            board.setStatus(request.getStatus());
+            return boardRepository.save(board);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional

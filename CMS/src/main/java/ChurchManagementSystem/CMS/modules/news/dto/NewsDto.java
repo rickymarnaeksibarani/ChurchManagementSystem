@@ -27,8 +27,8 @@ public class NewsDto {
     @JsonProperty("content")
     private String content;
 
-    @JsonProperty("publishDate")
-    private LocalDateTime publishDate;
+//    @JsonProperty("publishDate")
+//    private LocalDateTime publishDate;
 
     @Enumerated
     private Category category;

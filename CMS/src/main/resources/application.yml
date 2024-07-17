@@ -26,8 +26,12 @@ spring:
         jdbc:
           lob:
             non_contextual_creation: true
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
 minio:
-  url: http://192.168.43.211
+  url: http://172.16.172.28
   port: 9000
   access_key: cSbGLc9gnavEV8MDmXgy
   secret-key: Plpd09P7RFrUuY0P7cofZE9NoO8jhyKTcsnDCUx5

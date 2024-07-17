@@ -51,7 +51,7 @@ public class NewsService {
                 .category(newsEntity.getCategory())
                 .thumbnail(img)
                 .id(newsEntity.getId())
-                .publishDate(newsEntity.getPublishDate())
+//                .publishDate(newsEntity.getPublishDate())
                 .build();
     }
 
@@ -97,10 +97,8 @@ public class NewsService {
 
     @Transactional
     public NewsResponDto updateNews(Long id, NewsDto request) throws Exception{
-//        boolean existsByTitleName = newsRepository.existsByTitle(request.getTitle());
-//        if (existsByTitleName){
-//            throw new ResponseStatusException(HttpStatus.CONFLICT, "Title news already exists");
-//        }
+
+        //todo : fixing update image
         List<ApplicationFileDto> thumbnail = uploadImage(request.getThumbnail());
 
         NewsEntity news = new NewsEntity();

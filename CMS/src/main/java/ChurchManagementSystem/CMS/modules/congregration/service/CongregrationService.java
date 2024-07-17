@@ -27,13 +27,16 @@ public class CongregrationService {
 
     //Created
     public CongregrationEntity createCongregration(CongregrationDTO request){
-        CongregrationEntity data = new CongregrationEntity();
-        data.setName(request.getName());
-        data.setBirthDate(request.getBirthDate());
-        data.setAge(request.getAge());
-        data.setPhoneNumber(request.getPhoneNumber());
-
-        return congregrationRepository.save(data);
+        try {
+            CongregrationEntity data = new CongregrationEntity();
+            data.setName(request.getName());
+            data.setBirthDate(request.getBirthDate());
+            data.setAge(request.getAge());
+            data.setPhoneNumber(request.getPhoneNumber());
+            return congregrationRepository.save(data);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     //Getting
@@ -65,13 +68,16 @@ public class CongregrationService {
 
     @Transactional
     public CongregrationEntity updateCongregration(Long idCongregration, CongregrationDTO request){
-        CongregrationEntity congregration = congregrationRepository.findById(idCongregration).orElseThrow(()-> new CustomRequestException("People does not exists", HttpStatus.CONFLICT));
-        congregration.setName(request.getName());
-        congregration.setAge(request.getAge());
-        congregration.setBirthDate(request.getBirthDate());
-        congregration.setPhoneNumber(request.getPhoneNumber());
-
-        return congregrationRepository.save(congregration);
+        try {
+            CongregrationEntity congregration = congregrationRepository.findById(idCongregration).orElseThrow(()-> new CustomRequestException("People does not exists", HttpStatus.CONFLICT));
+            congregration.setName(request.getName());
+            congregration.setAge(request.getAge());
+            congregration.setBirthDate(request.getBirthDate());
+            congregration.setPhoneNumber(request.getPhoneNumber());
+            return congregrationRepository.save(congregration);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional

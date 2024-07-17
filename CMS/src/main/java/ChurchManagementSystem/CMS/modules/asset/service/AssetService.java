@@ -85,7 +85,7 @@ public class AssetService {
 
     @Transactional
     public void deleteAsset(Long idAsset){
-        AssetEntity findData = assetRepository.findById(idAsset).orElseThrow(()->new CustomRequestException("Asset does not exists", HttpStatus.CONFLICT));
+        AssetEntity findData = assetRepository.findById(idAsset).orElseThrow(()->new CustomRequestException("Id Asser does not exists", HttpStatus.CONFLICT));
         assetRepository.delete(findData);
     }
 }
