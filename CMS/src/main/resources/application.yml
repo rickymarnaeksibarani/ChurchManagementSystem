@@ -31,7 +31,7 @@ spring:
       max-file-size: 500MB
       max-request-size: 500MB
 minio:
-  url: http://172.16.172.28
+  url: http://172.16.172.21
   port: 9000
   access_key: cSbGLc9gnavEV8MDmXgy
   secret-key: Plpd09P7RFrUuY0P7cofZE9NoO8jhyKTcsnDCUx5

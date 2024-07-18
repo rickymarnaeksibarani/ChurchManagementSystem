@@ -72,10 +72,10 @@ public class StorageServiceImpl implements StorageService{
         try(InputStream inputStream = file.getInputStream()) {
             MinioClient minioClient = initMinioClient();
 
-            // Make 'sda-catalog' bucket if not exist.
+            // Make 'cms-project' bucket if not exist.
             boolean exists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build());
 
-            // Make a new bucket called 'sda-catalog'.
+            // Make a new bucket called 'cms-project'.
             if (!exists) minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build());
 
             return minioClient.putObject(

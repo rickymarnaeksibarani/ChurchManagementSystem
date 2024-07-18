@@ -29,7 +29,6 @@ import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/news")
-//@CrossOrigin(origins = "http://localhost:4200")
 public class NewsController {
     @Autowired
     private NewsService newsService;

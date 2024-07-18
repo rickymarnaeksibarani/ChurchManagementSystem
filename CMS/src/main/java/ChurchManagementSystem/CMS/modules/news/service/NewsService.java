@@ -40,8 +40,6 @@ public class NewsService {
     private StorageService storageService;
     @Autowired
     private ObjectMapper objectMapper;
-    private final Date date = new Date();
-    private final Long time = date.getTime();
 
     private NewsResponDto toNewsRespone(NewsEntity newsEntity)throws JsonProcessingException{
         List<ApplicationFileDto> img = objectMapper.readValue(newsEntity.getThumbnail(), new TypeReference<>() {});
@@ -51,16 +49,15 @@ public class NewsService {
                 .category(newsEntity.getCategory())
                 .thumbnail(img)
                 .id(newsEntity.getId())
-//                .publishDate(newsEntity.getPublishDate())
                 .build();
     }
 
     @Transactional
     public NewsResponDto createNews(NewsDto request) throws Exception{
-        boolean existsByTitleName = newsRepository.existsByTitle(request.getTitle());
-        if (existsByTitleName){
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Title news already exists");
-        }
+//        boolean existsByTitleName = newsRepository.existsByTitle(request.getTitle());
+//        if (existsByTitleName){
+//            throw new ResponseStatusException(HttpStatus.CONFLICT, "Title news already exists");
+//        }
         List<ApplicationFileDto> thumbnail = uploadImage(request.getThumbnail());
 
         NewsEntity news = new NewsEntity();

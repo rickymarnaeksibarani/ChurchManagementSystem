@@ -12,12 +12,4 @@ public class NewsRequestDto {
     private String searchTerm;
     private List<Category> category;
 
-    NewsRequestDto(){
-        if (this.getPage()==null){
-            this.page = 1;
-        }
-        if (this.getSize()==null){
-            this.size = 10;
-        }
-    }
 }

@@ -21,7 +21,6 @@ public class NewsResponDto {
     private Category category;
     private String title;
     private String content;
-//    private LocalDateTime publishDate;
     private List<ApplicationFileDto> thumbnail;
 
 }
