@@ -18,7 +18,7 @@ public class NewsDto {
     @JsonProperty("id")
     private long id;
 
-    @Nullable
+    @JsonIgnore
     @JsonProperty("thumbnail")
     private List<MultipartFile> thumbnail; //image .png
 

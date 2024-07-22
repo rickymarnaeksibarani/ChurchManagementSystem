@@ -24,7 +24,6 @@ public class NewsEntity {
     @Column(name = "id")
     private Long id;
 
-    @Nullable
     @Column(name = "thumbnail", columnDefinition = "text")
     private String thumbnail; //image .png
 

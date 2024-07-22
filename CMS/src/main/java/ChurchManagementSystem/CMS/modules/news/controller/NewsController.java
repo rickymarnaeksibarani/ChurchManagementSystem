@@ -79,7 +79,7 @@ public class NewsController {
     public ApiResponse<NewsResponDto> updateNewsById(
             @PathVariable Long id,
             @RequestPart @Valid NewsDto request,
-            @RequestPart(value = "image", required = false) List<MultipartFile> thumbnail
+            @RequestPart(value = "thumbnail", required = false) List<MultipartFile> thumbnail
     ) throws Exception {
         if (Objects.nonNull(thumbnail)) {
             request.setThumbnail(thumbnail);
