@@ -9,5 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface NewsRepository extends JpaRepository<NewsEntity, Long>, JpaSpecificationExecutor<NewsEntity> {
-    boolean existsByTitle(String title);
 }

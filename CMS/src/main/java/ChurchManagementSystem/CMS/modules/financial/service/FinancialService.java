@@ -79,9 +79,7 @@ public class FinancialService {
         return outcomeRepository.save(outcome);
     }
 
-    //TODO : PAGINATION
-    //TODO : Getting total income by month
-    //TODO : Getting total outcome by month
+    //TODO : PAGINATION\
 }
 
 

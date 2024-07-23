@@ -61,7 +61,6 @@ public class NewsService {
         NewsEntity news = new NewsEntity();
         NewsEntity payload = newsAppPayload(request, news, thumbnail);
         newsRepository.save(payload);
-
         return toNewsRespone(payload);
     }
 
@@ -81,7 +80,6 @@ public class NewsService {
 
         PageRequest pageRequest = PageRequest.of(page - 1, perPage, Sort.by(Sort.Order.desc("createdAt")));
         Page<NewsEntity> pagedResult = newsRepository.findAll(specification, pageRequest);
-
         return new PaginationUtil<>(pagedResult, NewsEntity.class);
     }
 
@@ -141,6 +139,7 @@ public class NewsService {
     private boolean isValidImageType(String contentType) {
         return "image/png".equals(contentType) || "image/jpeg".equals(contentType) || "image/jpg".equals(contentType);
     }
+
     //Upload image
     private List<ApplicationFileDto> uploadImage(List<MultipartFile> thumbnail){
         if (thumbnail == null || thumbnail.isEmpty()) return Collections.emptyList();
