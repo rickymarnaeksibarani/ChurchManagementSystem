@@ -18,4 +18,6 @@ public interface OutcomeRepository extends JpaRepository<OutcomeEntity, Long>, J
 
     @Query("SELECT SUM(i.outcomeDeposit + i.outcomeBuilding + i.outcomeDiakonia + i.outcomeEvent + i.outcomeGuest + i.outcomeOperational + i.outcomeOther) FROM OutcomeEntity i WHERE MONTH(i.outcomeDate) = :month AND YEAR(i.outcomeDate) = :year")
     BigDecimal findTotalOutcomeByMonth(@Param("month") int month, @Param("year") int year);
+
+//    BigDecimal findTotalOutcome();
 }

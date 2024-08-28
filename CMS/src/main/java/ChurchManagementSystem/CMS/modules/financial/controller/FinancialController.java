@@ -59,4 +59,16 @@ public class FinancialController {
     public OutcomeEntity addOutcome(@RequestBody OutcomeEntity outcome){
         return financialService.saveOutcome(outcome);
     }
+
+    @PutMapping(value = "/income/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public IncomeEntity updateIncome(@PathVariable Long id, @RequestBody IncomeEntity income) {
+        income.setIdIncome(id);
+        return financialService.updateIncome(income);
+    }
+
+    @PutMapping(value = "/outcome/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public OutcomeEntity updateOutcome(@PathVariable Long id, @RequestBody OutcomeEntity outcome){
+        outcome.setIdOutcome(id);
+        return financialService.updateOutcome(outcome);
+    }
 }

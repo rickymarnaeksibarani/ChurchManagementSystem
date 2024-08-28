@@ -75,11 +75,18 @@ public class FinancialService {
     public IncomeEntity saveIncome(IncomeEntity income){
         return incomeRepository.save(income);
     }
+
     public OutcomeEntity saveOutcome(OutcomeEntity outcome){
         return outcomeRepository.save(outcome);
     }
 
-    //TODO : PAGINATION\
+    public IncomeEntity updateIncome(IncomeEntity income) {
+        return incomeRepository.save(income);
+    }
+
+    public OutcomeEntity updateOutcome(OutcomeEntity outcome){
+        return outcomeRepository.save(outcome);
+    }
 }
 
 

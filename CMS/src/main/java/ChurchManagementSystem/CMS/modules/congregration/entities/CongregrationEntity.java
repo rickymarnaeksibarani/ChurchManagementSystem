@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "master_congregration")
 public class CongregrationEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
