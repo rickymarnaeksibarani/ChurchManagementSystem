@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FinancialService {
@@ -58,13 +57,23 @@ public class FinancialService {
     }
 
     //Getting total income by month
-    public BigDecimal getTotalIncomeByMonth(int month, int year) {
-        return incomeRepository.findTotalIncomeByMonth(month, year);
+    public String getTotalIncomeByMonth(int month, int year) {
+        BigDecimal totalIncome =  incomeRepository.findTotalIncomeByMonth(month, year);
+        if (totalIncome == null){
+            return "Total Income 0.00";
+        }else {
+            return "Total Income "+totalIncome;
+        }
     }
 
     //Getting total outcome by month
-    public BigDecimal getTotalOutcomeByMonth(int month, int year){
-        return outcomeRepository.findTotalOutcomeByMonth(month, year);
+    public String getTotalOutcomeByMonth(int month, int year){
+        BigDecimal totalOutcome = outcomeRepository.findTotalOutcomeByMonth(month, year);
+        if (totalOutcome == null){
+            return "Total Outcome 0.00";
+        }else {
+            return "Total Outcome " + totalOutcome;
+        }
     }
 
     //Getting summary outcome by month
