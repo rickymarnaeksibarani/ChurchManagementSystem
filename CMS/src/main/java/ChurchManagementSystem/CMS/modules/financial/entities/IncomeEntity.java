@@ -22,7 +22,7 @@ import java.util.Date;
 @Table(name = "tb_income")
 public class IncomeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_income")
     private long idIncome;
 
@@ -64,6 +64,4 @@ public class IncomeEntity {
     @UpdateTimestamp
     @Column(name = "update_at" )
     private LocalDateTime updateAt;
-
-
 }

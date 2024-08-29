@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.modules.financial.service;
 
+import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.financial.entities.FinancialEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
@@ -7,11 +8,13 @@ import ChurchManagementSystem.CMS.modules.financial.repository.FinancialReposito
 import ChurchManagementSystem.CMS.modules.financial.repository.IncomeRepository;
 import ChurchManagementSystem.CMS.modules.financial.repository.OutcomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class FinancialService {
@@ -53,33 +56,55 @@ public class FinancialService {
         return new FinancialEntity(totalIncome, totalOutcome);
     }
     //Getting summary income by month
-    public List<IncomeEntity> getIncomeByMonth(int month, int year) {
-        return incomeRepository.findByMonth(month, year);
+    public PaginationUtil<IncomeEntity, IncomeEntity> getIncomeByMonth(int month, int year, int page, int size){
+        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(page -1,size);
+        Page<IncomeEntity> pagedResult = (Page<IncomeEntity>) incomeRepository.findByMonth(month, year, (org.springframework.data.domain.Pageable) pageable);
+        return new PaginationUtil<>(pagedResult, IncomeEntity.class);
+    }
+    //Getting summary outcome by month
+//    public List<OutcomeEntity> getOutcomeByMonth(int month, int year){
+//        return outcomeRepository.findByMonth(month, year);
+//    }
+    public PaginationUtil<OutcomeEntity, OutcomeEntity>getOutcomeByMonth(int month, int year, int page, int size){
+        Pageable pageable = PageRequest.of(page-1, size);
+        Page<OutcomeEntity>pagedResult = (Page<OutcomeEntity>) outcomeRepository.findByMonth(month, year, pageable);
+        return new PaginationUtil<>(pagedResult, OutcomeEntity.class);
     }
 
     //Getting total income by month
-    public BigDecimal getTotalIncomeByMonth(int month, int year) {
-        return incomeRepository.findTotalIncomeByMonth(month, year);
+    public String getTotalIncomeByMonth(int month, int year) {
+        BigDecimal totalIncome =  incomeRepository.findTotalIncomeByMonth(month, year);
+        if (totalIncome == null){
+            return "Total Income 0.00";
+        }else {
+            return "Total Income "+totalIncome;
+        }
     }
 
     //Getting total outcome by month
-    public BigDecimal getTotalOutcomeByMonth(int month, int year){
-        return outcomeRepository.findTotalOutcomeByMonth(month, year);
+    public String getTotalOutcomeByMonth(int month, int year){
+        BigDecimal totalOutcome = outcomeRepository.findTotalOutcomeByMonth(month, year);
+        if (totalOutcome == null){
+            return "Total Outcome 0.00";
+        }else {
+            return "Total Outcome " + totalOutcome;
+        }
     }
-
-    //Getting summary outcome by month
-    public List<OutcomeEntity> getOutcomeByMonth(int month, int year){
-        return outcomeRepository.findByMonth(month, year);
-    }
-
     public IncomeEntity saveIncome(IncomeEntity income){
         return incomeRepository.save(income);
     }
+
     public OutcomeEntity saveOutcome(OutcomeEntity outcome){
         return outcomeRepository.save(outcome);
     }
 
-    //TODO : PAGINATION\
+    public IncomeEntity updateIncome(IncomeEntity income) {
+        return incomeRepository.save(income);
+    }
+
+    public OutcomeEntity updateOutcome(OutcomeEntity outcome){
+        return outcomeRepository.save(outcome);
+    }
 }
 
 

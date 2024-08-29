@@ -17,7 +17,7 @@ import java.util.Date;
 @Table(name = "master_activity")
 public class ActivityEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
