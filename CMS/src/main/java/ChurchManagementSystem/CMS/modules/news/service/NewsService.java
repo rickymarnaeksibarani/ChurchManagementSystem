@@ -169,8 +169,6 @@ public class NewsService {
         return thumbnailPaths;
     }
 
-
-
     private String genereateRandomString(){
         Random random = new Random();
         return random.ints(97, 122+1)

@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.modules.financial.controller;
 
+import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.financial.entities.FinancialEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
@@ -24,8 +25,20 @@ public class FinancialController {
 
     //Getting Income summary by month
     @GetMapping(value = "/income", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<IncomeEntity> getIncomeByMonth(@RequestParam int month, @RequestParam int year) {
-        return financialService.getIncomeByMonth(month, year);
+    public PaginationUtil<IncomeEntity, IncomeEntity> getIncomeByMonth(@RequestParam int month,
+                                                                       @RequestParam int year,
+                                                                       @RequestParam(defaultValue = "1")int page,
+                                                                       @RequestParam(defaultValue = "10")int size) {
+        return financialService.getIncomeByMonth(month, year, page, size);
+    }
+
+    //Getting Outcome summary by mounth
+    @GetMapping(value = "/outcome", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PaginationUtil<OutcomeEntity, OutcomeEntity> getOutcomeByMonth(@RequestParam int month,
+                                                                          @RequestParam int year,
+                                                                          @RequestParam(defaultValue = "1")int page,
+                                                                          @RequestParam(defaultValue = "10")int size){
+        return financialService.getOutcomeByMonth(month, year, page, size);
     }
 
     //Getting total income by month
@@ -38,11 +51,6 @@ public class FinancialController {
     @GetMapping(value = "/outcome/total", produces = MediaType.APPLICATION_JSON_VALUE)
     public String getTotalOutcomeByMonth(@RequestParam int month, @RequestParam int year){
         return financialService.getTotalOutcomeByMonth(month, year);
-    }
-    //Getting Outcome summary by mounth
-    @GetMapping(value = "/outcome", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<OutcomeEntity> getOutcomeByMonth(@RequestParam int month, @RequestParam int year){
-        return financialService.getOutcomeByMonth(month, year);
     }
 
     //Create Income

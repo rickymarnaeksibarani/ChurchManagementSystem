@@ -13,6 +13,8 @@ public class FinancialRequestDto {
     private String searchTerm;
     private List<Status> status;
     private List<Fungsi> fungsi;
+    private Integer month;
+    private Integer year;
 
     FinancialRequestDto(){
         if (this.getPage()==null){
