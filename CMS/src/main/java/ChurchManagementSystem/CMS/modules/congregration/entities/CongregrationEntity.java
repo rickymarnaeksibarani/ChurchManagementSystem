@@ -13,6 +13,8 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Data
 @Table(name = "master_congregration")
 public class CongregrationEntity {
     @Id

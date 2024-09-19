@@ -10,6 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface FinancialRepository extends JpaRepository<FinancialEntity, Long>, JpaSpecificationExecutor<FinancialEntity> {
-//    Optional<FinancialEntity> findFirst();
-//    Optional<FinancialEntity> findFirst();
 }

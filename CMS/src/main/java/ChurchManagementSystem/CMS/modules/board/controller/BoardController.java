@@ -20,19 +20,6 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createBoard(
-            @Valid @RequestBody BoardDto request
-    ){
-        try {
-            BoardEntity result = boardService.createBoard(request);
-            ApiResponse<BoardEntity> response =new ApiResponse<>(HttpStatus.CREATED, "Success create data board", result);
-            return new ResponseEntity<>(response, response.getStatus());
-        }catch (CustomRequestException err){
-            return err.GlobalCustomRequestException(err.getMessage(), err.getStatus());
-        }
-    }
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> searchBoard(BoardRequestDto searchDTO){
         try {
@@ -44,6 +31,7 @@ public class BoardController {
     }
 
     //Getting by Id
+
     @GetMapping(value = "/{idBoard}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getBoardById(
             @PathVariable("idBoard") Long idBoard
@@ -54,6 +42,19 @@ public class BoardController {
             return new ResponseEntity<>(response, response.getStatus());
         }catch (CustomRequestException error){
             return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
+        }
+    }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createBoard(
+            @Valid @RequestBody BoardDto request
+    ){
+        try {
+            BoardEntity result = boardService.createBoard(request);
+            ApiResponse<BoardEntity> response =new ApiResponse<>(HttpStatus.CREATED, "Success create data board", result);
+            return new ResponseEntity<>(response, response.getStatus());
+        }catch (CustomRequestException err){
+            return err.GlobalCustomRequestException(err.getMessage(), err.getStatus());
         }
     }
 

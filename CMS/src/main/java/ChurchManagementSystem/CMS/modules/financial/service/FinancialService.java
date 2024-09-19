@@ -19,8 +19,6 @@ import java.util.List;
 @Service
 public class FinancialService {
     @Autowired
-    private FinancialRepository financialRepository;
-    @Autowired
     private IncomeRepository incomeRepository;
     @Autowired
     private OutcomeRepository outcomeRepository;
@@ -57,17 +55,15 @@ public class FinancialService {
     }
     //Getting summary income by month
     public PaginationUtil<IncomeEntity, IncomeEntity> getIncomeByMonth(int month, int year, int page, int size){
-        org.springframework.data.domain.Pageable pageable = (org.springframework.data.domain.Pageable) PageRequest.of(page -1,size);
-        Page<IncomeEntity> pagedResult = (Page<IncomeEntity>) incomeRepository.findByMonth(month, year, (org.springframework.data.domain.Pageable) pageable);
+        Pageable pageable = PageRequest.of(page -1,size);
+        Page<IncomeEntity> pagedResult = incomeRepository.findByMonth(month, year, pageable);
         return new PaginationUtil<>(pagedResult, IncomeEntity.class);
     }
+
     //Getting summary outcome by month
-//    public List<OutcomeEntity> getOutcomeByMonth(int month, int year){
-//        return outcomeRepository.findByMonth(month, year);
-//    }
     public PaginationUtil<OutcomeEntity, OutcomeEntity>getOutcomeByMonth(int month, int year, int page, int size){
         Pageable pageable = PageRequest.of(page-1, size);
-        Page<OutcomeEntity>pagedResult = (Page<OutcomeEntity>) outcomeRepository.findByMonth(month, year, pageable);
+        Page<OutcomeEntity>pagedResult = outcomeRepository.findByMonth(month, year, pageable);
         return new PaginationUtil<>(pagedResult, OutcomeEntity.class);
     }
 
@@ -93,15 +89,12 @@ public class FinancialService {
     public IncomeEntity saveIncome(IncomeEntity income){
         return incomeRepository.save(income);
     }
-
     public OutcomeEntity saveOutcome(OutcomeEntity outcome){
         return outcomeRepository.save(outcome);
     }
-
     public IncomeEntity updateIncome(IncomeEntity income) {
         return incomeRepository.save(income);
     }
-
     public OutcomeEntity updateOutcome(OutcomeEntity outcome){
         return outcomeRepository.save(outcome);
     }

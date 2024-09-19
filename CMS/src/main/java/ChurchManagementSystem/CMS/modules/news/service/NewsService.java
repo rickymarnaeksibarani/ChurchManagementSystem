@@ -33,7 +33,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@Slf4j
 public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
@@ -55,16 +54,8 @@ public class NewsService {
                 .build();
     }
 
-    @Transactional
-    public NewsResponDto createNews(NewsDto request) throws Exception{
-        List<ApplicationFileDto> thumbnail = uploadImage(request.getThumbnail());
-        NewsEntity news = new NewsEntity();
-        NewsEntity payload = newsAppPayload(request, news, thumbnail);
-        newsRepository.save(payload);
-        return toNewsRespone(payload);
-    }
-
     //Getting
+
     @Transactional(readOnly = true)
     public PaginationUtil<NewsEntity, NewsEntity> getAllNews(Integer page, Integer perPage, NewsRequestDto searchRequest) {
         Specification<NewsEntity> specification = (root, query, builder) -> {
@@ -82,15 +73,23 @@ public class NewsService {
         Page<NewsEntity> pagedResult = newsRepository.findAll(specification, pageRequest);
         return new PaginationUtil<>(pagedResult, NewsEntity.class);
     }
-
     public NewsResponDto getNewsById(Long id) throws Exception {
         NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
         return toNewsRespone(news);
     }
 
     @Transactional
+    public NewsResponDto createNews(NewsDto request) throws Exception{
+        List<ApplicationFileDto> thumbnail = uploadImage(request.getThumbnail());
+        NewsEntity news = new NewsEntity();
+        NewsEntity payload = newsAppPayload(request, news, thumbnail);
+        newsRepository.save(payload);
+        return toNewsRespone(payload);
+    }
+
+    @Transactional
     public NewsResponDto updateNews(Long id, NewsDto request) throws Exception{
-       NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
+       NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND , "Id " + id + " not found"));
 
        List<ApplicationFileDto> img = objectMapper.readValue(news.getThumbnail(), new TypeReference<ArrayList<ApplicationFileDto>>() {});
        List<String> imgPathList = img.stream().map(ApplicationFileDto::getPath).toList();

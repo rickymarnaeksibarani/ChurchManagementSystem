@@ -19,7 +19,7 @@ public class CongregrationDTO {
     private int age;
 
     @JsonProperty("birthDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date birthDate;
 
     @JsonProperty("phoneNumber")

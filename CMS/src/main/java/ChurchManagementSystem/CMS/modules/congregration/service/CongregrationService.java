@@ -25,21 +25,8 @@ public class CongregrationService {
     @Autowired
     private CongregrationRepository congregrationRepository;
 
-    //Created
-    public CongregrationEntity createCongregration(CongregrationDTO request){
-        try {
-            CongregrationEntity data = new CongregrationEntity();
-            data.setName(request.getName());
-            data.setBirthDate(request.getBirthDate());
-            data.setAge(request.getAge());
-            data.setPhoneNumber(request.getPhoneNumber());
-            return congregrationRepository.save(data);
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
     //Getting
+
     public PaginationUtil<CongregrationEntity, CongregrationEntity> getAllCongregrationByPagination(CongregrationRequestDto searchRequest){
         Specification<CongregrationEntity> spec = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -56,14 +43,28 @@ public class CongregrationService {
         Page<CongregrationEntity> pagedResult = congregrationRepository.findAll(spec, paging);
         return new PaginationUtil<>(pagedResult, CongregrationEntity.class);
     }
-
     //Getting by ID
+
     public CongregrationEntity getCongregrationById(Long idCongregration){
         CongregrationEntity result = congregrationRepository.findById(idCongregration).orElse(null);
         if (result == null){
             throw new CustomRequestException("ID " + idCongregration + " not found ", HttpStatus.NOT_FOUND);
         }
         return result;
+    }
+    //Created
+    public CongregrationEntity createCongregration(CongregrationDTO request){
+        try {
+            CongregrationEntity data = CongregrationEntity.builder()
+                    .name(request.getName())
+                    .birthDate(request.getBirthDate())
+                    .age(request.getAge())
+                    .phoneNumber(request.getPhoneNumber())
+                    .build();
+            return congregrationRepository.save(data);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional

@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CongregrationRepository extends JpaRepository<CongregrationEntity, Long>, JpaSpecificationExecutor<CongregrationEntity> {
-    boolean existsByName(String name);
 }

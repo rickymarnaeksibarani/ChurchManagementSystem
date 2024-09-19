@@ -33,23 +33,6 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ApiResponse<NewsResponDto> createNews(
-            @RequestPart @Valid NewsDto request,
-            @RequestPart(value = "thumbnail", required = false)List<MultipartFile> thumbnail
-    )throws Exception{
-        if (Objects.nonNull(thumbnail)){
-            request.setThumbnail(thumbnail);
-        }
-        NewsResponDto news = newsService.createNews(request);
-        return ApiResponse.<NewsResponDto>builder()
-                .result(news)
-                .status(HttpStatus.CREATED)
-                .message("Success create data")
-                .build();
-    }
-
     //Getting by Pagination
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<Object> getAllNews(
@@ -72,6 +55,23 @@ public class NewsController {
                 .message("Success get data")
                 .status(HttpStatus.OK)
                 .result(news)
+                .build();
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<NewsResponDto> createNews(
+            @RequestPart @Valid NewsDto request,
+            @RequestPart(value = "thumbnail", required = false)List<MultipartFile> thumbnail
+    )throws Exception{
+        if (Objects.nonNull(thumbnail)){
+            request.setThumbnail(thumbnail);
+        }
+        NewsResponDto news = newsService.createNews(request);
+        return ApiResponse.<NewsResponDto>builder()
+                .result(news)
+                .status(HttpStatus.CREATED)
+                .message("Success create data")
                 .build();
     }
 

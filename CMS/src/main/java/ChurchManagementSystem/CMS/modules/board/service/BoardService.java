@@ -1,11 +1,11 @@
 package ChurchManagementSystem.CMS.modules.board.service;
 
+import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.board.dto.BoardDto;
 import ChurchManagementSystem.CMS.modules.board.dto.BoardRequestDto;
 import ChurchManagementSystem.CMS.modules.board.entity.BoardEntity;
 import ChurchManagementSystem.CMS.modules.board.repository.BoardRepository;
-import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
-import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,35 +15,17 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-
 public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-    //Create
-    public BoardEntity createBoard(BoardDto request){
-        try {
-            BoardEntity data = new BoardEntity();
-            data.setName(request.getName());
-            data.setBirthDate(request.getBirhDate());
-            data.setAge(request.getAge());
-            data.setAddress(request.getAddress());
-            data.setPhoneNumber(request.getPhoneNumber());
-            data.setFungsi(request.getFungsi());
-            data.setStatus(request.getStatus());
-            return boardRepository.save(data);
-        } catch (Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
     //Getting by pagination
+
     public PaginationUtil<BoardEntity, BoardEntity> getAllBoardByPagination(BoardRequestDto searchRequest){
         Specification<BoardEntity> specification = (root, query, builder)->{
             List<Predicate> predicates = new ArrayList<>();
@@ -76,14 +58,30 @@ public class BoardService {
         return new PaginationUtil<>(pagedResult, BoardEntity.class);
 
     }
-
 //    Getting by Id
+
     public BoardEntity getBoardById(Long idBoard){
         BoardEntity result = boardRepository.findById(idBoard).orElse(null);
         if (result == null){
             throw new CustomRequestException("ID " + idBoard + " not found", HttpStatus.NOT_FOUND);
         }
         return result;
+    }
+    //Create
+    public BoardEntity createBoard(BoardDto request){
+        try {
+            BoardEntity boardEntity = BoardEntity.builder()
+                    .name(request.getName())
+                    .birthDate(request.getBirthDate())
+                    .age(request.getAge())
+                    .address(request.getAddress())
+                    .phoneNumber(request.getPhoneNumber())
+                    .fungsi(request.getFungsi())
+                    .status(request.getStatus()).build();
+            return boardRepository.save(boardEntity);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     //Update by Id
@@ -92,7 +90,7 @@ public class BoardService {
         try {
             BoardEntity board = boardRepository.findById(idBoard).orElseThrow(()-> new CustomRequestException("People does nit exists", HttpStatus.CONFLICT));
             board.setName(request.getName());
-            board.setBirthDate(request.getBirhDate());
+            board.setBirthDate(request.getBirthDate());
             board.setAge(request.getAge());
             board.setAddress(request.getAddress());
             board.setPhoneNumber(request.getPhoneNumber());

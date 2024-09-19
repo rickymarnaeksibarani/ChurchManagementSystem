@@ -31,7 +31,6 @@ public class FinancialController {
                                                                        @RequestParam(defaultValue = "10")int size) {
         return financialService.getIncomeByMonth(month, year, page, size);
     }
-
     //Getting Outcome summary by mounth
     @GetMapping(value = "/outcome", produces = MediaType.APPLICATION_JSON_VALUE)
     public PaginationUtil<OutcomeEntity, OutcomeEntity> getOutcomeByMonth(@RequestParam int month,

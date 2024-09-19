@@ -14,6 +14,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "master_activity")
 public class ActivityEntity {
     @Id
