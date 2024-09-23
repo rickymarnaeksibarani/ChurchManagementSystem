@@ -31,10 +31,10 @@ spring:
       max-file-size: 500MB
       max-request-size: 500MB
 minio:
-  url: http://192.168.166.89
-  port: 9000
-  access_key: cSbGLc9gnavEV8MDmXgy
-  secret-key: Plpd09P7RFrUuY0P7cofZE9NoO8jhyKTcsnDCUx5
+  url: url
+  port: port
+  access_key: access_key
+  secret-key: secret_key
   bucket: "cms-project"
 
 
