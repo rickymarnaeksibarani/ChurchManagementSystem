@@ -4,7 +4,6 @@ import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.financial.entities.FinancialEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
-import ChurchManagementSystem.CMS.modules.financial.repository.FinancialRepository;
 import ChurchManagementSystem.CMS.modules.financial.repository.IncomeRepository;
 import ChurchManagementSystem.CMS.modules.financial.repository.OutcomeRepository;
 import org.springframework.beans.factory.annotation.Autowired;

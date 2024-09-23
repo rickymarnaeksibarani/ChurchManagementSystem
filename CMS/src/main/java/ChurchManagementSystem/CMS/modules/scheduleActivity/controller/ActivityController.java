@@ -21,27 +21,27 @@ public class ActivityController {
     @Autowired
     private ActivityService activityService;
 
-    //create
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createActivity(
-            @Valid @RequestBody ActivityDto request
-            ){
-        try {
-            ActivityEntity result = activityService.createActivity(request);
-            ApiResponse<ActivityEntity> response = new ApiResponse<>(HttpStatus.CREATED, "Success create data activity!", result);
-            return new ResponseEntity<>(response, response.getStatus());
-        }
-        catch (CustomRequestException error){
-            return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
-        }
-    }
-
     //Getting
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> searchActivity(ActivityRequestDto searchDTO){
         try {
             PaginationUtil<ActivityEntity, ActivityEntity> result = activityService.getAllActivityByPagination(searchDTO);
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success retrieved data activity", result), HttpStatus.OK);
+        }
+        catch (CustomRequestException error){
+            return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
+        }
+    }
+    //create
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createActivity(
+            @Valid @RequestBody ActivityDto request
+    ){
+        try {
+            ActivityEntity result = activityService.createActivity(request);
+            ApiResponse<ActivityEntity> response = new ApiResponse<>(HttpStatus.CREATED, "Success create data activity!", result);
+            return new ResponseEntity<>(response, response.getStatus());
         }
         catch (CustomRequestException error){
             return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
