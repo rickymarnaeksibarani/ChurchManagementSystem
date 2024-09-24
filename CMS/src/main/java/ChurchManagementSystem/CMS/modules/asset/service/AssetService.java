@@ -1,7 +1,6 @@
 package ChurchManagementSystem.CMS.modules.asset.service;
 
 import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
-import ChurchManagementSystem.CMS.core.utils.ObjectMapperUtil;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.asset.dto.AssetRequestDto;
 import ChurchManagementSystem.CMS.modules.asset.dto.AssetsDto;
@@ -27,23 +26,8 @@ public class AssetService {
     @Autowired
     private AssetRepository assetRepository;
 
-    //create
-    public AssetEntity createAsset(AssetsDto request){
-        try {
-            AssetEntity data = new AssetEntity();
-            data.setAssetName(request.getAssetName());
-            data.setStatus(request.getStatus());
-            data.setDescription(request.getDescription());
-            data.setQuantity(request.getQuantity());
-            data.setBrand(request.getBrand());
-            return assetRepository.save(data);
-        }
-        catch (Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
     //Getting by pagination
+
     public PaginationUtil<AssetEntity, AssetEntity> getAllAssetByPagination(AssetRequestDto searhRequest){
         Specification<AssetEntity> specification = (root, query, builder)-> {
             List<Predicate> predicates = new ArrayList<>();
@@ -59,14 +43,31 @@ public class AssetService {
         Page<AssetEntity> pagedResult = assetRepository.findAll(specification, paging);
         return new PaginationUtil<>(pagedResult, AssetEntity.class);
     }
-
     //Getting by ID
+
     public AssetEntity getAssetById(Long idAsset){
         AssetEntity result = assetRepository.findById(idAsset).orElse(null);
         if (result == null){
             throw new CustomRequestException("ID " + idAsset + " not found ", HttpStatus.NOT_FOUND);
         }
         return result;
+    }
+
+    //create
+    public AssetEntity createAsset(AssetsDto request){
+        try {
+            AssetEntity data = AssetEntity.builder()
+                    .assetName(request.getAssetName())
+                    .status(request.getStatus())
+                    .description(request.getDescription())
+                    .quantity(request.getQuantity())
+                    .brand(request.getBrand())
+                    .build();
+            return assetRepository.save(data);
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional

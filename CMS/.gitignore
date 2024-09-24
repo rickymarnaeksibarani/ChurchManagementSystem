@@ -13,6 +13,9 @@ target/
 .springBeans
 .sts4-cache
 
+### Application yml ###
+src/main/resources/application.yml
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -31,3 +34,4 @@ build/
 
 ### VS Code ###
 .vscode/
+

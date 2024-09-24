@@ -3,11 +3,9 @@ package ChurchManagementSystem.CMS.modules.scheduleActivity.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-
 import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.UUID;
 
 @Data
 public class ActivityDto {
@@ -25,7 +23,7 @@ public class ActivityDto {
     private Time activityTime;
 
     @JsonProperty("activityDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date activityDate;
 
     @JsonProperty("location")

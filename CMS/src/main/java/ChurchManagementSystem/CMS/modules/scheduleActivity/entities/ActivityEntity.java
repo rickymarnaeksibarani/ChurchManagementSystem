@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.modules.scheduleActivity.entities;
 
+import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Builder
 @Table(name = "master_activity")
 public class ActivityEntity {
     @Id

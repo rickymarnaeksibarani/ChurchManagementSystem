@@ -1,7 +1,6 @@
 package ChurchManagementSystem.CMS.modules.news.entity;
 
 import ChurchManagementSystem.CMS.core.enums.Category;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

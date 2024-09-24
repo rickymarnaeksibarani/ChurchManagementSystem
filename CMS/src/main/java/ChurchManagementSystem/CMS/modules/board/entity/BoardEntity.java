@@ -3,10 +3,7 @@ package ChurchManagementSystem.CMS.modules.board.entity;
 import ChurchManagementSystem.CMS.core.enums.Fungsi;
 import ChurchManagementSystem.CMS.core.enums.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -18,6 +15,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Data
+@Builder
 @Table(name = "master_Board")
 public class BoardEntity {
     @Id

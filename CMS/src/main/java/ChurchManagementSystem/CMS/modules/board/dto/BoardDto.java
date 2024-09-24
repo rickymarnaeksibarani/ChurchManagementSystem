@@ -5,6 +5,7 @@ import ChurchManagementSystem.CMS.core.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Enumerated;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
@@ -18,8 +19,8 @@ public class BoardDto {
     private String name;
 
     @JsonProperty("birthDate")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date birhDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private Date birthDate;
 
     @JsonProperty("age")
     private int age;

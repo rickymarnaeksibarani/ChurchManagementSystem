@@ -3,16 +3,14 @@ package ChurchManagementSystem.CMS.modules.asset.entity;
 import ChurchManagementSystem.CMS.core.enums.AssetStatus;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "master_asset")
 public class AssetEntity {
     @Id

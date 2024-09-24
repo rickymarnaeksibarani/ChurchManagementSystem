@@ -24,24 +24,8 @@ public class ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
 
-    //Created
-    public ActivityEntity createActivity(ActivityDto request){
-//        boolean existsByActivityTitle = activityRepository.existsByActivityTitle(request.getActivityTitle());
-//        if (existsByActivityTitle){
-//            throw new CustomRequestException("Title Activity already exists, please check title", HttpStatus.CONFLICT);
-//        }
-        ActivityEntity data = new ActivityEntity();
-        data.setActivityTitle(request.getActivityTitle());
-        data.setDescription(request.getDescription());
-        data.setActivityTime(request.getActivityTime());
-        data.setActivityDate(request.getActivityDate());
-        data.setLocation(request.getLocation());
-        data.setPic(request.getPic());
-
-        return activityRepository.save(data);
-    }
-
     //Getting
+
     public PaginationUtil<ActivityEntity, ActivityEntity> getAllActivityByPagination(ActivityRequestDto searchRequest){
         Specification<ActivityEntity> spec = (root, query, builder) -> {
             List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();
@@ -58,8 +42,8 @@ public class ActivityService {
         Page<ActivityEntity> pagedResult = activityRepository.findAll(spec, paging);
         return new PaginationUtil<>(pagedResult, ActivityEntity.class);
     }
-
     //Getting by ID
+
     public ActivityEntity getActivityById(Long idActivity){
         ActivityEntity result = activityRepository.findById(idActivity).orElse(null);
         if (result == null){
@@ -67,10 +51,23 @@ public class ActivityService {
         }
         return result;
     }
+    //Created
+    public ActivityEntity createActivity(ActivityDto request){
+        ActivityEntity data = ActivityEntity.builder()
+                .activityTitle(request.getActivityTitle())
+                .description(request.getDescription())
+                .activityTime(request.getActivityTime())
+                .activityDate(request.getActivityDate())
+                .location(request.getLocation())
+                .pic(request.getPic())
+                .build();
+        return activityRepository.save(data);
+    }
 
     @Transactional
     public ActivityEntity updateActivity(Long idActivity, ActivityDto request){
-        ActivityEntity activity = activityRepository.findById(idActivity).orElseThrow(()-> new CustomRequestException("Activity does nit exists", HttpStatus.CONFLICT));
+        ActivityEntity activity = activityRepository.findById(idActivity)
+                .orElseThrow(()-> new CustomRequestException("Activity does nit exists", HttpStatus.CONFLICT));
         activity.setActivityTitle(request.getActivityTitle());
         activity.setDescription(request.getDescription());
         activity.setActivityDate(request.getActivityDate());

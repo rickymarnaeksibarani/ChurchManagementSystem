@@ -1,6 +1,5 @@
 package ChurchManagementSystem.CMS.modules.financial.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
