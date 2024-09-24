@@ -66,7 +66,8 @@ public class ActivityService {
 
     @Transactional
     public ActivityEntity updateActivity(Long idActivity, ActivityDto request){
-        ActivityEntity activity = activityRepository.findById(idActivity).orElseThrow(()-> new CustomRequestException("Activity does nit exists", HttpStatus.CONFLICT));
+        ActivityEntity activity = activityRepository.findById(idActivity)
+                .orElseThrow(()-> new CustomRequestException("Activity does nit exists", HttpStatus.CONFLICT));
         activity.setActivityTitle(request.getActivityTitle());
         activity.setDescription(request.getDescription());
         activity.setActivityDate(request.getActivityDate());

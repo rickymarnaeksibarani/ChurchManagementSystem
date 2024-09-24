@@ -53,7 +53,6 @@ public class NewsService {
     }
 
     //Getting
-
     @Transactional(readOnly = true)
     public PaginationUtil<NewsEntity, NewsEntity> getAllNews(Integer page, Integer perPage, NewsRequestDto searchRequest) {
         Specification<NewsEntity> specification = (root, query, builder) -> {
@@ -152,11 +151,12 @@ public class NewsService {
                 String filePath = LocalDate.now().getYear() + "/img/" + imgFileName;
                 ObjectWriteResponse objectWriteResponse = storageService.storeToS3(filePath, img);
 
-                ApplicationFileDto applicationFileDto = new ApplicationFileDto();
-                applicationFileDto.setPath(objectWriteResponse.object());
-                applicationFileDto.setFilename(img.getOriginalFilename());
-                applicationFileDto.setSize(String.valueOf(img.getSize()));
-                applicationFileDto.setMimeType(img.getContentType());
+                ApplicationFileDto applicationFileDto = ApplicationFileDto.builder()
+                        .path(objectWriteResponse.object())
+                        .filename(img.getOriginalFilename())
+                        .size(String.valueOf(img.getSize()))
+                        .mimeType(img.getContentType())
+                        .build();
                 thumbnailPaths.add(applicationFileDto);
 
             } catch (IOException | NoSuchAlgorithmException | InvalidKeyException e) {
