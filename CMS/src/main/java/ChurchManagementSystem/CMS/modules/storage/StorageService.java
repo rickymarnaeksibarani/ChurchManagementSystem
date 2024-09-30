@@ -20,6 +20,5 @@ public interface StorageService {
     Resource loadAsResource(String path);
     void deleteAllFileS3(List<String> path) throws IOException, NoSuchAlgorithmException, InvalidKeyException;
     ObjectWriteResponse storeToS3(String filename, MultipartFile file) throws IOException, NoSuchAlgorithmException, InvalidKeyException;
-    void deleteFileS3(String path)throws IOException, NoSuchAlgorithmException, InvalidKeyException;
     InputStream getFileFromS3(String path) throws IOException, NoSuchAlgorithmException, InvalidKeyException;
 }
