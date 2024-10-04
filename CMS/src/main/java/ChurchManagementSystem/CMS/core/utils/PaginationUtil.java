@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.core.utils;
 
+import ChurchManagementSystem.CMS.modules.loginUser.entity.UserEntity;
 import lombok.*;
 import org.springframework.data.domain.Page;
 
@@ -25,5 +26,8 @@ public class PaginationUtil<InClass, OutClass> {
         this.totalItemsPerPage = pagedResult.getNumberOfElements();
         this.hasNext = pagedResult.hasNext();
         this.hasPrev = pagedResult.hasPrevious();
+    }
+
+    public PaginationUtil(List<UserEntity> pagedResult, Class<UserEntity> userEntityClass) {
     }
 }
