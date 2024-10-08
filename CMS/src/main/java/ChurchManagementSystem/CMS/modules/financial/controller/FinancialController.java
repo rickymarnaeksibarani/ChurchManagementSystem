@@ -1,12 +1,21 @@
 package ChurchManagementSystem.CMS.modules.financial.controller;
 
+import ChurchManagementSystem.CMS.core.CustomResponse.ApiResponse;
+import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
+import ChurchManagementSystem.CMS.modules.congregration.dto.CongregrationDTO;
+import ChurchManagementSystem.CMS.modules.congregration.entities.CongregrationEntity;
+import ChurchManagementSystem.CMS.modules.financial.dto.IncomeDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.OutcomeDto;
 import ChurchManagementSystem.CMS.modules.financial.entities.FinancialEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.service.FinancialService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,8 +27,13 @@ public class FinancialController {
     //Getting balance
     @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
     public FinancialEntity getBalance(){
+
         return financialService.calculateBalance();
     }
+//    @GetMapping(value = "/balance", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public PaginationUtil<FinancialEntity, FinancialEntity> getBalance(){
+//        return financialService.calculateBalance();
+//    }
 
     //Getting Income summary by month
     @GetMapping(value = "/income", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,26 +65,68 @@ public class FinancialController {
     }
 
     //Create Income
+//    @PostMapping(value = "/income", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public IncomeEntity addIncome(@RequestBody IncomeEntity income){
+//
+//        return financialService.saveIncome(income);
+//    }
+
     @PostMapping(value = "/income", produces = MediaType.APPLICATION_JSON_VALUE)
-    public IncomeEntity addIncome(@RequestBody IncomeEntity income){
-        return financialService.saveIncome(income);
+    public ResponseEntity<?> addIncome(
+            @Valid @RequestBody IncomeDto income
+    ){
+        try {
+            IncomeEntity result = financialService.saveIncome(income);
+            ApiResponse<IncomeEntity> response = new ApiResponse<>(HttpStatus.CREATED, "Success create data income!", result);
+            return new ResponseEntity<>(response, response.getStatus());
+        }
+        catch (CustomRequestException error){
+            return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
+        }
     }
 
     //Create Outcome
     @PostMapping(value = "/outcome", produces = MediaType.APPLICATION_JSON_VALUE)
-    public OutcomeEntity addOutcome(@RequestBody OutcomeEntity outcome){
-        return financialService.saveOutcome(outcome);
+    public ResponseEntity<?> addOutcome(
+            @Valid @RequestBody OutcomeDto outcome
+    ){
+        try {
+            OutcomeEntity result = financialService.saveOutcome(outcome);
+            ApiResponse<OutcomeEntity> response = new ApiResponse<>(HttpStatus.CREATED, "Success create data outcome!", result);
+            return new ResponseEntity<>(response, response.getStatus());
+        }
+        catch (CustomRequestException error){
+            return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
+        }
     }
 
-    @PutMapping(value = "/income/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public IncomeEntity updateIncome(@PathVariable Long id, @RequestBody IncomeEntity income) {
-        income.setIdIncome(id);
-        return financialService.updateIncome(income);
+    //update
+    @PutMapping(value = "/income/{idIncome}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateIncome(
+            @PathVariable("idIncome") Long idIncome,
+            @Valid @RequestBody IncomeDto request
+    ){
+        try {
+            IncomeEntity result = financialService.updateIncome(idIncome, request);
+            ApiResponse<IncomeEntity> response = new ApiResponse<>(HttpStatus.ACCEPTED, "Success update data income!", result);
+            return new ResponseEntity<>(response, response.getStatus());
+        }
+        catch (CustomRequestException error){
+            return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
+        }
     }
 
-    @PutMapping(value = "/outcome/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public OutcomeEntity updateOutcome(@PathVariable Long id, @RequestBody OutcomeEntity outcome){
-        outcome.setIdOutcome(id);
-        return financialService.updateOutcome(outcome);
+    @PutMapping(value = "/outcome/{idOutcome}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateOutcome(
+            @PathVariable("idOutcome") Long idOutcome,
+            @Valid @RequestBody OutcomeDto request
+    ){
+        try {
+            OutcomeEntity result = financialService.updateOutcome(idOutcome, request);
+            ApiResponse<OutcomeEntity> response = new ApiResponse<>(HttpStatus.ACCEPTED, "Success update data outcome", result);
+            return new ResponseEntity<>(response, response.getStatus());
+        }catch (CustomRequestException e){
+            return e.GlobalCustomRequestException(e.getMessage(), e.getStatus());
+        }
     }
 }

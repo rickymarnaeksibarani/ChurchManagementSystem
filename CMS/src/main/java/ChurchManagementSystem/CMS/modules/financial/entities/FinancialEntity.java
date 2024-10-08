@@ -1,10 +1,7 @@
 package ChurchManagementSystem.CMS.modules.financial.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@Data
 @Table(name = "master_financial")
 public class FinancialEntity {
     @Id
@@ -41,9 +39,12 @@ public class FinancialEntity {
     private LocalDateTime updateAt;
 
     public FinancialEntity(BigDecimal totalIncome, BigDecimal totalOutcome) {
+        this.idFinancial = getIdFinancial();
         this.totalIncome = totalIncome;
         this.totalOutcome = totalOutcome;
         this.balance = totalIncome.subtract(totalOutcome);
+        this.createdAt = getCreatedAt();
+        this.updateAt = getUpdateAt();
     }
 }
 

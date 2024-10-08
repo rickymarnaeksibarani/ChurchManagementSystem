@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +68,7 @@ public class ActivityService {
     @Transactional
     public ActivityEntity updateActivity(Long idActivity, ActivityDto request){
         ActivityEntity activity = activityRepository.findById(idActivity)
-                .orElseThrow(()-> new CustomRequestException("Activity does nit exists", HttpStatus.CONFLICT));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idActivity + " not found"));
         activity.setActivityTitle(request.getActivityTitle());
         activity.setDescription(request.getDescription());
         activity.setActivityDate(request.getActivityDate());

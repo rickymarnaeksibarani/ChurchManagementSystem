@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,7 @@ public class CongregrationService {
     @Transactional
     public CongregrationEntity updateCongregration(Long idCongregration, CongregrationDTO request){
         try {
-            CongregrationEntity congregration = congregrationRepository.findById(idCongregration).orElseThrow(()-> new CustomRequestException("People does not exists", HttpStatus.CONFLICT));
+            CongregrationEntity congregration = congregrationRepository.findById(idCongregration).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " +idCongregration + " not found"));
             congregration.setName(request.getName());
             congregration.setAge(request.getAge());
             congregration.setBirthDate(request.getBirthDate());

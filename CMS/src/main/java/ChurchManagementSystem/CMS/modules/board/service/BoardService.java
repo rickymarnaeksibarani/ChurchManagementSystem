@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +89,7 @@ public class BoardService {
     @Transactional
     public BoardEntity updateBoard(Long idBoard, BoardDto request){
         try {
-            BoardEntity board = boardRepository.findById(idBoard).orElseThrow(()-> new CustomRequestException("People does nit exists", HttpStatus.CONFLICT));
+            BoardEntity board = boardRepository.findById(idBoard).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idBoard + " not found "));
             board.setName(request.getName());
             board.setBirthDate(request.getBirthDate());
             board.setAge(request.getAge());

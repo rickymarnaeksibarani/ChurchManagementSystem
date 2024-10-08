@@ -2,12 +2,14 @@ package ChurchManagementSystem.CMS.modules.financial.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
+@Builder
 public class IncomeDto {
     @JsonProperty("idIncome")
     private long idIncome;
@@ -33,4 +35,7 @@ public class IncomeDto {
 
     @JsonProperty("incomeOther")
     private BigDecimal incomeOther; //lainya
+
+    @JsonProperty("description")
+    private String description;
 }

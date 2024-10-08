@@ -36,4 +36,7 @@ public class OutcomeDto {
 
     @JsonProperty("outcomeOther")
     private BigDecimal outcomeOther; //lainnya
+
+    @JsonProperty("description")
+    private String description;
 }

@@ -27,7 +27,4 @@ public class PaginationUtil<InClass, OutClass> {
         this.hasNext = pagedResult.hasNext();
         this.hasPrev = pagedResult.hasPrevious();
     }
-
-    public PaginationUtil(List<UserEntity> pagedResult, Class<UserEntity> userEntityClass) {
-    }
 }
