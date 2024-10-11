@@ -69,13 +69,17 @@ public class ActivityService {
     public ActivityEntity updateActivity(Long idActivity, ActivityDto request){
         ActivityEntity activity = activityRepository.findById(idActivity)
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idActivity + " not found"));
-        activity.setActivityTitle(request.getActivityTitle());
-        activity.setDescription(request.getDescription());
-        activity.setActivityDate(request.getActivityDate());
-        activity.setActivityTime(request.getActivityTime());
-        activity.setLocation(request.getLocation());
-        activity.setPic(request.getPic());
-        return activityRepository.save(activity);
+        return ActivityEntity.builder()
+                .id(activity.getId())
+                .activityTitle(request.getActivityTitle())
+                .description(request.getDescription())
+                .activityDate(request.getActivityDate())
+                .activityTime(request.getActivityTime())
+                .location(request.getLocation())
+                .pic(request.getPic())
+                .created_at(activity.getCreated_at())
+                .updated_at(activity.getUpdated_at())
+                .build();
     }
 
     @Transactional

@@ -32,25 +32,25 @@ public class BoardService {
             List<Predicate> predicates = new ArrayList<>();
 
             //search by name
-            if (searchRequest.getSearchTerm() != null) {
-                predicates.add(
-                        builder.like(builder.upper(root.get("name")), "%" + searchRequest.getSearchTerm().toUpperCase() + "%")
-                );
-            }
-
-            //search by status
-            if (searchRequest.getStatus() != null && !searchRequest.getStatus().isEmpty()) {
-                predicates.add(
-                        builder.in(root.get("status")).value(searchRequest.getStatus())
-                );
-            }
-
-            //search by fungsi
-            if (searchRequest.getFungsi()!= null && !searchRequest.getFungsi().isEmpty()){
-                predicates.add(
-                        builder.in(root.get("fungsi")).value(searchRequest.getFungsi())
-                );
-            }
+//            if (searchRequest.getSearchTerm() != null) {
+//                predicates.add(
+//                        builder.like(builder.upper(root.get("name")), "%" + searchRequest.getSearchTerm().toUpperCase() + "%")
+//                );
+//            }
+//
+//            //search by status
+//            if (searchRequest.getStatus() != null && !searchRequest.getStatus().isEmpty()) {
+//                predicates.add(
+//                        builder.in(root.get("status")).value(searchRequest.getStatus())
+//                );
+//            }
+//
+//            //search by fungsi
+//            if (searchRequest.getFungsi()!= null && !searchRequest.getFungsi().isEmpty()){
+//                predicates.add(
+//                        builder.in(root.get("fungsi")).value(searchRequest.getFungsi())
+//                );
+//            }
 
             return query.where(predicates.toArray(new jakarta.persistence.criteria.Predicate[]{})).getRestriction();
         };
@@ -90,14 +90,16 @@ public class BoardService {
     public BoardEntity updateBoard(Long idBoard, BoardDto request){
         try {
             BoardEntity board = boardRepository.findById(idBoard).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idBoard + " not found "));
-            board.setName(request.getName());
-            board.setBirthDate(request.getBirthDate());
-            board.setAge(request.getAge());
-            board.setAddress(request.getAddress());
-            board.setPhoneNumber(request.getPhoneNumber());
-            board.setFungsi(request.getFungsi());
-            board.setStatus(request.getStatus());
-            return boardRepository.save(board);
+            return BoardEntity.builder()
+                    .id(board.getId())
+                    .name(request.getName())
+                    .birthDate(request.getBirthDate())
+                    .age(request.getAge())
+                    .address(request.getAddress())
+                    .phoneNumber(request.getPhoneNumber())
+                    .fungsi(request.getFungsi())
+                    .status(request.getStatus())
+                    .build();
         } catch (Exception e){
             throw new RuntimeException(e);
         }

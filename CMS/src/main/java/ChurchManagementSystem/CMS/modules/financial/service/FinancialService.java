@@ -142,6 +142,8 @@ public class FinancialService {
                     .incomeDonate(request.getIncomeDonate())
                     .incomeOther(request.getIncomeOther())
                     .description(request.getDescription())
+                    .createdAt(income.getCreatedAt())
+                    .updateAt(income.getUpdateAt())
                     .build();
         } catch (Exception e){
             throw new RuntimeException(e);
