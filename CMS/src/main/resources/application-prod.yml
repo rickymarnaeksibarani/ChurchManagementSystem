@@ -34,6 +34,13 @@ minio:
   access_key: access_key
   secret-key: secret-key
   bucket: "cms-project"
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+baseUrl: https://api-prod.cms.co.id/
 
 
 
