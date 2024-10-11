@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.core.utils;
 
+import ChurchManagementSystem.CMS.modules.loginUser.entity.UserEntity;
 import lombok.*;
 import org.springframework.data.domain.Page;
 

@@ -7,9 +7,6 @@ import java.math.BigDecimal;
 
 @Data
 public class FinancialDto {
-    @JsonProperty("id")
-    private long id;
-
     @JsonProperty("balance")
     private BigDecimal balance;
 

@@ -16,6 +16,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +74,7 @@ public class AssetService {
     @Transactional
     public AssetEntity updateAsset(Long idAsset, AssetsDto request){
         try {
-            AssetEntity asset = assetRepository.findById(idAsset).orElseThrow(()-> new CustomRequestException("Asset does not exists", HttpStatus.CONFLICT));
+            AssetEntity asset = assetRepository.findById(idAsset).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"ID "+ idAsset + " not found"));
             asset.setAssetName(request.getAssetName());
             asset.setStatus(request.getStatus());
             asset.setDescription(request.getDescription());

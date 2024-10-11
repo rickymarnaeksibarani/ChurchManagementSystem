@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,14 +68,18 @@ public class ActivityService {
     @Transactional
     public ActivityEntity updateActivity(Long idActivity, ActivityDto request){
         ActivityEntity activity = activityRepository.findById(idActivity)
-                .orElseThrow(()-> new CustomRequestException("Activity does nit exists", HttpStatus.CONFLICT));
-        activity.setActivityTitle(request.getActivityTitle());
-        activity.setDescription(request.getDescription());
-        activity.setActivityDate(request.getActivityDate());
-        activity.setActivityTime(request.getActivityTime());
-        activity.setLocation(request.getLocation());
-        activity.setPic(request.getPic());
-        return activityRepository.save(activity);
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idActivity + " not found"));
+        return ActivityEntity.builder()
+                .id(activity.getId())
+                .activityTitle(request.getActivityTitle())
+                .description(request.getDescription())
+                .activityDate(request.getActivityDate())
+                .activityTime(request.getActivityTime())
+                .location(request.getLocation())
+                .pic(request.getPic())
+                .created_at(activity.getCreated_at())
+                .updated_at(activity.getUpdated_at())
+                .build();
     }
 
     @Transactional

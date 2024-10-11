@@ -15,6 +15,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,25 +32,25 @@ public class BoardService {
             List<Predicate> predicates = new ArrayList<>();
 
             //search by name
-            if (searchRequest.getSearchTerm() != null) {
-                predicates.add(
-                        builder.like(builder.upper(root.get("name")), "%" + searchRequest.getSearchTerm().toUpperCase() + "%")
-                );
-            }
-
-            //search by status
-            if (searchRequest.getStatus() != null && !searchRequest.getStatus().isEmpty()) {
-                predicates.add(
-                        builder.in(root.get("status")).value(searchRequest.getStatus())
-                );
-            }
-
-            //search by fungsi
-            if (searchRequest.getFungsi()!= null && !searchRequest.getFungsi().isEmpty()){
-                predicates.add(
-                        builder.in(root.get("fungsi")).value(searchRequest.getFungsi())
-                );
-            }
+//            if (searchRequest.getSearchTerm() != null) {
+//                predicates.add(
+//                        builder.like(builder.upper(root.get("name")), "%" + searchRequest.getSearchTerm().toUpperCase() + "%")
+//                );
+//            }
+//
+//            //search by status
+//            if (searchRequest.getStatus() != null && !searchRequest.getStatus().isEmpty()) {
+//                predicates.add(
+//                        builder.in(root.get("status")).value(searchRequest.getStatus())
+//                );
+//            }
+//
+//            //search by fungsi
+//            if (searchRequest.getFungsi()!= null && !searchRequest.getFungsi().isEmpty()){
+//                predicates.add(
+//                        builder.in(root.get("fungsi")).value(searchRequest.getFungsi())
+//                );
+//            }
 
             return query.where(predicates.toArray(new jakarta.persistence.criteria.Predicate[]{})).getRestriction();
         };
@@ -88,15 +89,17 @@ public class BoardService {
     @Transactional
     public BoardEntity updateBoard(Long idBoard, BoardDto request){
         try {
-            BoardEntity board = boardRepository.findById(idBoard).orElseThrow(()-> new CustomRequestException("People does nit exists", HttpStatus.CONFLICT));
-            board.setName(request.getName());
-            board.setBirthDate(request.getBirthDate());
-            board.setAge(request.getAge());
-            board.setAddress(request.getAddress());
-            board.setPhoneNumber(request.getPhoneNumber());
-            board.setFungsi(request.getFungsi());
-            board.setStatus(request.getStatus());
-            return boardRepository.save(board);
+            BoardEntity board = boardRepository.findById(idBoard).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idBoard + " not found "));
+            return BoardEntity.builder()
+                    .id(board.getId())
+                    .name(request.getName())
+                    .birthDate(request.getBirthDate())
+                    .age(request.getAge())
+                    .address(request.getAddress())
+                    .phoneNumber(request.getPhoneNumber())
+                    .fungsi(request.getFungsi())
+                    .status(request.getStatus())
+                    .build();
         } catch (Exception e){
             throw new RuntimeException(e);
         }

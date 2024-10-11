@@ -1,16 +1,22 @@
 package ChurchManagementSystem.CMS.modules.financial.service;
 
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
+import ChurchManagementSystem.CMS.modules.financial.dto.IncomeDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.OutcomeDto;
 import ChurchManagementSystem.CMS.modules.financial.entities.FinancialEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.repository.IncomeRepository;
 import ChurchManagementSystem.CMS.modules.financial.repository.OutcomeRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -85,17 +91,85 @@ public class FinancialService {
             return "Total Outcome " + totalOutcome;
         }
     }
-    public IncomeEntity saveIncome(IncomeEntity income){
-        return incomeRepository.save(income);
+    public IncomeEntity saveIncome(IncomeDto income){
+        try {
+            IncomeEntity data = IncomeEntity.builder()
+                    .incomeDate(income.getIncomeDate())
+                    .incomeGive(income.getIncomeGive())
+                    .incomeTenth(income.getIncomeTenth())
+                    .incomeBuilding(income.getIncomeBuilding())
+                    .incomeService(income.getIncomeService())
+                    .incomeDonate(income.getIncomeDonate())
+                    .incomeOther(income.getIncomeOther())
+                    .description(income.getDescription())
+                    .build();
+            return incomeRepository.save(data);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
-    public OutcomeEntity saveOutcome(OutcomeEntity outcome){
-        return outcomeRepository.save(outcome);
+    public OutcomeEntity saveOutcome(@Valid OutcomeDto outcome){
+        try {
+            OutcomeEntity data = OutcomeEntity.builder()
+                    .outcomeDate(outcome.getOutcomeDate())
+                    .outcomeDeposit(outcome.getOutcomeDeposit())
+                    .outcomeBuilding(outcome.getOutcomeBuilding())
+                    .outcomeDiakonia(outcome.getOutcomeDiakonia())
+                    .outcomeGuest(outcome.getOutcomeGuest())
+                    .outcomeOperational(outcome.getOutcomeOperational())
+                    .outcomeEvent(outcome.getOutcomeEvent())
+                    .outcomeOther(outcome.getOutcomeOther())
+                    .description(outcome.getDescription())
+                    .build();
+            return outcomeRepository.save(data);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
     }
-    public IncomeEntity updateIncome(IncomeEntity income) {
-        return incomeRepository.save(income);
+
+    @Transactional
+    public IncomeEntity updateIncome(Long idIncome, IncomeDto request){
+        try {
+            IncomeEntity income = incomeRepository.findById(idIncome).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idIncome + " not found"));
+            return  IncomeEntity.builder()
+                    .idIncome(income.getIdIncome())
+                    .incomeDate(request.getIncomeDate())
+                    .incomeGive(request.getIncomeGive())
+                    .incomeTenth(request.getIncomeTenth())
+                    .incomeBuilding(request.getIncomeBuilding())
+                    .incomeService(request.getIncomeService())
+                    .incomeDonate(request.getIncomeDonate())
+                    .incomeOther(request.getIncomeOther())
+                    .description(request.getDescription())
+                    .createdAt(income.getCreatedAt())
+                    .updateAt(income.getUpdateAt())
+                    .build();
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
-    public OutcomeEntity updateOutcome(OutcomeEntity outcome){
-        return outcomeRepository.save(outcome);
+
+    public OutcomeEntity updateOutcome(Long idOutcome, OutcomeDto request) {
+        try {
+            OutcomeEntity outcome = outcomeRepository.findById(idOutcome).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idOutcome + " not found"));
+            return OutcomeEntity.builder()
+                    .idOutcome(outcome.getIdOutcome())
+                    .outcomeDate(request.getOutcomeDate())
+                    .outcomeDeposit(request.getOutcomeDeposit())
+                    .outcomeBuilding(request.getOutcomeBuilding())
+                    .outcomeDiakonia(request.getOutcomeDiakonia())
+                    .outcomeGuest(request.getOutcomeGuest())
+                    .outcomeOperational(request.getOutcomeOperational())
+                    .outcomeEvent(request.getOutcomeEvent())
+                    .outcomeOther(request.getOutcomeOther())
+                    .description(request.getDescription())
+                    .createdAt(outcome.getCreatedAt())
+                    .updateAt(outcome.getUpdateAt())
+                    .build();
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 }
 

@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatusCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
     private HttpStatusCode status;
-    private String message;
-    private T result;
+    private String message; //status
+    private T result; //respon
 
     public ApiResponse(HttpStatusCode status, String message, T result) {
         this.status = status;
