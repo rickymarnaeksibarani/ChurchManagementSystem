@@ -1,9 +1,9 @@
-package ChurchManagementSystem.CMS.modules.congregration.controller;
+package ChurchManagementSystem.CMS.modules.congregation.controller;
 
-import ChurchManagementSystem.CMS.modules.congregration.dto.CongregrationDTO;
-import ChurchManagementSystem.CMS.modules.congregration.dto.CongregrationRequestDto;
-import ChurchManagementSystem.CMS.modules.congregration.entities.CongregrationEntity;
-import ChurchManagementSystem.CMS.modules.congregration.service.CongregrationService;
+import ChurchManagementSystem.CMS.modules.congregation.dto.CongregationDTO;
+import ChurchManagementSystem.CMS.modules.congregation.dto.CongregationRequestDto;
+import ChurchManagementSystem.CMS.modules.congregation.entities.CongregationEntity;
+import ChurchManagementSystem.CMS.modules.congregation.service.CongregationService;
 import ChurchManagementSystem.CMS.core.CustomResponse.ApiResponse;
 import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
@@ -15,19 +15,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/congregration")
-public class CongregrationController {
+@RequestMapping("/api/v1/congregation")
+public class CongregationController {
     @Autowired
-    private CongregrationService congregrationService;
+    private CongregationService congregationService;
 
     //create
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createCongregration(
-            @Valid @RequestBody CongregrationDTO request
+            @Valid @RequestBody CongregationDTO request
     ){
         try {
-            CongregrationEntity result = congregrationService.createCongregration(request);
-            ApiResponse<CongregrationEntity> response = new ApiResponse<>(HttpStatus.CREATED, "Success create data name!", result);
+            CongregationEntity result = congregationService.createCongregration(request);
+            ApiResponse<CongregationEntity> response = new ApiResponse<>(HttpStatus.CREATED, "Success create data name!", result);
             return new ResponseEntity<>(response, response.getStatus());
         }
         catch (CustomRequestException error){
@@ -37,9 +37,9 @@ public class CongregrationController {
 
     //Getting by Pagination
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> searchCongregration(CongregrationRequestDto searchDTO){
+    public ResponseEntity<?> searchCongregration(CongregationRequestDto searchDTO){
         try {
-            PaginationUtil<CongregrationEntity, CongregrationEntity> result = congregrationService.getAllCongregrationByPagination(searchDTO);
+            PaginationUtil<CongregationEntity, CongregationEntity> result = congregationService.getAllCongregrationByPagination(searchDTO);
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success retrieved data name", result), HttpStatus.OK);
         }
         catch (CustomRequestException error){
@@ -53,8 +53,8 @@ public class CongregrationController {
             @PathVariable("idCongregration") Long idCongregration
     ){
         try {
-            CongregrationEntity result = congregrationService.getCongregrationById(idCongregration);
-            ApiResponse<CongregrationEntity> response = new ApiResponse<>(HttpStatus.OK, "Success retrievedd data people", result);
+            CongregationEntity result = congregationService.getCongregrationById(idCongregration);
+            ApiResponse<CongregationEntity> response = new ApiResponse<>(HttpStatus.OK, "Success retrievedd data people", result);
             return new ResponseEntity<>(response, response.getStatus());
         }catch (CustomRequestException error){
             return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
@@ -65,11 +65,11 @@ public class CongregrationController {
     @PutMapping(value = "/{idCongregration}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateCongregration(
             @PathVariable("idCongregration") Long idCongregration,
-            @Valid @RequestBody CongregrationDTO request
+            @Valid @RequestBody CongregationDTO request
     ){
         try {
-            CongregrationEntity result = congregrationService.updateCongregration(idCongregration, request);
-            ApiResponse<CongregrationEntity> response = new ApiResponse<>(HttpStatus.ACCEPTED, "Success update data congregration!", result);
+            CongregationEntity result = congregationService.updateCongregration(idCongregration, request);
+            ApiResponse<CongregationEntity> response = new ApiResponse<>(HttpStatus.ACCEPTED, "Success update data congregration!", result);
             return new ResponseEntity<>(response, response.getStatus());
         }
         catch (CustomRequestException error){
@@ -83,7 +83,7 @@ public class CongregrationController {
             @PathVariable("idCongregration") Long idCongregration
     ){
         try{
-            congregrationService.deleteCongregration(idCongregration);
+            congregationService.deleteCongregration(idCongregration);
             ApiResponse<String> response = new ApiResponse<>(HttpStatus.OK,"Success delete data", "DELETED");
             return new ResponseEntity<>(response, response.getStatus());
         } catch (CustomRequestException error){

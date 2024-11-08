@@ -23,10 +23,6 @@ public class ActivityEntity {
     @Column(name = "id")
     private Long id;
 
-//    @UuidGenerator
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    private UUID uuid;
-
     @Column(name = "activity_title")
     private String activityTitle;
 
@@ -44,6 +40,9 @@ public class ActivityEntity {
 
     @Column(name = "pic")
     private String pic;
+
+    @Column(name = "timeHour")
+    private String timeHour;
 
     @CreationTimestamp
     @Column(name = "created_at")

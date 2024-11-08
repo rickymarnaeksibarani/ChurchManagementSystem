@@ -26,6 +26,9 @@ public class ActivityDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date activityDate;
 
+    @JsonProperty("timeHour")
+    private String timeHour;
+
     @JsonProperty("location")
     private String location;
 

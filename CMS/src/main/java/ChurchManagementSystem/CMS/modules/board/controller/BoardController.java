@@ -2,6 +2,7 @@ package ChurchManagementSystem.CMS.modules.board.controller;
 
 import ChurchManagementSystem.CMS.modules.board.dto.BoardDto;
 import ChurchManagementSystem.CMS.modules.board.dto.BoardRequestDto;
+import ChurchManagementSystem.CMS.modules.board.dto.BoardResponDto;
 import ChurchManagementSystem.CMS.modules.board.entity.BoardEntity;
 import ChurchManagementSystem.CMS.modules.board.service.BoardService;
 import ChurchManagementSystem.CMS.core.CustomResponse.ApiResponse;
@@ -45,33 +46,30 @@ public class BoardController {
         }
     }
 
+    //todo: using this mf way for all module
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createBoard(
+    public ApiResponse<BoardResponDto> createBoard(
             @Valid @RequestBody BoardDto request
-    ){
-        try {
-            BoardEntity result = boardService.createBoard(request);
-            ApiResponse<BoardEntity> response =new ApiResponse<>(HttpStatus.CREATED, "Success create data board", result);
-            return new ResponseEntity<>(response, response.getStatus());
-        }catch (CustomRequestException err){
-            return err.GlobalCustomRequestException(err.getMessage(), err.getStatus());
-        }
+    ) throws Exception {
+        BoardResponDto boards = boardService.createBoard(request);
+        return ApiResponse.<BoardResponDto>builder()
+                .result(boards)
+                .status(HttpStatus.CREATED)
+                .message("Success create data")
+                .build();
     }
 
-    //Update by Id
     @PutMapping(value = "/{idBoard}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> updateBoard(
-            @PathVariable("idBoard") Long idBoard,
-            @Valid @RequestBody BoardDto request
-    ){
-        try {
-            BoardEntity result = boardService.updateBoard(idBoard, request);
-            ApiResponse<BoardEntity> response = new ApiResponse<>(HttpStatus.ACCEPTED, "Success update data board!", result);
-            return new ResponseEntity<>(response, response.getStatus());
-        }
-        catch (CustomRequestException error){
-            return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
-        }
+    public ApiResponse<BoardResponDto> updateBoard(
+            @PathVariable Long idBoard,
+            @RequestBody @Valid BoardDto request
+    )throws Exception{
+        BoardResponDto boards = boardService.updateBoard(idBoard, request);
+        return ApiResponse.<BoardResponDto>builder()
+                .result(boards)
+                .status(HttpStatus.OK)
+                .message("Success update data")
+                .build();
     }
 
     //Delete by Id

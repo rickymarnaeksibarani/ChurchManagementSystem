@@ -26,7 +26,6 @@ public class ActivityService {
     private ActivityRepository activityRepository;
 
     //Getting
-
     public PaginationUtil<ActivityEntity, ActivityEntity> getAllActivityByPagination(ActivityRequestDto searchRequest){
         Specification<ActivityEntity> spec = (root, query, builder) -> {
             List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();

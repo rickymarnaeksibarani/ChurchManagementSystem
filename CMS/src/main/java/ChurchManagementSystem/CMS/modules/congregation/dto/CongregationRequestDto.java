@@ -1,14 +1,14 @@
-package ChurchManagementSystem.CMS.modules.congregration.dto;
+package ChurchManagementSystem.CMS.modules.congregation.dto;
 
 import lombok.Data;
 
 @Data
-public class CongregrationRequestDto {
+public class CongregationRequestDto {
     private Integer page;
     private Integer size;
     private String searchTerm;
 
-    CongregrationRequestDto(){
+    CongregationRequestDto(){
         if (this.getPage() == null){
             this.page = 1;
         }

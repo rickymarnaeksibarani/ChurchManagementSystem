@@ -34,4 +34,6 @@ public class AssetEntity {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    //todo: added created and update-at
 }

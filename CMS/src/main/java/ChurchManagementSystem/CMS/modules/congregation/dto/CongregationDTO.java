@@ -1,4 +1,4 @@
-package ChurchManagementSystem.CMS.modules.congregration.dto;
+package ChurchManagementSystem.CMS.modules.congregation.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class CongregrationDTO {
+public class CongregationDTO {
 
     @JsonProperty("id")
     private long id;

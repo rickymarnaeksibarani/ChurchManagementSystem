@@ -1,4 +1,4 @@
-package ChurchManagementSystem.CMS.modules.congregration.entities;
+package ChurchManagementSystem.CMS.modules.congregation.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,8 +15,8 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 @Data
-@Table(name = "master_congregration")
-public class CongregrationEntity {
+@Table(name = "master_congregation")
+public class CongregationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

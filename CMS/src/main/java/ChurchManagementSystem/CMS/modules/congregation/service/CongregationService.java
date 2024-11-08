@@ -1,10 +1,10 @@
-package ChurchManagementSystem.CMS.modules.congregration.service;
+package ChurchManagementSystem.CMS.modules.congregation.service;
 
 
-import ChurchManagementSystem.CMS.modules.congregration.dto.CongregrationDTO;
-import ChurchManagementSystem.CMS.modules.congregration.dto.CongregrationRequestDto;
-import ChurchManagementSystem.CMS.modules.congregration.entities.CongregrationEntity;
-import ChurchManagementSystem.CMS.modules.congregration.repository.CongregrationRepository;
+import ChurchManagementSystem.CMS.modules.congregation.dto.CongregationDTO;
+import ChurchManagementSystem.CMS.modules.congregation.dto.CongregationRequestDto;
+import ChurchManagementSystem.CMS.modules.congregation.entities.CongregationEntity;
+import ChurchManagementSystem.CMS.modules.congregation.repository.CongregationRepository;
 import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import jakarta.persistence.criteria.Predicate;
@@ -22,14 +22,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CongregrationService {
+public class CongregationService {
     @Autowired
-    private CongregrationRepository congregrationRepository;
+    private CongregationRepository congregationRepository;
 
     //Getting
 
-    public PaginationUtil<CongregrationEntity, CongregrationEntity> getAllCongregrationByPagination(CongregrationRequestDto searchRequest){
-        Specification<CongregrationEntity> spec = (root, query, builder) -> {
+    public PaginationUtil<CongregationEntity, CongregationEntity> getAllCongregrationByPagination(CongregationRequestDto searchRequest){
+        Specification<CongregationEntity> spec = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             if (searchRequest.getSearchTerm() != null) {
@@ -41,42 +41,42 @@ public class CongregrationService {
             return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
         };
         Pageable paging = PageRequest.of(searchRequest.getPage() - 1, searchRequest.getSize());
-        Page<CongregrationEntity> pagedResult = congregrationRepository.findAll(spec, paging);
-        return new PaginationUtil<>(pagedResult, CongregrationEntity.class);
+        Page<CongregationEntity> pagedResult = congregationRepository.findAll(spec, paging);
+        return new PaginationUtil<>(pagedResult, CongregationEntity.class);
     }
     //Getting by ID
 
-    public CongregrationEntity getCongregrationById(Long idCongregration){
-        CongregrationEntity result = congregrationRepository.findById(idCongregration).orElse(null);
+    public CongregationEntity getCongregrationById(Long idCongregration){
+        CongregationEntity result = congregationRepository.findById(idCongregration).orElse(null);
         if (result == null){
             throw new CustomRequestException("ID " + idCongregration + " not found ", HttpStatus.NOT_FOUND);
         }
         return result;
     }
     //Created
-    public CongregrationEntity createCongregration(CongregrationDTO request){
+    public CongregationEntity createCongregration(CongregationDTO request){
         try {
-            CongregrationEntity data = CongregrationEntity.builder()
+            CongregationEntity data = CongregationEntity.builder()
                     .name(request.getName())
                     .birthDate(request.getBirthDate())
                     .age(request.getAge())
                     .phoneNumber(request.getPhoneNumber())
                     .build();
-            return congregrationRepository.save(data);
+            return congregationRepository.save(data);
         }catch (Exception e){
             throw new RuntimeException(e);
         }
     }
 
     @Transactional
-    public CongregrationEntity updateCongregration(Long idCongregration, CongregrationDTO request){
+    public CongregationEntity updateCongregration(Long idCongregration, CongregationDTO request){
         try {
-            CongregrationEntity congregration = congregrationRepository.findById(idCongregration).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " +idCongregration + " not found"));
+            CongregationEntity congregration = congregationRepository.findById(idCongregration).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " +idCongregration + " not found"));
             congregration.setName(request.getName());
             congregration.setAge(request.getAge());
             congregration.setBirthDate(request.getBirthDate());
             congregration.setPhoneNumber(request.getPhoneNumber());
-            return congregrationRepository.save(congregration);
+            return congregationRepository.save(congregration);
         } catch (Exception e){
             throw new RuntimeException(e);
         }
@@ -84,7 +84,7 @@ public class CongregrationService {
 
     @Transactional
     public void deleteCongregration(Long idCongregration){
-        CongregrationEntity findData = congregrationRepository.findById(idCongregration).orElseThrow(()->new CustomRequestException("People does not exists", HttpStatus.CONFLICT));
-        congregrationRepository.delete(findData);
+        CongregationEntity findData = congregationRepository.findById(idCongregration).orElseThrow(()->new CustomRequestException("People does not exists", HttpStatus.CONFLICT));
+        congregationRepository.delete(findData);
     }
 }

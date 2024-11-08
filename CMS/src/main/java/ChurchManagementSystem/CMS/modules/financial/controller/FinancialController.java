@@ -3,8 +3,6 @@ package ChurchManagementSystem.CMS.modules.financial.controller;
 import ChurchManagementSystem.CMS.core.CustomResponse.ApiResponse;
 import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
-import ChurchManagementSystem.CMS.modules.congregration.dto.CongregrationDTO;
-import ChurchManagementSystem.CMS.modules.congregration.entities.CongregrationEntity;
 import ChurchManagementSystem.CMS.modules.financial.dto.IncomeDto;
 import ChurchManagementSystem.CMS.modules.financial.dto.OutcomeDto;
 import ChurchManagementSystem.CMS.modules.financial.entities.FinancialEntity;
