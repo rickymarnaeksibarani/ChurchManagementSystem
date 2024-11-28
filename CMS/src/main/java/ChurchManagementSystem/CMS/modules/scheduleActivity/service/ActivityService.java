@@ -1,5 +1,7 @@
 package ChurchManagementSystem.CMS.modules.scheduleActivity.service;
 
+import ChurchManagementSystem.CMS.modules.congregation.dto.CongregationDTO;
+import ChurchManagementSystem.CMS.modules.congregation.entities.CongregationEntity;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityDto;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityRequestDto;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.entities.ActivityEntity;
@@ -58,6 +60,7 @@ public class ActivityService {
                 .description(request.getDescription())
                 .activityTime(request.getActivityTime())
                 .activityDate(request.getActivityDate())
+                .timeHour(request.getTimeHour())
                 .location(request.getLocation())
                 .pic(request.getPic())
                 .build();
@@ -66,19 +69,19 @@ public class ActivityService {
 
     @Transactional
     public ActivityEntity updateActivity(Long idActivity, ActivityDto request){
-        ActivityEntity activity = activityRepository.findById(idActivity)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idActivity + " not found"));
-        return ActivityEntity.builder()
-                .id(activity.getId())
-                .activityTitle(request.getActivityTitle())
-                .description(request.getDescription())
-                .activityDate(request.getActivityDate())
-                .activityTime(request.getActivityTime())
-                .location(request.getLocation())
-                .pic(request.getPic())
-                .created_at(activity.getCreated_at())
-                .updated_at(activity.getUpdated_at())
-                .build();
+        try {
+            ActivityEntity data = activityRepository.findById(idActivity).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " +idActivity + " not found"));
+            data.setActivityTitle(request.getActivityTitle());
+            data.setDescription(request.getDescription());
+            data.setActivityDate(request.getActivityDate());
+            data.setActivityTime(request.getActivityTime());
+            data.setTimeHour(request.getTimeHour());
+            data.setLocation(request.getLocation());
+            data.setPic(request.getPic());
+            return activityRepository.save(data);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Transactional
