@@ -9,10 +9,14 @@ import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
 
 
 @RestController
@@ -89,6 +93,34 @@ public class ActivityController {
             return new ResponseEntity<>(response, response.getStatus());
         } catch (CustomRequestException error){
             return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
+        }
+    }
+
+    // Get upcoming activities
+    @GetMapping(value = "/upcoming", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getActivityByActivityDateUpcoming(
+            @RequestParam("currentDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date currentDate
+    ) {
+        try {
+            List<ActivityEntity> result = activityService.getActivityByActivityDateUpcoming(currentDate);
+            ApiResponse<List<ActivityEntity>> response = new ApiResponse<>(HttpStatus.OK, "Success retrieved upcoming activities", result);
+            return new ResponseEntity<>(response, response.getStatus());
+        } catch (Exception error) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // Get activity history
+    @GetMapping(value = "/history", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getActivityByActivityHistory(
+            @RequestParam("currentDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date currentDate
+    ) {
+        try {
+            List<ActivityEntity> result = activityService.getActivityByActivityHistory(currentDate);
+            ApiResponse<List<ActivityEntity>> response = new ApiResponse<>(HttpStatus.OK, "Success retrieved activity history", result);
+            return new ResponseEntity<>(response, response.getStatus());
+        } catch (Exception error) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -25,5 +25,8 @@ public class CongregationDTO {
     @JsonProperty("phoneNumber")
     private String phoneNumber;
 
+    @JsonProperty("address")
+    private String address;
+
 
 }

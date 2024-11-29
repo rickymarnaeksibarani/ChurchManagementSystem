@@ -34,6 +34,9 @@ public class CongregationEntity {
     @Column(name = "phoneNumber")
     private String phoneNumber;
 
+    @Column(name = "address")
+    private String address;
+
     @CreationTimestamp
     @Column(name = "created_at")
     private LocalDateTime createdAt;

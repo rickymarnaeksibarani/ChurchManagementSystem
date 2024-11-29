@@ -61,6 +61,7 @@ public class CongregationService {
                     .birthDate(request.getBirthDate())
                     .age(request.getAge())
                     .phoneNumber(request.getPhoneNumber())
+                    .address(request.getAddress())
                     .build();
             return congregationRepository.save(data);
         }catch (Exception e){
@@ -76,6 +77,7 @@ public class CongregationService {
             congregration.setAge(request.getAge());
             congregration.setBirthDate(request.getBirthDate());
             congregration.setPhoneNumber(request.getPhoneNumber());
+            congregration.setAddress(request.getAddress());
             return congregationRepository.save(congregration);
         } catch (Exception e){
             throw new RuntimeException(e);

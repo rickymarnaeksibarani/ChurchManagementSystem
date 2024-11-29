@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -88,6 +89,21 @@ public class ActivityService {
     public void deleteActivity(Long idActivity){
         ActivityEntity findData = activityRepository.findById(idActivity).orElseThrow(()->new CustomRequestException("Activity does not exists", HttpStatus.CONFLICT));
         activityRepository.delete(findData);
+    }
+
+    public List<ActivityEntity> getActivityByActivityDateUpcoming(Date currentDate){
+        return activityRepository.findAll(
+                (root, query, builder) -> builder.greaterThanOrEqualTo
+                        (root.get("activityDate"), currentDate)
+        );
+    }
+
+    public List<ActivityEntity> getActivityByActivityHistory(Date currentDate){
+        return activityRepository.findAll(
+                (root, query, builder) -> builder.lessThan
+                        (root.get("activityDate"), currentDate)
+
+        );
     }
 
 }
