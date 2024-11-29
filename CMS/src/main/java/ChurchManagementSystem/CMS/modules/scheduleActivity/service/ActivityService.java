@@ -91,19 +91,22 @@ public class ActivityService {
         activityRepository.delete(findData);
     }
 
-    public List<ActivityEntity> getActivityByActivityDateUpcoming(Date currentDate){
-        return activityRepository.findAll(
-                (root, query, builder) -> builder.greaterThanOrEqualTo
-                        (root.get("activityDate"), currentDate)
-        );
+    public PaginationUtil<ActivityEntity, ActivityEntity> getUpcomingActivities(Date currentDate, int page, int size) {
+        Specification<ActivityEntity> spec = (root, query, builder) ->
+                builder.greaterThanOrEqualTo(root.get("activityDate"), currentDate);
+
+        Pageable paging = PageRequest.of(page - 1, size);
+        Page<ActivityEntity> pagedResult = activityRepository.findAll(spec, paging);
+        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
     }
 
-    public List<ActivityEntity> getActivityByActivityHistory(Date currentDate){
-        return activityRepository.findAll(
-                (root, query, builder) -> builder.lessThan
-                        (root.get("activityDate"), currentDate)
+    public PaginationUtil<ActivityEntity, ActivityEntity> getActivityByActivityHistory(Date currentDate, int page, int size){
+        Specification<ActivityEntity> specification = (root, query, builder)->
+                builder.lessThan(root.get("activityDate"), currentDate);
 
-        );
+        Pageable paging = PageRequest.of(page-1, size);
+        Page<ActivityEntity> pagedResult = activityRepository.findAll(specification, paging);
+        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
     }
 
 }

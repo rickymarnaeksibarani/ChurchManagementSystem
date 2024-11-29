@@ -96,14 +96,15 @@ public class ActivityController {
         }
     }
 
-    // Get upcoming activities
     @GetMapping(value = "/upcoming", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getActivityByActivityDateUpcoming(
-            @RequestParam("currentDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date currentDate
+            @RequestParam("currentDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date currentDate,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         try {
-            List<ActivityEntity> result = activityService.getActivityByActivityDateUpcoming(currentDate);
-            ApiResponse<List<ActivityEntity>> response = new ApiResponse<>(HttpStatus.OK, "Success retrieved upcoming activities", result);
+            PaginationUtil<ActivityEntity, ActivityEntity> result = activityService.getUpcomingActivities(currentDate, page, size);
+            ApiResponse<PaginationUtil<ActivityEntity, ActivityEntity>> response = new ApiResponse<>(HttpStatus.OK, "Success retrieved upcoming activities", result);
             return new ResponseEntity<>(response, response.getStatus());
         } catch (Exception error) {
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -113,11 +114,13 @@ public class ActivityController {
     // Get activity history
     @GetMapping(value = "/history", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getActivityByActivityHistory(
-            @RequestParam("currentDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date currentDate
+            @RequestParam("currentDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date currentDate,
+            @RequestParam(value = "page", defaultValue = "1")int page,
+            @RequestParam(value = "size", defaultValue = "10")int size
     ) {
         try {
-            List<ActivityEntity> result = activityService.getActivityByActivityHistory(currentDate);
-            ApiResponse<List<ActivityEntity>> response = new ApiResponse<>(HttpStatus.OK, "Success retrieved activity history", result);
+            PaginationUtil<ActivityEntity, ActivityEntity> result = activityService.getActivityByActivityHistory(currentDate, page, size);
+            ApiResponse<PaginationUtil<ActivityEntity, ActivityEntity>> response = new ApiResponse<>(HttpStatus.OK, "Success retrieved activity history", result);
             return new ResponseEntity<>(response, response.getStatus());
         } catch (Exception error) {
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Error occurred", null), HttpStatus.INTERNAL_SERVER_ERROR);
