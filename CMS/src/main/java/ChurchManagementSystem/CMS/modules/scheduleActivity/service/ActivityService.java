@@ -26,51 +26,22 @@ import java.util.List;
 public class ActivityService {
     @Autowired
     private ActivityRepository activityRepository;
-
-    //Getting
-    public PaginationUtil<ActivityEntity, ActivityEntity> getAllActivityByPagination(ActivityRequestDto searchRequest){
-        Specification<ActivityEntity> spec = (root, query, builder) -> {
-            List<jakarta.persistence.criteria.Predicate> predicates = new ArrayList<>();
-
-            if (searchRequest.getSearchTerm() != null) {
-                predicates.add(
-                        builder.like(builder.upper(root.get("activityTitle")), "%" + searchRequest.getSearchTerm().toUpperCase() + "%")
-                );
-            }
-
-            return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
-        };
-        Pageable paging = PageRequest.of(searchRequest.getPage() - 1, searchRequest.getSize());
-        Page<ActivityEntity> pagedResult = activityRepository.findAll(spec, paging);
-        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
-    }
-    public PaginationUtil<ActivityEntity, ActivityEntity> getUpcomingActivities(Date currentDate, int page, int size, String sortDate) {
-        Sort.Direction direction = Sort.Direction.fromString(sortDate);
+    public PaginationUtil<ActivityEntity, ActivityEntity> getUpcomingActivities(Date currentDate, int page, int size) {
         Specification<ActivityEntity> spec = (root, query, builder) ->
                 builder.greaterThanOrEqualTo(root.get("activityDate"), currentDate);
 
-        Pageable paging = PageRequest.of(page - 1, size, Sort.by(direction, "activityDate"));
+        Pageable paging = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.ASC, "activityDate"));
         Page<ActivityEntity> pagedResult = activityRepository.findAll(spec, paging);
         return new PaginationUtil<>(pagedResult, ActivityEntity.class);
     }
-
-    public PaginationUtil<ActivityEntity, ActivityEntity> getHistoryActivity(Date currentDate, int page, int size, String sortDate){
-        Sort.Direction direction = Sort.Direction.fromString(sortDate);
+    public PaginationUtil<ActivityEntity, ActivityEntity> getHistoryActivity(Date currentDate, int page, int size){
         Specification<ActivityEntity> specification = (root, query, builder)->
                 builder.lessThanOrEqualTo(root.get("activityDate"), currentDate);
 
-        Pageable paging = PageRequest.of(page-1, size, Sort.by(direction, "activityDate"));
+        Pageable paging = PageRequest.of(page-1, size, Sort.by(Sort.Direction.DESC, "activityDate"));
         Page<ActivityEntity> pagedResult = activityRepository.findAll(specification, paging);
         return new PaginationUtil<>(pagedResult, ActivityEntity.class);
     }
-
-    public PaginationUtil<ActivityEntity, ActivityEntity> getActivityBySortDate(String sortDate, int page, int size) {
-        Sort.Direction direction = Sort.Direction.fromString(sortDate);
-        Pageable paging = PageRequest.of(page - 1, size, Sort.by(direction, "activityDate"));
-        Page<ActivityEntity> pagedResult = activityRepository.findAll(paging);
-        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
-    }
-
     //Getting by ID
     public ActivityEntity getActivityById(Long idActivity){
         ActivityEntity result = activityRepository.findById(idActivity).orElse(null);
@@ -79,8 +50,8 @@ public class ActivityService {
         }
         return result;
     }
+    
     //Created
-
     public ActivityEntity createActivity(ActivityDto request){
         ActivityEntity data = ActivityEntity.builder()
                 .activityTitle(request.getActivityTitle())
