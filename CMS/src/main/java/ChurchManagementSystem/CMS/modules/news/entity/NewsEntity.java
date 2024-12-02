@@ -23,11 +23,11 @@ public class NewsEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "thumbnail", columnDefinition = "text")
-    private String thumbnail; //image .png
-
     @Column(name = "title")
     private String title;
+
+    @Column(name = "image_path")
+    private String imagePath; // Add this field
 
     @Column(name = "content", columnDefinition = "text")
     private String content;

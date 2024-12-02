@@ -5,7 +5,6 @@ import ChurchManagementSystem.CMS.core.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Enumerated;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;

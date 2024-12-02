@@ -1,6 +1,5 @@
 package ChurchManagementSystem.CMS.modules.scheduleActivity.entities;
 
-import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

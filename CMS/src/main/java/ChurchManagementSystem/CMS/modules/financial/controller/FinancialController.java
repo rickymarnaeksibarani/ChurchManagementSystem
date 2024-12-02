@@ -33,8 +33,26 @@ public class FinancialController {
 //        return financialService.calculateBalance();
 //    }
 
+    @GetMapping(value = "/income/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PaginationUtil<IncomeEntity, IncomeEntity> getAllIncome(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String category)
+    {
+        return financialService.getAllIncome(page, size, category);
+    }
+
+    @GetMapping(value = "/outcome/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PaginationUtil<OutcomeEntity, OutcomeEntity>getAllOutcome(
+            @RequestParam(defaultValue = "1")int page,
+            @RequestParam(defaultValue = "10")int size,
+            @RequestParam(required = false)String category)
+    {
+        return financialService.getAllOutcome(page, size, category);
+    }
+
     //Getting Income summary by month
-    @GetMapping(value = "/income", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/income/byMounth", produces = MediaType.APPLICATION_JSON_VALUE)
     public PaginationUtil<IncomeEntity, IncomeEntity> getIncomeByMonth(@RequestParam int month,
                                                                        @RequestParam int year,
                                                                        @RequestParam(defaultValue = "1")int page,
@@ -42,7 +60,7 @@ public class FinancialController {
         return financialService.getIncomeByMonth(month, year, page, size);
     }
     //Getting Outcome summary by mounth
-    @GetMapping(value = "/outcome", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/outcome/byMounth", produces = MediaType.APPLICATION_JSON_VALUE)
     public PaginationUtil<OutcomeEntity, OutcomeEntity> getOutcomeByMonth(@RequestParam int month,
                                                                           @RequestParam int year,
                                                                           @RequestParam(defaultValue = "1")int page,
@@ -61,13 +79,6 @@ public class FinancialController {
     public String getTotalOutcomeByMonth(@RequestParam int month, @RequestParam int year){
         return financialService.getTotalOutcomeByMonth(month, year);
     }
-
-    //Create Income
-//    @PostMapping(value = "/income", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public IncomeEntity addIncome(@RequestBody IncomeEntity income){
-//
-//        return financialService.saveIncome(income);
-//    }
 
     @PostMapping(value = "/income", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addIncome(

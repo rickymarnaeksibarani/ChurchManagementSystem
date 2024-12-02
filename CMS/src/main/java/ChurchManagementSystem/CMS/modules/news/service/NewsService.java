@@ -1,17 +1,12 @@
 package ChurchManagementSystem.CMS.modules.news.service;
 
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
-import ChurchManagementSystem.CMS.modules.news.dto.ApplicationFileDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsRequestDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsResponDto;
 import ChurchManagementSystem.CMS.modules.news.entity.NewsEntity;
 import ChurchManagementSystem.CMS.modules.news.repository.NewsRepository;
-import ChurchManagementSystem.CMS.modules.storage.StorageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.minio.ObjectWriteResponse;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,30 +20,27 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
-    @Autowired
-    private StorageService storageService;
-    @Autowired
-    private ObjectMapper objectMapper;
-    private final Date date = new Date();
-    private final Long time = date.getTime();
+    private final String UPLOAD_DIR = "src/main/resources/upload/image";
 
     private NewsResponDto toNewsRespone(NewsEntity newsEntity)throws JsonProcessingException{
-        List<ApplicationFileDto> img = objectMapper.readValue(newsEntity.getThumbnail(), new TypeReference<>() {});
         return NewsResponDto.builder()
                 .title(newsEntity.getTitle())
                 .content(newsEntity.getContent())
                 .category(newsEntity.getCategory())
-                .thumbnail(img)
                 .id(newsEntity.getId())
+                .image(newsEntity.getImagePath())
                 .build();
     }
 
@@ -77,9 +69,17 @@ public class NewsService {
 
     @Transactional
     public NewsResponDto createNews(NewsDto request) throws Exception{
-        List<ApplicationFileDto> thumbnail = uploadImage(request.getThumbnail());
         NewsEntity news = new NewsEntity();
-        NewsEntity payload = newsAppPayload(request, news, thumbnail);
+        String imagePath = null;
+
+        if (request.getImage() != null && !request.getImage().isEmpty()) {
+            imagePath = saveFile(request.getImage());
+        }
+        NewsEntity payload = newsAppPayload(request, news, imagePath);
+//        if (request.getImage() != null && !request.getImage().isEmpty()) {
+//            String fileName = saveFile(request.getImage());
+//            payload.setImagePath(fileName); // Assuming you have an imagePath field in NewsEntity
+//        }
         newsRepository.save(payload);
         return toNewsRespone(payload);
     }
@@ -88,23 +88,14 @@ public class NewsService {
     public NewsResponDto updateNews(Long id, NewsDto request) throws Exception{
        NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND , "Id " + id + " not found"));
 
-       List<ApplicationFileDto> img = objectMapper.readValue(news.getThumbnail(), new TypeReference<ArrayList<ApplicationFileDto>>() {});
-       List<String> imgPathList = img.stream().map(ApplicationFileDto::getPath).toList();
-       List<String> imgFileName = img.stream().map(ApplicationFileDto::getFilename).toList();
+        String imagePath = null; // Initialize imagePath
 
-       boolean isNewImgNameAndOldImgNameEqual = request.getThumbnail()!= null
-               && Objects.equals(request.getThumbnail().stream().map(MultipartFile::getOriginalFilename).toList(), imgFileName);
-
-       if (!imgPathList.isEmpty()&& !isNewImgNameAndOldImgNameEqual){
-           storageService.deleteAllFileS3(imgPathList);
-       }
-
-       List<ApplicationFileDto> imagePaths = isNewImgNameAndOldImgNameEqual ? img : new ArrayList<>();
-       if (!isNewImgNameAndOldImgNameEqual){
-           imagePaths = uploadImage(request.getThumbnail());
-       }
-
-       NewsEntity payload = newsAppPayload(request, news, imagePaths);
+        if (request.getImage() != null && !request.getImage().isEmpty()) {
+            // Delete the old file if necessary
+            deleteFile(news.getImagePath());
+            imagePath = saveFile(request.getImage()); // Save the new image and get the path
+        }
+       NewsEntity payload = newsAppPayload(request, news, imagePath);
        newsRepository.saveAndFlush(payload);
        return toNewsRespone(payload);
     }
@@ -114,64 +105,34 @@ public class NewsService {
     public void deleteById(Long id) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
         NewsEntity data = newsRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
-
-        // Remove old image
-        List<ApplicationFileDto> imgs = objectMapper.readValue(data.getThumbnail(), new TypeReference<ArrayList<ApplicationFileDto>>() {});
-        List<String> imgList = imgs.stream().map(ApplicationFileDto::getFilename).toList();
-        if (!imgList.isEmpty()) {
-            storageService.deleteAllFileS3(imgList);
-        }
+        deleteFile(data.getImagePath());
         newsRepository.deleteById(id);
     }
 
-    private NewsEntity newsAppPayload(NewsDto request, NewsEntity news, List<ApplicationFileDto> thumbnail)throws JsonProcessingException{
+    private NewsEntity newsAppPayload(NewsDto request, NewsEntity news, String imagePath)throws JsonProcessingException{
         news.setTitle(request.getTitle());
         news.setContent(request.getContent());
         news.setCategory(request.getCategory());
-        news.setThumbnail(objectMapper.writeValueAsString(thumbnail));
+        news.setImagePath(imagePath);
         return news;
     }
+    private String saveFile(MultipartFile file) throws IOException {
+        // Create the directory if it doesn't exist
+        java.nio.file.Path uploadPath = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectories(uploadPath);
+        }
 
-    private boolean isValidImageType(String contentType) {
-        return "image/png".equals(contentType) || "image/jpeg".equals(contentType) || "image/jpg".equals(contentType);
+        // Save the file
+        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+        Path filePath = uploadPath.resolve(fileName);
+        Files.copy(file.getInputStream(), filePath);
+        return fileName;
     }
 
-    //Upload image
-    private List<ApplicationFileDto> uploadImage(List<MultipartFile> thumbnail){
-        if (thumbnail == null || thumbnail.isEmpty()) return Collections.emptyList();
-        List<ApplicationFileDto> thumbnailPaths = new ArrayList<>();
-        String generatedString = genereateRandomString();
-        thumbnail.forEach(img ->{
-            String contentType = img.getContentType();
-            if (!isValidImageType(contentType)) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid image format. Only PNG, JPG, and JPEG are allowed.");
-            }
-            try {
-                String imgFileName = time + generatedString + "_" + Objects.requireNonNull(img.getOriginalFilename()).replace(" ", "_");
-                String filePath = LocalDate.now().getYear() + "/img/" + imgFileName;
-                ObjectWriteResponse objectWriteResponse = storageService.storeToS3(filePath, img);
-
-                ApplicationFileDto applicationFileDto = ApplicationFileDto.builder()
-                        .path(objectWriteResponse.object())
-                        .filename(img.getOriginalFilename())
-                        .size(String.valueOf(img.getSize()))
-                        .mimeType(img.getContentType())
-                        .build();
-                thumbnailPaths.add(applicationFileDto);
-
-            } catch (IOException | NoSuchAlgorithmException | InvalidKeyException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        return thumbnailPaths;
-    }
-
-    private String genereateRandomString(){
-        Random random = new Random();
-        return random.ints(97, 122+1)
-                .limit(11)
-                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+    private void deleteFile(String fileName) throws IOException {
+        java.nio.file.Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
+        Files.deleteIfExists(filePath);
     }
 
 }

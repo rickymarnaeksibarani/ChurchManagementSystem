@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Repository
 public interface IncomeRepository extends JpaRepository<IncomeEntity, Long>, JpaSpecificationExecutor<IncomeEntity> {
@@ -19,4 +18,13 @@ public interface IncomeRepository extends JpaRepository<IncomeEntity, Long>, Jpa
 
     @Query("SELECT SUM(i.incomeGive + i.incomeTenth + i.incomeBuilding + i.incomeService + i.incomeDonate + i.incomeOther) FROM IncomeEntity i WHERE MONTH(i.incomeDate) = :month AND YEAR(i.incomeDate) = :year")
     BigDecimal findTotalIncomeByMonth(@Param("month") int month, @Param("year") int year);
+
+    @Query("SELECT i FROM IncomeEntity i WHERE " +
+            "(:category = 'incomeGive' AND i.incomeGive IS NOT NULL) OR " +
+            "(:category = 'incomeTenth' AND i.incomeTenth IS NOT NULL) OR " +
+            "(:category = 'incomeBuilding' AND i.incomeBuilding IS NOT NULL) OR " +
+            "(:category = 'incomeService' AND i.incomeService IS NOT NULL) OR " +
+            "(:category = 'incomeDonate' AND i.incomeDonate IS NOT NULL) OR " +
+            "(:category = 'incomeOther' AND i.incomeOther IS NOT NULL)")
+    Page<IncomeEntity> findAllByCategory(@Param("category") String category, Pageable pageable);
 }

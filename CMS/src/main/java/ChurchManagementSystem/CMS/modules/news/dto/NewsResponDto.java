@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -19,6 +17,6 @@ public class NewsResponDto {
     private Category category;
     private String title;
     private String content;
-    private List<ApplicationFileDto> thumbnail;
+    private String image;
 
 }

@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/v1/news")
@@ -55,9 +54,7 @@ public class NewsController {
             @RequestPart @Valid NewsDto request,
             @RequestPart(value = "thumbnail", required = false)List<MultipartFile> thumbnail
     )throws Exception{
-        if (Objects.nonNull(thumbnail)){
-            request.setThumbnail(thumbnail);
-        }
+
         NewsResponDto news = newsService.createNews(request);
         return ApiResponse.<NewsResponDto>builder()
                 .result(news)
@@ -72,9 +69,7 @@ public class NewsController {
             @RequestPart @Valid NewsDto request,
             @RequestPart(value = "thumbnail", required = false) List<MultipartFile> thumbnail
     ) throws Exception {
-        if (Objects.nonNull(thumbnail)) {
-            request.setThumbnail(thumbnail);
-        }
+
         NewsResponDto news = newsService.updateNews(id, request);
         return ApiResponse.<NewsResponDto>builder()
                 .message("Success update data")

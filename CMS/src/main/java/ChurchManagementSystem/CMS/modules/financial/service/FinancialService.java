@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -58,6 +59,49 @@ public class FinancialService {
         ).reduce(BigDecimal.ZERO, BigDecimal::add);
         return new FinancialEntity(totalIncome, totalOutcome);
     }
+
+    public PaginationUtil<IncomeEntity, IncomeEntity> getAllIncome(int page, int size, String category) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<IncomeEntity> pagedResult;
+
+        if (category == null || category.isEmpty()) {
+            pagedResult = incomeRepository.findAll(pageable);
+        } else {
+            pagedResult = incomeRepository.findAllByCategory(category, pageable);
+            pagedResult.getContent().forEach(income -> {
+                if (!category.equals("incomeGive")) income.setIncomeGive(null);
+                if (!category.equals("incomeTenth")) income.setIncomeTenth(null);
+                if (!category.equals("incomeBuilding")) income.setIncomeBuilding(null);
+                if (!category.equals("incomeService")) income.setIncomeService(null);
+                if (!category.equals("incomeDonate")) income.setIncomeDonate(null);
+                if (!category.equals("incomeOther")) income.setIncomeOther(null);
+            });
+        }
+        return new PaginationUtil<>(pagedResult, IncomeEntity.class);
+    }
+
+    public PaginationUtil<OutcomeEntity, OutcomeEntity> getAllOutcome(int page, int size, String category) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<OutcomeEntity> pagedResult;
+
+        if (category == null || category.isEmpty()) {
+            pagedResult = outcomeRepository.findAll(pageable);
+        } else {
+            pagedResult = outcomeRepository.findAllByCategory(category, pageable);
+            pagedResult.getContent().forEach(outcome -> {
+                if (!category.equals("outcomeDeposit")) outcome.setOutcomeDeposit(null);
+                if (!category.equals("outcomeBuilding")) outcome.setOutcomeBuilding(null);
+                if (!category.equals("outcomeDiakonia")) outcome.setOutcomeDiakonia(null);
+                if (!category.equals("outcomeGuest")) outcome.setOutcomeGuest(null);
+                if (!category.equals("outcomeOperational")) outcome.setOutcomeOperational(null);
+                if (!category.equals("outcomeEvent")) outcome.setOutcomeEvent(null);
+                if (!category.equals("outcomeOther")) outcome.setOutcomeOther(null);
+
+            });
+        }
+        return new PaginationUtil<>(pagedResult, OutcomeEntity.class);
+    }
+
     //Getting summary income by month
     public PaginationUtil<IncomeEntity, IncomeEntity> getIncomeByMonth(int month, int year, int page, int size){
         Pageable pageable = PageRequest.of(page -1,size);
@@ -91,7 +135,7 @@ public class FinancialService {
             return "Total Outcome " + totalOutcome;
         }
     }
-    public IncomeEntity saveIncome(IncomeDto income){
+    public IncomeEntity saveIncome(@Valid IncomeDto income){
         try {
             IncomeEntity data = IncomeEntity.builder()
                     .incomeDate(income.getIncomeDate())
@@ -125,48 +169,43 @@ public class FinancialService {
         }catch (Exception e){
             throw new RuntimeException(e);
         }
-
     }
 
     @Transactional
     public IncomeEntity updateIncome(Long idIncome, IncomeDto request){
         try {
-            IncomeEntity income = incomeRepository.findById(idIncome).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idIncome + " not found"));
-            return  IncomeEntity.builder()
-                    .idIncome(income.getIdIncome())
-                    .incomeDate(request.getIncomeDate())
-                    .incomeGive(request.getIncomeGive())
-                    .incomeTenth(request.getIncomeTenth())
-                    .incomeBuilding(request.getIncomeBuilding())
-                    .incomeService(request.getIncomeService())
-                    .incomeDonate(request.getIncomeDonate())
-                    .incomeOther(request.getIncomeOther())
-                    .description(request.getDescription())
-                    .createdAt(income.getCreatedAt())
-                    .updateAt(income.getUpdateAt())
-                    .build();
-        } catch (Exception e){
+            IncomeEntity income = incomeRepository.findById(idIncome)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idIncome + " not found"));
+            income.setIncomeDate(request.getIncomeDate());
+            income.setIncomeGive(request.getIncomeGive());
+            income.setIncomeTenth(request.getIncomeTenth());
+            income.setIncomeBuilding(request.getIncomeBuilding());
+            income.setIncomeService(request.getIncomeService());
+            income.setIncomeDonate(request.getIncomeDonate());
+            income.setIncomeOther(request.getIncomeOther());
+            income.setDescription(request.getDescription());
+            income.setUpdateAt(LocalDateTime.now());
+            return incomeRepository.save(income);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    @Transactional
     public OutcomeEntity updateOutcome(Long idOutcome, OutcomeDto request) {
         try {
             OutcomeEntity outcome = outcomeRepository.findById(idOutcome).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " + idOutcome + " not found"));
-            return OutcomeEntity.builder()
-                    .idOutcome(outcome.getIdOutcome())
-                    .outcomeDate(request.getOutcomeDate())
-                    .outcomeDeposit(request.getOutcomeDeposit())
-                    .outcomeBuilding(request.getOutcomeBuilding())
-                    .outcomeDiakonia(request.getOutcomeDiakonia())
-                    .outcomeGuest(request.getOutcomeGuest())
-                    .outcomeOperational(request.getOutcomeOperational())
-                    .outcomeEvent(request.getOutcomeEvent())
-                    .outcomeOther(request.getOutcomeOther())
-                    .description(request.getDescription())
-                    .createdAt(outcome.getCreatedAt())
-                    .updateAt(outcome.getUpdateAt())
-                    .build();
+            outcome.setOutcomeDate(request.getOutcomeDate());
+            outcome.setOutcomeDeposit(request.getOutcomeDeposit());
+            outcome.setOutcomeBuilding(request.getOutcomeBuilding());
+            outcome.setOutcomeDiakonia(request.getOutcomeDiakonia());
+            outcome.setOutcomeGuest(request.getOutcomeGuest());
+            outcome.setOutcomeOperational(request.getOutcomeOperational());
+            outcome.setOutcomeEvent(request.getOutcomeEvent());
+            outcome.setOutcomeOther(request.getOutcomeOther());
+            outcome.setDescription(request.getDescription());
+            outcome.setUpdateAt(LocalDateTime.now());
+            return outcomeRepository.save(outcome);
         }catch (Exception e){
             throw new RuntimeException(e);
         }

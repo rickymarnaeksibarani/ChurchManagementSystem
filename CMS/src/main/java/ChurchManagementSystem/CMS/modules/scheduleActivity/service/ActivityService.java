@@ -1,18 +1,17 @@
 package ChurchManagementSystem.CMS.modules.scheduleActivity.service;
 
-import ChurchManagementSystem.CMS.modules.congregation.dto.CongregationDTO;
-import ChurchManagementSystem.CMS.modules.congregation.entities.CongregationEntity;
+import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityDto;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityRequestDto;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.entities.ActivityEntity;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.repository.ActivityRepository;
-import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
-import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -45,8 +44,32 @@ public class ActivityService {
         Page<ActivityEntity> pagedResult = activityRepository.findAll(spec, paging);
         return new PaginationUtil<>(pagedResult, ActivityEntity.class);
     }
-    //Getting by ID
+    public PaginationUtil<ActivityEntity, ActivityEntity> getUpcomingActivities(Date currentDate, int page, int size) {
+        Specification<ActivityEntity> spec = (root, query, builder) ->
+                builder.greaterThanOrEqualTo(root.get("activityDate"), currentDate);
 
+        Pageable paging = PageRequest.of(page - 1, size);
+        Page<ActivityEntity> pagedResult = activityRepository.findAll(spec, paging);
+        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
+    }
+
+    public PaginationUtil<ActivityEntity, ActivityEntity> getActivityByActivityHistory(Date currentDate, int page, int size){
+        Specification<ActivityEntity> specification = (root, query, builder)->
+                builder.lessThanOrEqualTo(root.get("activityDate"), currentDate);
+
+        Pageable paging = PageRequest.of(page-1, size);
+        Page<ActivityEntity> pagedResult = activityRepository.findAll(specification, paging);
+        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
+    }
+
+    public PaginationUtil<ActivityEntity, ActivityEntity> getActivityBySortDate(String sortDate, int page, int size) {
+        Sort.Direction direction = Sort.Direction.fromString(sortDate);
+        Pageable paging = PageRequest.of(page - 1, size, Sort.by(direction, "activityDate"));
+        Page<ActivityEntity> pagedResult = activityRepository.findAll(paging);
+        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
+    }
+
+    //Getting by ID
     public ActivityEntity getActivityById(Long idActivity){
         ActivityEntity result = activityRepository.findById(idActivity).orElse(null);
         if (result == null){
@@ -55,6 +78,7 @@ public class ActivityService {
         return result;
     }
     //Created
+
     public ActivityEntity createActivity(ActivityDto request){
         ActivityEntity data = ActivityEntity.builder()
                 .activityTitle(request.getActivityTitle())
@@ -90,23 +114,4 @@ public class ActivityService {
         ActivityEntity findData = activityRepository.findById(idActivity).orElseThrow(()->new CustomRequestException("Activity does not exists", HttpStatus.CONFLICT));
         activityRepository.delete(findData);
     }
-
-    public PaginationUtil<ActivityEntity, ActivityEntity> getUpcomingActivities(Date currentDate, int page, int size) {
-        Specification<ActivityEntity> spec = (root, query, builder) ->
-                builder.greaterThanOrEqualTo(root.get("activityDate"), currentDate);
-
-        Pageable paging = PageRequest.of(page - 1, size);
-        Page<ActivityEntity> pagedResult = activityRepository.findAll(spec, paging);
-        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
-    }
-
-    public PaginationUtil<ActivityEntity, ActivityEntity> getActivityByActivityHistory(Date currentDate, int page, int size){
-        Specification<ActivityEntity> specification = (root, query, builder)->
-                builder.lessThan(root.get("activityDate"), currentDate);
-
-        Pageable paging = PageRequest.of(page-1, size);
-        Page<ActivityEntity> pagedResult = activityRepository.findAll(specification, paging);
-        return new PaginationUtil<>(pagedResult, ActivityEntity.class);
-    }
-
 }

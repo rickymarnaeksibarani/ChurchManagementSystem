@@ -2,9 +2,6 @@ package ChurchManagementSystem.CMS.modules.board.dto;
 
 import ChurchManagementSystem.CMS.core.enums.Fungsi;
 import ChurchManagementSystem.CMS.core.enums.Status;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
