@@ -38,13 +38,14 @@ public class ActivityController {
 
     // Get activity upcoming & history
     @GetMapping(value = "/upcoming", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getActivityByActivityDateUpcoming(
+    public ResponseEntity<?> getUpcomingActivity(
             @RequestParam("currentDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date currentDate,
+            @RequestParam(value = "sortDate", defaultValue = "ASC") String sortDate,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         try {
-            PaginationUtil<ActivityEntity, ActivityEntity> result = activityService.getUpcomingActivities(currentDate, page, size);
+            PaginationUtil<ActivityEntity, ActivityEntity> result = activityService.getUpcomingActivities(currentDate, page, size, sortDate);
             ApiResponse<PaginationUtil<ActivityEntity, ActivityEntity>> response = new ApiResponse<>(HttpStatus.OK, "Success retrieved upcoming activities", result);
             return new ResponseEntity<>(response, response.getStatus());
         } catch (Exception error) {
@@ -53,13 +54,14 @@ public class ActivityController {
     }
 
     @GetMapping(value = "/history", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getActivityByActivityHistory(
+    public ResponseEntity<?> getHistoryActivity(
             @RequestParam("currentDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Date currentDate,
+            @RequestParam(value = "sortDate", defaultValue = "DESC") String sortDate,
             @RequestParam(value = "page", defaultValue = "1")int page,
             @RequestParam(value = "size", defaultValue = "10")int size
     ) {
         try {
-            PaginationUtil<ActivityEntity, ActivityEntity> result = activityService.getActivityByActivityHistory(currentDate, page, size);
+            PaginationUtil<ActivityEntity, ActivityEntity> result = activityService.getHistoryActivity(currentDate, page, size, sortDate);
             ApiResponse<PaginationUtil<ActivityEntity, ActivityEntity>> response = new ApiResponse<>(HttpStatus.OK, "Success retrieved activity history", result);
             return new ResponseEntity<>(response, response.getStatus());
         } catch (Exception error) {
