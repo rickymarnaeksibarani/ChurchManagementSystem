@@ -27,7 +27,7 @@ public class NewsEntity {
     private String title;
 
     @Column(name = "image_path")
-    private String imagePath; // Add this field
+    private String imagePath;
 
     @Column(name = "content", columnDefinition = "text")
     private String content;

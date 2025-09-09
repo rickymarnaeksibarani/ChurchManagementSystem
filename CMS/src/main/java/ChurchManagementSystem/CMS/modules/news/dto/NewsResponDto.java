@@ -17,6 +17,9 @@ public class NewsResponDto {
     private Category category;
     private String title;
     private String content;
-    private String imagePath;
+    private String fileName;
+    private String fileType;
+    private long fileSize;
+    private String filePath;
 
 }

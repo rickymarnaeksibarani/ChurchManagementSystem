@@ -46,15 +46,37 @@ public class NewsService {
         }
     }
 
-    private NewsResponDto toNewsRespone(NewsEntity newsEntity){
+    private NewsResponDto toNewsRespone(NewsEntity newsEntity) {
+        String imagePath = newsEntity.getImagePath();
+        String fileName = null;
+        String fileType = null;
+        long fileSize = 0L;
+
+        if (imagePath != null && !imagePath.isEmpty()) {
+            Path path = Paths.get(imagePath);
+            fileName = path.getFileName().toString();
+            try {
+                fileType = Files.probeContentType(path); // detect MIME type
+                fileSize = Files.size(path);             // size in bytes
+            } catch (IOException e) {
+                fileType = "unknown";
+                fileSize = 0L;
+            }
+        }
+
         return NewsResponDto.builder()
                 .id(newsEntity.getId())
                 .title(newsEntity.getTitle())
                 .content(newsEntity.getContent())
                 .category(newsEntity.getCategory())
-                .imagePath(newsEntity.getImagePath())
+                .fileName(fileName)
+                .fileType(fileType)
+                .fileSize(fileSize)
+                .filePath(imagePath != null ? imagePath.replace("\\", "/") : null) // normalize
                 .build();
     }
+
+
 
     @Transactional(readOnly = true)
     public PaginationUtil<NewsEntity, NewsEntity> getAllNews(Integer page, Integer perPage, NewsRequestDto searchRequest) {
@@ -134,7 +156,7 @@ public class NewsService {
     }
 
     //todo: solve news all feature
-    private String saveImage(MultipartFile image) throws IOException {
+    private String saveImage(MultipartFile image){
         try {
             String contentType = image.getContentType();
             if (contentType == null || !isValidImageType(contentType)) {
