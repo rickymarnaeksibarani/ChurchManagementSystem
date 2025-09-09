@@ -10,9 +10,9 @@ import java.util.List;
 public class BoardRequestDto {
     private Integer page;
     private Integer size;
-    private String searchTerm;
-    private List<Status> status;
-    private List<Fungsi> fungsi;
+    private String searchByName;
+    private Fungsi filterByFungsi;
+    private Status filterByStatus;
 
     BoardRequestDto(){
         if (this.getPage()==null){
