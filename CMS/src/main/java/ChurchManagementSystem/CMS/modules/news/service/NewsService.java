@@ -56,7 +56,6 @@ public class NewsService {
                 .build();
     }
 
-    //Getting
     @Transactional(readOnly = true)
     public PaginationUtil<NewsEntity, NewsEntity> getAllNews(Integer page, Integer perPage, NewsRequestDto searchRequest) {
         try {
