@@ -22,7 +22,6 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
-    //Getting by Pagination
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<Object> getAllNews(
             @RequestParam(defaultValue = "1") Integer page,
