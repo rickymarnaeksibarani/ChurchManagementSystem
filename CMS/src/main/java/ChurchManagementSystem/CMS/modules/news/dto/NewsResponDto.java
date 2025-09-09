@@ -17,6 +17,6 @@ public class NewsResponDto {
     private Category category;
     private String title;
     private String content;
-    private String image;
+    private String imagePath;
 
 }

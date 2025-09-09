@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/news")
@@ -51,11 +50,10 @@ public class NewsController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<NewsResponDto> createNews(
-            @RequestPart @Valid NewsDto request,
-            @RequestPart(value = "thumbnail", required = false)List<MultipartFile> thumbnail
-    )throws Exception{
-
-        NewsResponDto news = newsService.createNews(request);
+            @RequestPart("request") @Valid NewsDto request,
+            @RequestPart(value = "image", required = false) MultipartFile image
+    ) throws Exception {
+        NewsResponDto news = newsService.createNews(request, image);
         return ApiResponse.<NewsResponDto>builder()
                 .result(news)
                 .status(HttpStatus.CREATED)
@@ -67,10 +65,10 @@ public class NewsController {
     public ApiResponse<NewsResponDto> updateNewsById(
             @PathVariable Long id,
             @RequestPart @Valid NewsDto request,
-            @RequestPart(value = "thumbnail", required = false) List<MultipartFile> thumbnail
+            @RequestPart(value = "image", required = false) MultipartFile image
     ) throws Exception {
 
-        NewsResponDto news = newsService.updateNews(id, request);
+        NewsResponDto news = newsService.updateNews(id, request, image);
         return ApiResponse.<NewsResponDto>builder()
                 .message("Success update data")
                 .status(HttpStatus.OK)

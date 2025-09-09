@@ -6,7 +6,7 @@ import ChurchManagementSystem.CMS.modules.news.dto.NewsRequestDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsResponDto;
 import ChurchManagementSystem.CMS.modules.news.entity.NewsEntity;
 import ChurchManagementSystem.CMS.modules.news.repository.NewsRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,116 +23,153 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 @Service
 public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
-    private final String UPLOAD_DIR = "src/main/resources/upload/image";
+    private final String UPLOAD_DIR = "CMS/src/main/resources/upload/images";
 
-    private NewsResponDto toNewsRespone(NewsEntity newsEntity)throws JsonProcessingException{
+    @PostConstruct
+    private void init(){
+        Path uploadPath = Paths.get(UPLOAD_DIR);
+        if (!Files.exists(uploadPath)){
+            try {
+                Files.createDirectories(uploadPath);
+            }catch (Exception e){
+                throw new RuntimeException("Could not initialize upload directory", e);
+            }
+        }
+    }
+
+    private NewsResponDto toNewsRespone(NewsEntity newsEntity){
         return NewsResponDto.builder()
+                .id(newsEntity.getId())
                 .title(newsEntity.getTitle())
                 .content(newsEntity.getContent())
                 .category(newsEntity.getCategory())
-                .id(newsEntity.getId())
-                .image(newsEntity.getImagePath())
+                .imagePath(newsEntity.getImagePath())
                 .build();
     }
 
     //Getting
     @Transactional(readOnly = true)
     public PaginationUtil<NewsEntity, NewsEntity> getAllNews(Integer page, Integer perPage, NewsRequestDto searchRequest) {
-        Specification<NewsEntity> specification = (root, query, builder) -> {
-            List<Predicate> predicates = new ArrayList<>();
+        try {
+            Specification<NewsEntity> specification = (root, query, builder) -> {
+                List<Predicate> predicates = new ArrayList<>();
 
-            if (searchRequest.getSearchTerm() != null) {
-                predicates.add(
-                        builder.like(builder.upper(root.get("title")), "%" + searchRequest.getSearchTerm().toUpperCase() + "%")
-                );
-            }
-            return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
-        };
+                if (searchRequest.getSearchTerm() != null) {
+                    predicates.add(
+                            builder.like(builder.upper(root.get("title")), "%" + searchRequest.getSearchTerm().toUpperCase() + "%")
+                    );
+                }
+                return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
+            };
 
-        PageRequest pageRequest = PageRequest.of(page - 1, perPage, Sort.by(Sort.Order.desc("createdAt")));
-        Page<NewsEntity> pagedResult = newsRepository.findAll(specification, pageRequest);
-        return new PaginationUtil<>(pagedResult, NewsEntity.class);
+            PageRequest pageRequest = PageRequest.of(page - 1, perPage, Sort.by(Sort.Order.desc("createdAt")));
+            Page<NewsEntity> pagedResult = newsRepository.findAll(specification, pageRequest);
+            return new PaginationUtil<>(pagedResult, NewsEntity.class);
+        }catch (Exception e){
+            throw new RuntimeException(e);
+        }
     }
-    public NewsResponDto getNewsById(Long id) throws Exception {
+    public NewsResponDto getNewsById(Long id){
         NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
         return toNewsRespone(news);
     }
 
     @Transactional
-    public NewsResponDto createNews(NewsDto request) throws Exception{
-        NewsEntity news = new NewsEntity();
-        String imagePath = null;
-
-        if (request.getImage() != null && !request.getImage().isEmpty()) {
-            imagePath = saveFile(request.getImage());
+    public NewsResponDto createNews(NewsDto request, MultipartFile image) throws IOException {
+        try {
+            NewsEntity news = new NewsEntity();
+            NewsEntity payload = newsAppPayload(request, news);
+            if (image != null && !image.isEmpty()) {
+                String imagePath = saveImage(image);
+                payload.setImagePath(imagePath);
+            }
+            newsRepository.save(payload);
+            return toNewsRespone(payload);
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
-        NewsEntity payload = newsAppPayload(request, news, imagePath);
-//        if (request.getImage() != null && !request.getImage().isEmpty()) {
-//            String fileName = saveFile(request.getImage());
-//            payload.setImagePath(fileName); // Assuming you have an imagePath field in NewsEntity
-//        }
-        newsRepository.save(payload);
-        return toNewsRespone(payload);
     }
 
     @Transactional
-    public NewsResponDto updateNews(Long id, NewsDto request) throws Exception{
-       NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND , "Id " + id + " not found"));
-
-        String imagePath = null; // Initialize imagePath
-
-        if (request.getImage() != null && !request.getImage().isEmpty()) {
-            // Delete the old file if necessary
-            deleteFile(news.getImagePath());
-            imagePath = saveFile(request.getImage()); // Save the new image and get the path
+    public NewsResponDto updateNews(Long id, NewsDto request, MultipartFile image) throws Exception{
+        try {
+            NewsEntity news = newsRepository.findById(id)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Id " + id + " not found"));
+            NewsEntity payload = newsAppPayload(request, news);
+            if (image != null && !image.isEmpty()) {
+                String imagePath = saveImage(image);
+                news.setImagePath(imagePath);
+            }
+            newsRepository.saveAndFlush(payload);
+            return toNewsRespone(payload);
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
-       NewsEntity payload = newsAppPayload(request, news, imagePath);
-       newsRepository.saveAndFlush(payload);
-       return toNewsRespone(payload);
     }
 
 
     @Transactional
-    public void deleteById(Long id) throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+    public void deleteById(Long id){
         NewsEntity data = newsRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Data not found"));
-        deleteFile(data.getImagePath());
+        if (data.getImagePath() != null && !data.getImagePath().isEmpty()) {
+            deleteImage(data.getImagePath());
+        }
         newsRepository.deleteById(id);
     }
 
-    private NewsEntity newsAppPayload(NewsDto request, NewsEntity news, String imagePath)throws JsonProcessingException{
+    private NewsEntity newsAppPayload(NewsDto request, NewsEntity news){
         news.setTitle(request.getTitle());
         news.setContent(request.getContent());
         news.setCategory(request.getCategory());
-        news.setImagePath(imagePath);
         return news;
     }
-    private String saveFile(MultipartFile file) throws IOException {
-        // Create the directory if it doesn't exist
-        java.nio.file.Path uploadPath = Paths.get(UPLOAD_DIR);
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
+
+    private String saveImage(MultipartFile image) throws IOException {
+        try {
+            String contentType = image.getContentType();
+            if (contentType == null || !isValidImageType(contentType)) {
+                throw new IllegalArgumentException("Only JPG and PNG files are allowed");
+            }
+            String generatedString = generateRandomString();
+            String originalFilename = Objects.requireNonNull(image.getOriginalFilename()).replace(" ", "_");
+            String filename = System.currentTimeMillis() + "_" + generatedString + "_" + originalFilename;
+            Path filePath = Paths.get(UPLOAD_DIR, filename);
+            Files.createDirectories(filePath.getParent());
+            Files.write(filePath, image.getBytes());
+            return filePath.toString();
+        }catch (Exception e){
+            throw new RuntimeException(e);
         }
-
-        // Save the file
-        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-        Path filePath = uploadPath.resolve(fileName);
-        Files.copy(file.getInputStream(), filePath);
-        return fileName;
     }
 
-    private void deleteFile(String fileName) throws IOException {
-        java.nio.file.Path filePath = Paths.get(UPLOAD_DIR).resolve(fileName);
-        Files.deleteIfExists(filePath);
+    private boolean isValidImageType(String contentType) {
+        return "image/png".equals(contentType) || "image/jpeg".equals(contentType) || "image/jpg".equals(contentType);
     }
 
+    private String generateRandomString() {
+        Random random = new Random();
+        return random.ints(97, 123) // ASCII range for lowercase letters
+                .limit(11) // Generate an 11-character string
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+    }
+
+    private void deleteImage(String imagePath) {
+        try {
+            Path path = Paths.get(imagePath);
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            System.err.println("Could not delete file: " + imagePath + " - " + e.getMessage());
+        }
+    }
 }
