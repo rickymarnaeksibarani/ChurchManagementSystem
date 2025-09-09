@@ -133,6 +133,7 @@ public class NewsService {
         return news;
     }
 
+    //todo: solve news all feature
     private String saveImage(MultipartFile image) throws IOException {
         try {
             String contentType = image.getContentType();
