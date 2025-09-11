@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -33,10 +34,8 @@ public class FinancialService {
     public PaginationUtil<IncomeEntity, IncomeResponeDto> getAllIncomeByPagination(IncomeRequestDto request) {
         Pageable paging = PageRequest.of(request.getPage() - 1, request.getSize(), Sort.by("incomeDate").descending());
         Page<IncomeEntity> pagedResult = incomeRepository.findAll(paging);
-
         return new PaginationUtil<>(pagedResult, IncomeResponeDto.class);
     }
-
 
     public OutcomeEntity saveOutcome (OutcomeEntity outcomeEntity){
         return outcomeRepository.save(outcomeEntity);
