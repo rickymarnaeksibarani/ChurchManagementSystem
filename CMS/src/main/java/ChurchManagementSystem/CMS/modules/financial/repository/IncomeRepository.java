@@ -30,5 +30,5 @@ public interface IncomeRepository extends JpaRepository<IncomeEntity, Long>, Jpa
 //            "(:category = 'incomeDonate' AND i.incomeDonate IS NOT NULL) OR " +
 //            "(:category = 'incomeOther' AND i.incomeOther IS NOT NULL)")
 //    Page<IncomeEntity> findAllByCategory(@Param("category") String category, Pageable pageable);
-    List<IncomeEntity>findByIncomeDateBetween(Date start, Date end);
+    List<IncomeEntity>findByIncomeDateBetween(LocalDateTime start, LocalDateTime end);
 }

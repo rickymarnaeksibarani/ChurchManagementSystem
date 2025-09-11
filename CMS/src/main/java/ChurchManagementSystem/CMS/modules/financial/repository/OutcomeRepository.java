@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -31,5 +32,5 @@ public interface OutcomeRepository extends JpaRepository<OutcomeEntity, Long>, J
 //            "(:category = 'outcomeOther' AND i.outcomeOther IS NOT NULL)")
 //    Page<OutcomeEntity> findAllByCategory(@Param("category") String category, Pageable pageable);
 
-    List<OutcomeEntity>findByOutcomeDateBetween(Date start, Date end);
+    List<OutcomeEntity>findByOutcomeDateBetween(LocalDateTime start, LocalDateTime end);
 }

@@ -9,6 +9,7 @@ import ChurchManagementSystem.CMS.modules.asset.entity.AssetEntity;
 import ChurchManagementSystem.CMS.modules.financial.dto.IncomeRequestDto;
 import ChurchManagementSystem.CMS.modules.financial.dto.IncomeResponeDto;
 import ChurchManagementSystem.CMS.modules.financial.dto.OutcomeResponeDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.SummaryDto;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.service.FinancialService;
@@ -55,5 +56,14 @@ public class FinancialController {
         catch (CustomRequestException error){
             return error.GlobalCustomRequestException(error.getMessage(), error.getStatus());
         }
+    }
+
+    @GetMapping("/summary")
+    public ResponseEntity<SummaryDto> getSummary(
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        SummaryDto summary = financialService.getSummary(year, month);
+        return ResponseEntity.ok(summary);
     }
 }
