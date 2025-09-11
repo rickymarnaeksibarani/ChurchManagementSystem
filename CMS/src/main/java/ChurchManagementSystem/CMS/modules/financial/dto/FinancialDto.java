@@ -10,8 +10,8 @@ public class FinancialDto {
     private BigDecimal monthlyIncome;
     private BigDecimal monthlyOutcome;
 
-    private BigDecimal totalIncome;   // all time
-    private BigDecimal totalOutcome;  // all time
+    private BigDecimal totalIncome;
+    private BigDecimal totalOutcome;
 
     private BigDecimal balance;
 }
