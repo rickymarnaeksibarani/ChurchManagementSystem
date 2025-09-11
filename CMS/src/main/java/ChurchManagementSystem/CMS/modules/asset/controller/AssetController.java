@@ -38,7 +38,7 @@ public class AssetController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> searchAsset(AssetRequestDto searchDTO){
         try {
-            PaginationUtil<AssetEntity, AssetEntity> result = assetService.getAllAssetByPagination(searchDTO);
+            PaginationUtil<AssetEntity, AssetsDto> result = assetService.getAllAssetByPagination(searchDTO);
             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success retrieved data assets", result), HttpStatus.OK);
         }
         catch (CustomRequestException error){

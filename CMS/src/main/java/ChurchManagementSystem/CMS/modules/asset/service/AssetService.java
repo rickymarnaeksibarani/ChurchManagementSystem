@@ -7,6 +7,7 @@ import ChurchManagementSystem.CMS.modules.asset.dto.AssetsDto;
 import ChurchManagementSystem.CMS.modules.asset.entity.AssetEntity;
 import ChurchManagementSystem.CMS.modules.asset.repository.AssetRepository;
 import jakarta.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,13 +24,13 @@ import java.util.List;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AssetService {
-    @Autowired
-    private AssetRepository assetRepository;
+    private final AssetRepository assetRepository;
 
     //Getting by pagination
 
-    public PaginationUtil<AssetEntity, AssetEntity> getAllAssetByPagination(AssetRequestDto searhRequest){
+    public PaginationUtil<AssetEntity, AssetsDto> getAllAssetByPagination(AssetRequestDto searhRequest){
         Specification<AssetEntity> specification = (root, query, builder)-> {
             List<Predicate> predicates = new ArrayList<>();
 
@@ -42,7 +43,7 @@ public class AssetService {
         };
         Pageable paging = PageRequest.of(searhRequest.getPage()-1, searhRequest.getSize());
         Page<AssetEntity> pagedResult = assetRepository.findAll(specification, paging);
-        return new PaginationUtil<>(pagedResult, AssetEntity.class);
+        return new PaginationUtil<>(pagedResult, AssetsDto.class);
     }
     //Getting by ID
 

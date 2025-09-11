@@ -56,8 +56,8 @@ public class NewsService {
             Path path = Paths.get(imagePath);
             fileName = path.getFileName().toString();
             try {
-                fileType = Files.probeContentType(path); // detect MIME type
-                fileSize = Files.size(path);             // size in bytes
+                fileType = Files.probeContentType(path);
+                fileSize = Files.size(path);
             } catch (IOException e) {
                 fileType = "unknown";
                 fileSize = 0L;
