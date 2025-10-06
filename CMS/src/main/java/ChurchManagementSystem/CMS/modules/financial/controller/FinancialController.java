@@ -3,12 +3,11 @@ package ChurchManagementSystem.CMS.modules.financial.controller;
 import ChurchManagementSystem.CMS.core.CustomResponse.ApiResponse;
 import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
-import ChurchManagementSystem.CMS.modules.asset.dto.AssetRequestDto;
-import ChurchManagementSystem.CMS.modules.asset.dto.AssetsDto;
-import ChurchManagementSystem.CMS.modules.asset.entity.AssetEntity;
-import ChurchManagementSystem.CMS.modules.financial.dto.IncomeRequestDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.IncomeResponeDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.OutcomeResponeDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeFinancialDetailDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeRequestDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeResponeDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeFinancialDetailDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeResponeDto;
 import ChurchManagementSystem.CMS.modules.financial.dto.SummaryDto;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
@@ -65,5 +64,38 @@ public class FinancialController {
     ) {
         SummaryDto summary = financialService.getSummary(year, month);
         return ResponseEntity.ok(summary);
+    }
+
+//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, value = "/income/financial-detail")
+//    public ResponseEntity<?> getFinancialDetailByIncome() {
+//        try {
+//            IncomeFinancialDetailDto financialDetail = financialService.getFinancialDetailByIncome();
+//            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success retrieved financial detail", financialDetail), HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve financial detail", null), HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
+//    getFinancialDetailByIncome
+
+    @GetMapping(value = "/income/financial-detail", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFinancialDetailByIncome(
+            @RequestParam(name = "category", required = false) String category) {
+        try {
+            IncomeFinancialDetailDto result = financialService.getFinancialDetailByIncome(category);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success retrieved financial detail", result), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve financial detail", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/outcome/financial-detail", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFinancialDetailByOutcome(
+            @RequestParam(name = "category", required = false) String category) {
+        try {
+            OutcomeFinancialDetailDto result = financialService.getFinancialDetailByOutcome(category);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success retrieved financial detail", result), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to retrieve financial detail", null), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

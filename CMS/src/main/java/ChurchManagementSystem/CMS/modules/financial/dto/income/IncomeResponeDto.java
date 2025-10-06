@@ -1,19 +1,19 @@
-package ChurchManagementSystem.CMS.modules.financial.dto;
+package ChurchManagementSystem.CMS.modules.financial.dto.income;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
-public class OutcomeResponeDto {
-    private Long idOutcome;
+public class IncomeResponeDto {
+    private Long idIncome;
     private String nama;
-    private BigDecimal totalOutcome;
+    private BigDecimal totalIncome;
     private String deskripsi;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date outcomeDate;
+    private Date incomeDate;
+
 }
