@@ -5,8 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,5 +17,4 @@ public class IncomeFinancialDetailDto {
     private BigDecimal totalDonasi = BigDecimal.ZERO;
     private BigDecimal totalLainnya = BigDecimal.ZERO;
 
-    private List<IncomeFinancialDetailItemDto> details = new ArrayList<>();
 }
