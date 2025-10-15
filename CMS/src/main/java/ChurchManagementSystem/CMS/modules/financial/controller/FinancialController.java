@@ -21,6 +21,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -115,5 +117,37 @@ public class FinancialController {
 
         return ResponseEntity.ok(response);
 
+    }
+
+    @GetMapping("/income/total")
+    public ResponseEntity<?> getTotalIncome(
+            @RequestParam int year,
+            @RequestParam(required = false) String month) {
+        BigDecimal totalIncome = financialService.getTotalIncomeByYearAndMonth(year, month);
+
+        String message = (month == null)
+                ? "Total income for all months in year " + year
+                : "Total income for year " + year + ", month " + month;
+
+        return ResponseEntity.ok(Map.of(
+                "message", message,
+                "totalIncome", totalIncome
+        ));
+    }
+
+    @GetMapping("/outcome/total")
+    public ResponseEntity<?> getTotalOutcome(
+            @RequestParam int year,
+            @RequestParam(required = false) String month) {
+        BigDecimal totalOutcome = financialService.getTotalOutcomeByYearAndMonth(year, month);
+
+        String message = (month == null)
+                ? "Total outcome for all months in year " + year
+                : "Total outcome for year " + year + ", month " + month;
+
+        return ResponseEntity.ok(Map.of(
+                "message", message,
+                "totalOutcome", totalOutcome
+        ));
     }
 }

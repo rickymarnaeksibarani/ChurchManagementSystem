@@ -28,4 +28,11 @@ public interface IncomeRepository extends JpaRepository<IncomeEntity, Long>, Jpa
             "COALESCE(SUM(i.lainnya), 0) " +
             "FROM IncomeEntity i")
     Object[] findTotalFinancialDetail();
+
+    @Query("SELECT COALESCE(SUM(i.totalIncome), 0) " +
+            "FROM IncomeEntity i " +
+            "WHERE EXTRACT(YEAR FROM i.incomeDate) = :year " +
+            "AND (:month IS NULL OR EXTRACT(MONTH FROM i.incomeDate) = :month)")
+    BigDecimal getTotalIncomeByYearAndMonth(@Param("year") int year,
+                                            @Param("month") Integer month);
 }

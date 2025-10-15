@@ -19,4 +19,10 @@ public interface OutcomeRepository extends JpaRepository<OutcomeEntity, Long>, J
 
     List<OutcomeEntity>findByOutcomeDateBetween(LocalDateTime start, LocalDateTime end);
 
+    @Query("SELECT COALESCE(SUM(i.totalOutcome), 0) " +
+            "FROM OutcomeEntity i " +
+            "WHERE EXTRACT(YEAR FROM i.outcomeDate) = :year " +
+            "AND (:month IS NULL OR EXTRACT(MONTH FROM i.outcomeDate) = :month)")
+    BigDecimal getTotalOutcomeByYearAndMonth(@Param("year") int year,
+                                            @Param("month") Integer month);
 }

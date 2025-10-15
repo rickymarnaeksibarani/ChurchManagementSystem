@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.modules.financial.service;
 
+import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.financial.dto.income.*;
 import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeFinancialDetailDto;
@@ -15,15 +16,16 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.Pair;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -221,69 +223,66 @@ public class FinancialService {
     }
 
 
-//    public OutcomeFinancialDetailDto getFinancialDetailByOutcome(String category) {
-//        Specification<OutcomeEntity> spec = OutcomePredicate.category(category);
-//
-//        // Ambil semua data income yang sesuai category filter
-//        List<OutcomeEntity> outcomes = outcomeRepository.findAll(spec != null ? spec : Specification.where(null));
-//
-//
-//        OutcomeFinancialDetailDto result = new OutcomeFinancialDetailDto();
-//
-//        for (OutcomeEntity outcome : outcomes) {
-//            // Hitung total masing-masing kategori
-//            result.setTotalDeposit(result.getTotalDeposit().add(outcome.getDeposit() != null ? outcome.getDeposit() : BigDecimal.ZERO));
-//            result.setTotalPembangunan(result.getTotalPembangunan().add(outcome.getPembangunan() != null ? outcome.getPembangunan() : BigDecimal.ZERO));
-//            result.setTotalDiakonia(result.getTotalDiakonia().add(outcome.getDiakonia() != null ? outcome.getDiakonia() : BigDecimal.ZERO));
-//            result.setTotalPelayanan(result.getTotalPelayanan().add(outcome.getPelayanan() != null ? outcome.getPelayanan() : BigDecimal.ZERO));
-//            result.setTotalOperasional(result.getTotalOperasional().add(outcome.getOperasional() != null ? outcome.getOperasional() : BigDecimal.ZERO));
-//            result.setTotalAcara(result.getTotalAcara().add(outcome.getAcara() != null ? outcome.getAcara() : BigDecimal.ZERO));
-//
-//            // Tambahkan detail item berdasarkan kategori yang dicari
-//            if (category == null || category.isEmpty()) {
-//                // Jika category null, tampilkan semua kategori yang > 0 sebagai detail (bisa dipilih atau di skip)
-//                // Untuk simplifikasi, skip detail list kalau kategori kosong (atau implementasi bisa disesuaikan)
-//                continue;
-//            }
-//
-//            BigDecimal nominal = BigDecimal.ZERO;
-//            switch (category.toLowerCase()) {
-//                case "deposit":
-//                    nominal = outcome.getDeposit();
-//                    break;
-//                case "pembangunan":
-//                    nominal = outcome.getPembangunan();
-//                    break;
-//                case "diakonia":
-//                    nominal = outcome.getDiakonia();
-//                    break;
-//                case "pelayanan":
-//                    nominal = outcome.getPelayanan();
-//                    break;
-//                case "operasional":
-//                    nominal = outcome.getOperasional();
-//                    break;
-//                case "acara":
-//                    nominal = outcome.getAcara();
-//                    break;
-//                case "lainnya":
-//                    nominal = outcome.getLainnya();
-//                    break;
-//            }
-//
-//            if (nominal != null && nominal.compareTo(BigDecimal.ZERO) > 0) {
-//                String keterangan = outcome.getNama() != null ? outcome.getNama() : (outcome.getDeskripsi() != null ? outcome.getDeskripsi() : "");
-//                result.getDetails().add(new OutcomeFinancialDetailItemDto(outcome.getOutcomeDate(), capitalize(category), nominal, keterangan));
-//            }
-//        }
-//
-//        return result;
-//    }
-
     private String capitalize(String str) {
         if (str == null || str.isEmpty()) return str;
         return str.substring(0,1).toUpperCase() + str.substring(1).toLowerCase();
     }
+
+
+    //Total income by query paramater year, month and all month
+    public BigDecimal getTotalIncomeByYearAndMonth(int year, String month) {
+        try {
+            Integer monthNumber = null;
+
+            if (month != null && !month.isBlank()) {
+                try {
+                    // Konversi nama bulan ke angka (1–12)
+                    monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(
+                            "Invalid month name: '" + month + "'. Please use an English month name"
+                    );
+                }
+            }
+
+            return incomeRepository.getTotalIncomeByYearAndMonth(year, monthNumber);
+
+        } catch (IllegalArgumentException e) {
+            // Lempar error yang bisa dikirim ke response API
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            // Tangani error umum lain
+            throw new RuntimeException("An unexpected error occurred while retrieving total income.", e);
+        }
+    }
+
+    //Total outcome by query paramater year, month and all month
+    public BigDecimal getTotalOutcomeByYearAndMonth(int year, String month) {
+        try {
+            Integer monthNumber = null;
+
+            if (month != null && !month.isBlank()) {
+                try {
+                    // Konversi nama bulan ke angka (1–12)
+                    monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException(
+                            "Invalid month name: '" + month + "'. Please use an English month name"
+                    );
+                }
+            }
+
+            return outcomeRepository.getTotalOutcomeByYearAndMonth(year, monthNumber);
+
+        } catch (IllegalArgumentException e) {
+            // Lempar error yang bisa dikirim ke response API
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            // Tangani error umum lain
+            throw new RuntimeException("An unexpected error occurred while retrieving total income.", e);
+        }
+    }
+
 
 }
 
