@@ -1,8 +1,6 @@
 package ChurchManagementSystem.CMS.modules.financial.repository;
 
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -29,10 +26,11 @@ public interface IncomeRepository extends JpaRepository<IncomeEntity, Long>, Jpa
             "FROM IncomeEntity i")
     Object[] findTotalFinancialDetail();
 
-    @Query("SELECT COALESCE(SUM(i.totalIncome), 0) " +
-            "FROM IncomeEntity i " +
-            "WHERE EXTRACT(YEAR FROM i.incomeDate) = :year " +
-            "AND (:month IS NULL OR EXTRACT(MONTH FROM i.incomeDate) = :month)")
-    BigDecimal getTotalIncomeByYearAndMonth(@Param("year") int year,
-                                            @Param("month") Integer month);
+    @Query("SELECT COALESCE(SUM(i.totalIncome), 0) FROM IncomeEntity i WHERE EXTRACT(YEAR FROM i.incomeDate) = :year")
+    BigDecimal sumTotalIncomeByYear(@Param("year") int year);
+
+    @Query("SELECT COALESCE(SUM(i.totalIncome), 0) FROM IncomeEntity i WHERE EXTRACT(YEAR FROM i.incomeDate) = :year AND EXTRACT(MONTH FROM i.incomeDate) = :month")
+    BigDecimal sumTotalIncomeByYearAndMonth(@Param("year") int year, @Param("month") int month);
+
+
 }

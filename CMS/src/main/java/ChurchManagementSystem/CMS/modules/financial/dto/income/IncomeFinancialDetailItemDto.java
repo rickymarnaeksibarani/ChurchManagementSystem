@@ -12,7 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 public class IncomeFinancialDetailItemDto {
     private Date incomeDate;
-    private String category; // category name
+    private String category;
     private BigDecimal nominal;
-    private String keterangan;
+    private String deskripsi;
+    private String nama;
 }

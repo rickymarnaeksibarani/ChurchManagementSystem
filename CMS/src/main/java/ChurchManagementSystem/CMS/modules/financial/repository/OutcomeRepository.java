@@ -25,4 +25,10 @@ public interface OutcomeRepository extends JpaRepository<OutcomeEntity, Long>, J
             "AND (:month IS NULL OR EXTRACT(MONTH FROM i.outcomeDate) = :month)")
     BigDecimal getTotalOutcomeByYearAndMonth(@Param("year") int year,
                                             @Param("month") Integer month);
+
+    @Query("SELECT COALESCE(SUM(i.totalOutcome), 0) FROM OutcomeEntity i WHERE EXTRACT(YEAR FROM i.outcomeDate) = :year")
+    BigDecimal sumTotalOutcomeByYear(@Param("year") int year);
+
+    @Query("SELECT COALESCE(SUM(i.totalOutcome), 0) FROM OutcomeEntity i WHERE EXTRACT(YEAR FROM i.outcomeDate) = :year AND EXTRACT(MONTH FROM i.outcomeDate) = :month")
+    BigDecimal sumTotalOutcomeByYearAndMonth(@Param("year") int year, @Param("month") int month);
 }

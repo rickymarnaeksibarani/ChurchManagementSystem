@@ -22,7 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -120,34 +120,41 @@ public class FinancialController {
     }
 
     @GetMapping("/income/total")
-    public ResponseEntity<?> getTotalIncome(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getTotalIncome(
             @RequestParam int year,
             @RequestParam(required = false) String month) {
+
         BigDecimal totalIncome = financialService.getTotalIncomeByYearAndMonth(year, month);
 
-        String message = (month == null)
-                ? "Total income for all months in year " + year
-                : "Total income for year " + year + ", month " + month;
+        String message = (month == null || month.isBlank())
+                ? "Successfully retrieved total income for all months in year " + year
+                : "Successfully retrieved total income for year " + year + ", month " + month;
 
-        return ResponseEntity.ok(Map.of(
-                "message", message,
-                "totalIncome", totalIncome
-        ));
+        Map<String, Object> data = new HashMap<>();
+        data.put("year", year);
+        data.put("month", month);
+        data.put("totalIncome", totalIncome);
+
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, message, data));
     }
 
+
     @GetMapping("/outcome/total")
-    public ResponseEntity<?> getTotalOutcome(
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getTotalOutcome(
             @RequestParam int year,
             @RequestParam(required = false) String month) {
+
         BigDecimal totalOutcome = financialService.getTotalOutcomeByYearAndMonth(year, month);
 
-        String message = (month == null)
-                ? "Total outcome for all months in year " + year
-                : "Total outcome for year " + year + ", month " + month;
+        String message = (month == null || month.isBlank())
+                ? "Successfully retrieved total outcome for all months in year " + year
+                : "Successfully retrieved total outcome for year " + year + ", month " + month;
 
-        return ResponseEntity.ok(Map.of(
-                "message", message,
-                "totalOutcome", totalOutcome
-        ));
+        Map<String, Object> data = new HashMap<>();
+        data.put("year", year);
+        data.put("month", month);
+        data.put("totalIncome", totalOutcome);
+
+        return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, message, data));
     }
 }

@@ -15,4 +15,5 @@ public class OutcomeFinancialDetailItemDto {
     private String category;
     private BigDecimal nominal;
     private String keterangan;
+    private String nama;
 }

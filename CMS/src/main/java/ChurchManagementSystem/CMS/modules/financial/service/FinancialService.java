@@ -137,9 +137,8 @@ public class FinancialService {
                 };
 
                 if (nominal != null && nominal.compareTo(BigDecimal.ZERO) > 0) {
-                    String keterangan = income.getNama() != null ? income.getNama() :
-                            (income.getDeskripsi() != null ? income.getDeskripsi() : "");
-                    allDetails.add(new IncomeFinancialDetailItemDto(income.getIncomeDate(), capitalize(category), nominal, keterangan));
+                    String keterangan = income.getDeskripsi() != null ? income.getDeskripsi() : "";
+                    allDetails.add(new IncomeFinancialDetailItemDto(income.getIncomeDate(), capitalize(category), nominal, keterangan, income.getNama()));
                 }
             }
         }
@@ -201,9 +200,8 @@ public class FinancialService {
                 };
 
                 if (nominal != null && nominal.compareTo(BigDecimal.ZERO) > 0) {
-                    String keterangan = outcome.getNama() != null ? outcome.getNama() :
-                            (outcome.getDeskripsi() != null ? outcome.getDeskripsi() : "");
-                    allDetails.add(new OutcomeFinancialDetailItemDto(outcome.getOutcomeDate(), capitalize(category), nominal, keterangan));
+                    String keterangan = outcome.getDeskripsi() != null ? outcome.getDeskripsi() : "";
+                    allDetails.add(new OutcomeFinancialDetailItemDto(outcome.getOutcomeDate(), capitalize(category), nominal, keterangan, outcome.getNama()));
                 }
             }
         }
@@ -231,56 +229,37 @@ public class FinancialService {
 
     //Total income by query paramater year, month and all month
     public BigDecimal getTotalIncomeByYearAndMonth(int year, String month) {
-        try {
-            Integer monthNumber = null;
-
-            if (month != null && !month.isBlank()) {
-                try {
-                    // Konversi nama bulan ke angka (1–12)
-                    monthNumber = Month.valueOf(month.toUpperCase()).getValue();
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalArgumentException(
-                            "Invalid month name: '" + month + "'. Please use an English month name"
-                    );
-                }
-            }
-
-            return incomeRepository.getTotalIncomeByYearAndMonth(year, monthNumber);
-
-        } catch (IllegalArgumentException e) {
-            // Lempar error yang bisa dikirim ke response API
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (Exception e) {
-            // Tangani error umum lain
-            throw new RuntimeException("An unexpected error occurred while retrieving total income.", e);
+        if (month == null || month.isBlank()) {
+            return incomeRepository.sumTotalIncomeByYear(year);
         }
+
+        try {
+            int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+            return incomeRepository.sumTotalIncomeByYearAndMonth(year, monthNumber);
+        } catch (IllegalArgumentException e) {
+            throw new CustomRequestException("Invalid month name: " + month, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new CustomRequestException("Failed to calculate total income: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
+
 
     //Total outcome by query paramater year, month and all month
     public BigDecimal getTotalOutcomeByYearAndMonth(int year, String month) {
-        try {
-            Integer monthNumber = null;
-
-            if (month != null && !month.isBlank()) {
-                try {
-                    // Konversi nama bulan ke angka (1–12)
-                    monthNumber = Month.valueOf(month.toUpperCase()).getValue();
-                } catch (IllegalArgumentException e) {
-                    throw new IllegalArgumentException(
-                            "Invalid month name: '" + month + "'. Please use an English month name"
-                    );
-                }
-            }
-
-            return outcomeRepository.getTotalOutcomeByYearAndMonth(year, monthNumber);
-
-        } catch (IllegalArgumentException e) {
-            // Lempar error yang bisa dikirim ke response API
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } catch (Exception e) {
-            // Tangani error umum lain
-            throw new RuntimeException("An unexpected error occurred while retrieving total income.", e);
+        if (month == null || month.isBlank()) {
+            return outcomeRepository.sumTotalOutcomeByYear(year);
         }
+
+        try {
+            int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+            return outcomeRepository.sumTotalOutcomeByYearAndMonth(year, monthNumber);
+        } catch (IllegalArgumentException e) {
+            throw new CustomRequestException("Invalid month name: " + month, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            throw new CustomRequestException("Failed to calculate total income: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 
