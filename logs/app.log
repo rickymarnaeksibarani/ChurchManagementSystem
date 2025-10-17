@@ -750,3 +750,43 @@
 2025-10-17T14:29:19.734+07:00  INFO 17116 --- [CMS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2025-10-17T14:29:19.863+07:00  INFO 17116 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2025-10-17T14:29:19.876+07:00  INFO 17116 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-17T14:37:47.145+07:00  INFO 9788 --- [CMS] [main] C.CMS.CmsApplication                     : Starting CmsApplication using Java 17.0.10 with PID 9788 (C:\Users\User\cms\ChurchManagementSystem\CMS\target\classes started by User in C:\Users\User\cms\ChurchManagementSystem)
+2025-10-17T14:37:47.148+07:00  INFO 9788 --- [CMS] [main] C.CMS.CmsApplication                     : The following 1 profile is active: "local"
+2025-10-17T14:37:48.792+07:00  INFO 9788 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-17T14:37:48.980+07:00  INFO 9788 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 170 ms. Found 8 JPA repository interfaces.
+2025-10-17T14:37:49.911+07:00  INFO 9788 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-17T14:37:49.927+07:00  INFO 9788 --- [CMS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-17T14:37:49.927+07:00  INFO 9788 --- [CMS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.25]
+2025-10-17T14:37:50.041+07:00  INFO 9788 --- [CMS] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-17T14:37:50.042+07:00  INFO 9788 --- [CMS] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2819 ms
+2025-10-17T14:37:50.292+07:00  INFO 9788 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-17T14:37:50.397+07:00  INFO 9788 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-10-17T14:37:50.469+07:00  INFO 9788 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-17T14:37:50.690+07:00  INFO 9788 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-17T14:37:50.849+07:00  INFO 9788 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5be4be74
+2025-10-17T14:37:50.854+07:00  INFO 9788 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-17T14:37:50.942+07:00  WARN 9788 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-17T14:37:51.498+07:00  INFO 9788 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-17T14:37:53.021+07:00  INFO 9788 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-17T14:37:53.057+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2025-10-17T14:37:53.058+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_activity" does not exist, skipping
+2025-10-17T14:37:53.059+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2025-10-17T14:37:53.060+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_asset" does not exist, skipping
+2025-10-17T14:37:53.060+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2025-10-17T14:37:53.060+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_board" does not exist, skipping
+2025-10-17T14:37:53.062+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2025-10-17T14:37:53.062+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_congregation" does not exist, skipping
+2025-10-17T14:37:53.064+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2025-10-17T14:37:53.064+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_news" does not exist, skipping
+2025-10-17T14:37:53.066+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2025-10-17T14:37:53.067+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "tb_income" does not exist, skipping
+2025-10-17T14:37:53.068+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2025-10-17T14:37:53.069+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "tb_outcome" does not exist, skipping
+2025-10-17T14:37:53.070+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
+2025-10-17T14:37:53.071+07:00  WARN 9788 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "user_entity" does not exist, skipping
+2025-10-17T14:37:53.218+07:00  INFO 9788 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-17T14:37:53.828+07:00  INFO 9788 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-17T14:37:55.031+07:00  WARN 9788 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-17T14:37:55.793+07:00  INFO 9788 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-10-17T14:37:55.809+07:00  INFO 9788 --- [CMS] [main] C.CMS.CmsApplication                     : Started CmsApplication in 9.433 seconds (process running for 10.24)
+2025-10-17T14:38:08.576+07:00  INFO 9788 --- [CMS] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'

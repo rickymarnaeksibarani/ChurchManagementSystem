@@ -14,6 +14,6 @@ public class IncomeFinancialDetailItemDto {
     private Date incomeDate;
     private String category;
     private BigDecimal nominal;
-    private String deskripsi;
+    private String keterangan;
     private String nama;
 }
