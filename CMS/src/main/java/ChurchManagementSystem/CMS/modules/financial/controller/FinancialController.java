@@ -153,7 +153,7 @@ public class FinancialController {
         Map<String, Object> data = new HashMap<>();
         data.put("year", year);
         data.put("month", month);
-        data.put("totalIncome", totalOutcome);
+        data.put("totalOutcome", totalOutcome);
 
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, message, data));
     }
