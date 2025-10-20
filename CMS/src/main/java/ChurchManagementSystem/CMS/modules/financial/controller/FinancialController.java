@@ -9,8 +9,8 @@ import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeRequestDto;
 import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeResponeDto;
 import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeFinancialDetailDto;
 import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeFinancialDetailItemDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeRequestDto;
 import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeResponeDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.SummaryDto;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.service.FinancialService;
@@ -63,24 +63,14 @@ public class FinancialController {
         }
     }
 
-    @GetMapping("/summary")
-    public ResponseEntity<SummaryDto> getSummary(
-            @RequestParam int year,
-            @RequestParam int month
-    ) {
-        SummaryDto summary = financialService.getSummary(year, month);
-        return ResponseEntity.ok(summary);
-    }
-
     @GetMapping(value = "/income/financial-detail", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> getFinancialDetailByIncome(
-            @RequestParam(required = false) String category,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size
+            @ModelAttribute IncomeRequestDto requestDto
+
     ) {
 
         Pair<IncomeFinancialDetailDto, PaginationUtil<IncomeFinancialDetailItemDto, IncomeFinancialDetailItemDto>> result =
-                financialService.getFinancialDetailByIncome(category, page, size);
+                financialService.getFinancialDetailByIncome(requestDto);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("status", "OK");
@@ -88,7 +78,7 @@ public class FinancialController {
         response.put("result", result.getLeft());
 
         // Tampilkan pagination hanya jika category dikirim
-        if (category != null && !category.isEmpty()) {
+        if (requestDto.getCategory() != null && !requestDto.getCategory().isEmpty()) {
             response.put("details", result.getRight());
         }
 
@@ -97,13 +87,11 @@ public class FinancialController {
 
     @GetMapping(value = "/outcome/financial-detail", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> getFinancialDetailByOutcome(
-            @RequestParam(required = false) String category,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size
-    ) {
+            @ModelAttribute OutcomeRequestDto requestDto
+            ) {
 
         Pair<OutcomeFinancialDetailDto, PaginationUtil<OutcomeFinancialDetailItemDto, OutcomeFinancialDetailItemDto>> result =
-                financialService.getFinancialDetailByOutcome(category, page, size);
+                financialService.getFinancialDetailByOutcome(requestDto);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("status", "OK");
@@ -111,7 +99,7 @@ public class FinancialController {
         response.put("result", result.getLeft());
 
         // Tampilkan pagination hanya jika category dikirim
-        if (category != null && !category.isEmpty()) {
+        if (requestDto.getCategory() != null && !requestDto.getCategory().isEmpty()) {
             response.put("details", result.getRight());
         }
 

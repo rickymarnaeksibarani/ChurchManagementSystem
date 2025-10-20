@@ -1,4 +1,4 @@
-package ChurchManagementSystem.CMS.modules.financial.dto.income;
+package ChurchManagementSystem.CMS.modules.financial.dto.outcome;
 
 import lombok.Data;
 import lombok.Getter;
@@ -8,10 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Data
 @Getter
 @Setter
-@Data
-public class IncomeRequestDto {
+public class OutcomeRequestDto {
     private Integer page;
     private Integer size;
     private String category;
@@ -24,7 +24,7 @@ public class IncomeRequestDto {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDate specificDate;
-    IncomeRequestDto(){
+    OutcomeRequestDto(){
         {
             if(this.getPage() == null) {
                 this.page = 1;

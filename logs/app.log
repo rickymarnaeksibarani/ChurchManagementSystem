@@ -1,42 +1,158 @@
-2025-10-18T16:37:14.979+07:00  INFO 17256 --- [CMS] [main] C.CMS.CmsApplication                     : Starting CmsApplication using Java 17.0.10 with PID 17256 (C:\Users\User\cms\ChurchManagementSystem\CMS\target\classes started by User in C:\Users\User\cms\ChurchManagementSystem)
-2025-10-18T16:37:14.994+07:00  INFO 17256 --- [CMS] [main] C.CMS.CmsApplication                     : The following 1 profile is active: "local"
-2025-10-18T16:37:17.067+07:00  INFO 17256 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-10-18T16:37:17.270+07:00  INFO 17256 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 178 ms. Found 8 JPA repository interfaces.
-2025-10-18T16:37:18.419+07:00  INFO 17256 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
-2025-10-18T16:37:18.444+07:00  INFO 17256 --- [CMS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-10-18T16:37:18.444+07:00  INFO 17256 --- [CMS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.25]
-2025-10-18T16:37:18.597+07:00  INFO 17256 --- [CMS] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-10-18T16:37:18.599+07:00  INFO 17256 --- [CMS] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3470 ms
-2025-10-18T16:37:18.960+07:00  INFO 17256 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-10-18T16:37:19.254+07:00  INFO 17256 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
-2025-10-18T16:37:19.362+07:00  INFO 17256 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-10-18T16:37:19.630+07:00  INFO 17256 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-10-18T16:37:19.823+07:00  INFO 17256 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@69a373fd
-2025-10-18T16:37:19.824+07:00  INFO 17256 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-10-18T16:37:19.931+07:00  WARN 17256 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
-2025-10-18T16:37:20.549+07:00  INFO 17256 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-10-18T16:37:22.187+07:00  INFO 17256 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-10-18T16:37:22.225+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-10-18T16:37:22.225+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_activity" does not exist, skipping
-2025-10-18T16:37:22.225+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-10-18T16:37:22.231+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_asset" does not exist, skipping
-2025-10-18T16:37:22.231+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-10-18T16:37:22.231+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_board" does not exist, skipping
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_congregation" does not exist, skipping
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "master_news" does not exist, skipping
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "tb_income" does not exist, skipping
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "tb_outcome" does not exist, skipping
-2025-10-18T16:37:22.233+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Warning Code: 0, SQLState: 00000
-2025-10-18T16:37:22.238+07:00  WARN 17256 --- [CMS] [main] o.h.engine.jdbc.spi.SqlExceptionHelper   : table "user_entity" does not exist, skipping
-2025-10-18T16:37:22.427+07:00  INFO 17256 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-10-18T16:37:23.137+07:00  INFO 17256 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-10-18T16:37:24.856+07:00  WARN 17256 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-10-18T16:37:25.701+07:00  INFO 17256 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
-2025-10-18T16:37:25.717+07:00  INFO 17256 --- [CMS] [main] C.CMS.CmsApplication                     : Started CmsApplication in 11.906 seconds (process running for 12.957)
-2025-10-18T16:38:17.293+07:00  INFO 17256 --- [CMS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-10-18T16:38:17.384+07:00  INFO 17256 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2025-10-18T16:38:17.395+07:00  INFO 17256 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-20T07:49:08.710+07:00  INFO 14048 --- [CMS] [main] C.CMS.CmsApplication                     : Starting CmsApplication using Java 17.0.10 with PID 14048 (C:\Users\User\cms\ChurchManagementSystem\CMS\target\classes started by User in C:\Users\User\cms\ChurchManagementSystem)
+2025-10-20T07:49:08.730+07:00  INFO 14048 --- [CMS] [main] C.CMS.CmsApplication                     : The following 1 profile is active: "local"
+2025-10-20T07:49:11.419+07:00  INFO 14048 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-20T07:49:11.615+07:00  INFO 14048 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 174 ms. Found 8 JPA repository interfaces.
+2025-10-20T07:49:13.386+07:00  INFO 14048 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-20T07:49:13.418+07:00  INFO 14048 --- [CMS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-20T07:49:13.420+07:00  INFO 14048 --- [CMS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.25]
+2025-10-20T07:49:13.614+07:00  INFO 14048 --- [CMS] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-20T07:49:13.614+07:00  INFO 14048 --- [CMS] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4736 ms
+2025-10-20T07:49:14.091+07:00  INFO 14048 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-20T07:49:14.292+07:00  INFO 14048 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-10-20T07:49:14.489+07:00  INFO 14048 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-20T07:49:14.856+07:00  INFO 14048 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-20T07:49:15.265+07:00  INFO 14048 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1e734eee
+2025-10-20T07:49:15.268+07:00  INFO 14048 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-20T07:49:15.398+07:00  WARN 14048 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-20T07:49:16.138+07:00  INFO 14048 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-20T07:49:18.073+07:00  INFO 14048 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-20T07:49:18.305+07:00  INFO 14048 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T07:49:19.112+07:00  INFO 14048 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-20T07:49:20.768+07:00  WARN 14048 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-20T07:49:21.641+07:00  INFO 14048 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-10-20T07:49:21.660+07:00  INFO 14048 --- [CMS] [main] C.CMS.CmsApplication                     : Started CmsApplication in 14.348 seconds (process running for 15.497)
+2025-10-20T07:49:25.283+07:00  INFO 14048 --- [CMS] [http-nio-8080-exec-4] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-20T07:51:22.462+07:00  INFO 14048 --- [CMS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T07:51:22.503+07:00  INFO 14048 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-20T07:51:22.516+07:00  INFO 14048 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-20T07:51:29.107+07:00  INFO 8996 --- [CMS] [main] C.CMS.CmsApplication                     : Starting CmsApplication using Java 17.0.10 with PID 8996 (C:\Users\User\cms\ChurchManagementSystem\CMS\target\classes started by User in C:\Users\User\cms\ChurchManagementSystem)
+2025-10-20T07:51:29.112+07:00  INFO 8996 --- [CMS] [main] C.CMS.CmsApplication                     : The following 1 profile is active: "local"
+2025-10-20T07:51:30.716+07:00  INFO 8996 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-20T07:51:30.848+07:00  INFO 8996 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 120 ms. Found 8 JPA repository interfaces.
+2025-10-20T07:51:31.861+07:00  INFO 8996 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-20T07:51:31.882+07:00  INFO 8996 --- [CMS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-20T07:51:31.882+07:00  INFO 8996 --- [CMS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.25]
+2025-10-20T07:51:31.993+07:00  INFO 8996 --- [CMS] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-20T07:51:31.993+07:00  INFO 8996 --- [CMS] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2811 ms
+2025-10-20T07:51:32.250+07:00  INFO 8996 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-20T07:51:32.361+07:00  INFO 8996 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-10-20T07:51:32.408+07:00  INFO 8996 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-20T07:51:32.614+07:00  INFO 8996 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-20T07:51:32.795+07:00  INFO 8996 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2424cb9d
+2025-10-20T07:51:32.801+07:00  INFO 8996 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-20T07:51:32.869+07:00  WARN 8996 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-20T07:51:33.350+07:00  INFO 8996 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-20T07:51:34.831+07:00  INFO 8996 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-20T07:51:34.961+07:00  INFO 8996 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T07:51:35.544+07:00  INFO 8996 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-20T07:51:36.730+07:00  WARN 8996 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-20T07:51:37.418+07:00  INFO 8996 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-10-20T07:51:37.432+07:00  INFO 8996 --- [CMS] [main] C.CMS.CmsApplication                     : Started CmsApplication in 9.291 seconds (process running for 10.206)
+2025-10-20T07:51:40.847+07:00  INFO 8996 --- [CMS] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-20T08:02:44.350+07:00  INFO 8996 --- [CMS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T08:02:44.352+07:00  INFO 8996 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-20T08:02:44.369+07:00  INFO 8996 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-20T08:02:51.674+07:00  INFO 5972 --- [CMS] [main] C.CMS.CmsApplication                     : Starting CmsApplication using Java 17.0.10 with PID 5972 (C:\Users\User\cms\ChurchManagementSystem\CMS\target\classes started by User in C:\Users\User\cms\ChurchManagementSystem)
+2025-10-20T08:02:51.679+07:00  INFO 5972 --- [CMS] [main] C.CMS.CmsApplication                     : The following 1 profile is active: "local"
+2025-10-20T08:02:53.423+07:00  INFO 5972 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-20T08:02:53.602+07:00  INFO 5972 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 161 ms. Found 8 JPA repository interfaces.
+2025-10-20T08:02:54.545+07:00  INFO 5972 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-20T08:02:54.565+07:00  INFO 5972 --- [CMS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-20T08:02:54.565+07:00  INFO 5972 --- [CMS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.25]
+2025-10-20T08:02:54.684+07:00  INFO 5972 --- [CMS] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-20T08:02:54.684+07:00  INFO 5972 --- [CMS] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2910 ms
+2025-10-20T08:02:54.894+07:00  INFO 5972 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-20T08:02:55.003+07:00  INFO 5972 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-10-20T08:02:55.077+07:00  INFO 5972 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-20T08:02:55.263+07:00  INFO 5972 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-20T08:02:55.419+07:00  INFO 5972 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@f18b738
+2025-10-20T08:02:55.421+07:00  INFO 5972 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-20T08:02:55.496+07:00  WARN 5972 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-20T08:02:55.959+07:00  INFO 5972 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-20T08:02:57.287+07:00  INFO 5972 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-20T08:02:57.409+07:00  INFO 5972 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T08:02:57.967+07:00  INFO 5972 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-20T08:02:59.268+07:00  WARN 5972 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-20T08:02:59.869+07:00  INFO 5972 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-10-20T08:02:59.882+07:00  INFO 5972 --- [CMS] [main] C.CMS.CmsApplication                     : Started CmsApplication in 9.133 seconds (process running for 9.899)
+2025-10-20T08:03:22.415+07:00  INFO 5972 --- [CMS] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-20T08:08:29.959+07:00  INFO 5972 --- [CMS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T08:08:29.977+07:00  INFO 5972 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-20T08:08:30.008+07:00  INFO 5972 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-20T08:08:38.409+07:00  INFO 15572 --- [CMS] [main] C.CMS.CmsApplication                     : Starting CmsApplication using Java 17.0.10 with PID 15572 (C:\Users\User\cms\ChurchManagementSystem\CMS\target\classes started by User in C:\Users\User\cms\ChurchManagementSystem)
+2025-10-20T08:08:38.415+07:00  INFO 15572 --- [CMS] [main] C.CMS.CmsApplication                     : The following 1 profile is active: "local"
+2025-10-20T08:08:40.274+07:00  INFO 15572 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-20T08:08:40.446+07:00  INFO 15572 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 153 ms. Found 8 JPA repository interfaces.
+2025-10-20T08:08:41.480+07:00  INFO 15572 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-20T08:08:41.496+07:00  INFO 15572 --- [CMS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-20T08:08:41.496+07:00  INFO 15572 --- [CMS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.25]
+2025-10-20T08:08:41.617+07:00  INFO 15572 --- [CMS] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-20T08:08:41.617+07:00  INFO 15572 --- [CMS] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3078 ms
+2025-10-20T08:08:41.914+07:00  INFO 15572 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-20T08:08:42.025+07:00  INFO 15572 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-10-20T08:08:42.088+07:00  INFO 15572 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-20T08:08:42.271+07:00  INFO 15572 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-20T08:08:42.426+07:00  INFO 15572 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5323999f
+2025-10-20T08:08:42.428+07:00  INFO 15572 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-20T08:08:42.496+07:00  WARN 15572 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-20T08:08:42.991+07:00  INFO 15572 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-20T08:08:44.343+07:00  INFO 15572 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-20T08:08:44.472+07:00  INFO 15572 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T08:08:45.066+07:00  INFO 15572 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-20T08:08:46.285+07:00  WARN 15572 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-20T08:08:46.912+07:00  INFO 15572 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-10-20T08:08:46.928+07:00  INFO 15572 --- [CMS] [main] C.CMS.CmsApplication                     : Started CmsApplication in 9.854 seconds (process running for 10.783)
+2025-10-20T08:08:50.213+07:00  INFO 15572 --- [CMS] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-10-20T08:21:34.152+07:00  INFO 15572 --- [CMS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T08:21:34.157+07:00  INFO 15572 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-20T08:21:34.170+07:00  INFO 15572 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-20T08:21:42.163+07:00  INFO 3928 --- [CMS] [main] C.CMS.CmsApplication                     : Starting CmsApplication using Java 17.0.10 with PID 3928 (C:\Users\User\cms\ChurchManagementSystem\CMS\target\classes started by User in C:\Users\User\cms\ChurchManagementSystem)
+2025-10-20T08:21:42.169+07:00  INFO 3928 --- [CMS] [main] C.CMS.CmsApplication                     : The following 1 profile is active: "local"
+2025-10-20T08:21:43.898+07:00  INFO 3928 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-20T08:21:44.059+07:00  INFO 3928 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 139 ms. Found 8 JPA repository interfaces.
+2025-10-20T08:21:45.002+07:00  INFO 3928 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-20T08:21:45.026+07:00  INFO 3928 --- [CMS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-20T08:21:45.026+07:00  INFO 3928 --- [CMS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.25]
+2025-10-20T08:21:45.142+07:00  INFO 3928 --- [CMS] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-20T08:21:45.143+07:00  INFO 3928 --- [CMS] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2886 ms
+2025-10-20T08:21:45.435+07:00  INFO 3928 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-20T08:21:45.527+07:00  INFO 3928 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-10-20T08:21:45.588+07:00  INFO 3928 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-20T08:21:45.860+07:00  INFO 3928 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-20T08:21:46.018+07:00  INFO 3928 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@104a287c
+2025-10-20T08:21:46.020+07:00  INFO 3928 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-20T08:21:46.087+07:00  WARN 3928 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-20T08:21:46.604+07:00  INFO 3928 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-20T08:21:47.975+07:00  INFO 3928 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-20T08:21:48.117+07:00  INFO 3928 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T08:21:48.664+07:00  INFO 3928 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-20T08:21:49.857+07:00  WARN 3928 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-20T08:21:50.548+07:00  INFO 3928 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-10-20T08:21:50.562+07:00  INFO 3928 --- [CMS] [main] C.CMS.CmsApplication                     : Started CmsApplication in 9.402 seconds (process running for 10.23)
+2025-10-20T08:23:22.635+07:00  INFO 3928 --- [CMS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T08:23:22.639+07:00  INFO 3928 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-20T08:23:22.655+07:00  INFO 3928 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-10-20T08:23:30.124+07:00  INFO 11776 --- [CMS] [main] C.CMS.CmsApplication                     : Starting CmsApplication using Java 17.0.10 with PID 11776 (C:\Users\User\cms\ChurchManagementSystem\CMS\target\classes started by User in C:\Users\User\cms\ChurchManagementSystem)
+2025-10-20T08:23:30.136+07:00  INFO 11776 --- [CMS] [main] C.CMS.CmsApplication                     : The following 1 profile is active: "local"
+2025-10-20T08:23:31.955+07:00  INFO 11776 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-20T08:23:32.156+07:00  INFO 11776 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 182 ms. Found 8 JPA repository interfaces.
+2025-10-20T08:23:33.248+07:00  INFO 11776 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-10-20T08:23:33.264+07:00  INFO 11776 --- [CMS] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-10-20T08:23:33.264+07:00  INFO 11776 --- [CMS] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.25]
+2025-10-20T08:23:33.363+07:00  INFO 11776 --- [CMS] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-10-20T08:23:33.363+07:00  INFO 11776 --- [CMS] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3101 ms
+2025-10-20T08:23:33.628+07:00  INFO 11776 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-20T08:23:33.743+07:00  INFO 11776 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-10-20T08:23:33.822+07:00  INFO 11776 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-20T08:23:34.059+07:00  INFO 11776 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-20T08:23:34.243+07:00  INFO 11776 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4357524b
+2025-10-20T08:23:34.246+07:00  INFO 11776 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-20T08:23:34.322+07:00  WARN 11776 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-20T08:23:34.754+07:00  INFO 11776 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-20T08:23:36.030+07:00  INFO 11776 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-20T08:23:36.164+07:00  INFO 11776 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-20T08:23:36.726+07:00  INFO 11776 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-20T08:23:38.224+07:00  WARN 11776 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-20T08:23:39.000+07:00  INFO 11776 --- [CMS] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-10-20T08:23:39.016+07:00  INFO 11776 --- [CMS] [main] C.CMS.CmsApplication                     : Started CmsApplication in 10.062 seconds (process running for 10.967)
+2025-10-20T08:29:46.032+07:00  INFO 11776 --- [CMS] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'

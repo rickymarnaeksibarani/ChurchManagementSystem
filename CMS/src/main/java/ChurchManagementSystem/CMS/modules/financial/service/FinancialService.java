@@ -3,10 +3,7 @@ package ChurchManagementSystem.CMS.modules.financial.service;
 import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.financial.dto.income.*;
-import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeFinancialDetailDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeFinancialDetailItemDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomePredicate;
-import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeResponeDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.outcome.*;
 import ChurchManagementSystem.CMS.modules.financial.dto.SummaryDto;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
@@ -18,7 +15,6 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -81,29 +77,15 @@ public class FinancialService {
         return new SummaryDto(monthlyIncome, monthlyOutcome, totalSummary, balance, totalIncome, totalOutcome);
     }
 
-    //Get Income Financial Detail
-    public IncomeFinancialDetailDto getFinancialDetailByIncome() {
-        Object[] totals = incomeRepository.findTotalFinancialDetail();
-
-        IncomeFinancialDetailDto dto = new IncomeFinancialDetailDto();
-
-        dto.setTotalPersembahan((BigDecimal) totals[0]);
-        dto.setTotalPerpuluhan((BigDecimal) totals[1]);
-        dto.setTotalPembangunan((BigDecimal) totals[2]);
-        dto.setTotalService((BigDecimal) totals[3]);
-        dto.setTotalDonasi((BigDecimal) totals[4]);
-        dto.setTotalLainnya((BigDecimal) totals[5]);
-
-        return dto;
-    }
-
     public Pair<IncomeFinancialDetailDto, PaginationUtil<IncomeFinancialDetailItemDto, IncomeFinancialDetailItemDto>>
-    getFinancialDetailByIncome(String category, int page, int size) {
+    getFinancialDetailByIncome(IncomeRequestDto requestDto) {
 
-        int zeroBasedPage = Math.max(0, page - 1);
-        Pageable pageable = PageRequest.of(zeroBasedPage, size);
+        int zeroBasedPage = Math.max(0, requestDto.getPage() - 1);
+        Pageable pageable = PageRequest.of(zeroBasedPage, requestDto.getSize());
 
-        Specification<IncomeEntity> spec = IncomePredicate.category(category);
+        Specification<IncomeEntity> spec = Specification.where(IncomePredicate.category(requestDto.getCategory()))
+                .and(IncomePredicate.betweenDates(requestDto.getPeriodStartTime(), requestDto.getPeriodEndTime()))
+                .and(IncomePredicate.specificDate(requestDto.getSpecificDate()));
         List<IncomeEntity> incomes = incomeRepository.findAll(spec);
 
         IncomeFinancialDetailDto result = new IncomeFinancialDetailDto();
@@ -125,8 +107,8 @@ public class FinancialService {
                     income.getLainnya() != null ? income.getLainnya() : BigDecimal.ZERO));
 
             // Tambahkan detail berdasarkan category
-            if (category != null && !category.isEmpty()) {
-                BigDecimal nominal = switch (category.toLowerCase()) {
+            if (requestDto.getCategory() != null && !requestDto.getCategory().isEmpty()) {
+                BigDecimal nominal = switch (requestDto.getCategory().toLowerCase()) {
                     case "persembahan" -> income.getPersembahan();
                     case "perpuluhan" -> income.getPerpuluhan();
                     case "pembangunan" -> income.getPembangunan();
@@ -138,12 +120,11 @@ public class FinancialService {
 
                 if (nominal != null && nominal.compareTo(BigDecimal.ZERO) > 0) {
                     String keterangan = income.getDeskripsi() != null ? income.getDeskripsi() : "";
-                    allDetails.add(new IncomeFinancialDetailItemDto(income.getIncomeDate(), capitalize(category), nominal, keterangan, income.getNama()));
+                    allDetails.add(new IncomeFinancialDetailItemDto(income.getIncomeDate(), capitalize(requestDto.getCategory()), nominal, keterangan, income.getNama()));
                 }
             }
         }
 
-        // Pagination secara manual karena pakai List
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), allDetails.size());
 
@@ -153,17 +134,18 @@ public class FinancialService {
         PaginationUtil<IncomeFinancialDetailItemDto, IncomeFinancialDetailItemDto> pagination =
                 new PaginationUtil<>(pageResult, IncomeFinancialDetailItemDto.class);
 
-        // Jangan set result.setDetails(...) jika pagination terpisah
         return Pair.of(result, pagination);
     }
 
     public Pair<OutcomeFinancialDetailDto, PaginationUtil<OutcomeFinancialDetailItemDto, OutcomeFinancialDetailItemDto>>
-    getFinancialDetailByOutcome(String category, int page, int size) {
+    getFinancialDetailByOutcome(OutcomeRequestDto requestDto) {
 
-        int zeroBasedPage = Math.max(0, page - 1);
-        Pageable pageable = PageRequest.of(zeroBasedPage, size);
+        int zeroBasedPage = Math.max(0, requestDto.getPage() - 1);
+        Pageable pageable = PageRequest.of(zeroBasedPage, requestDto.getSize());
 
-        Specification<OutcomeEntity> spec = OutcomePredicate.category(category);
+        Specification<OutcomeEntity> spec = OutcomePredicate.category(requestDto.getCategory())
+                .and(OutcomePredicate.betweenDates(requestDto.getPeriodStartTime(), requestDto.getPeriodEndTime()))
+                .and(OutcomePredicate.specificDate(requestDto.getSpecificDate()));
         List<OutcomeEntity> outcomes = outcomeRepository.findAll(spec);
 
         OutcomeFinancialDetailDto result = new OutcomeFinancialDetailDto();
@@ -187,8 +169,8 @@ public class FinancialService {
                     outcome.getLainnya() != null ? outcome.getLainnya() : BigDecimal.ZERO));
 
             // Tambahkan detail berdasarkan category
-            if (category != null && !category.isEmpty()) {
-                BigDecimal nominal = switch (category.toLowerCase()) {
+            if (requestDto.getCategory() != null && !requestDto.getCategory().isEmpty()) {
+                BigDecimal nominal = switch (requestDto.getCategory().toLowerCase()) {
                     case "deposit" -> outcome.getDeposit();
                     case "pembangunan" -> outcome.getPembangunan();
                     case "diakonia" -> outcome.getDiakonia();
@@ -201,12 +183,11 @@ public class FinancialService {
 
                 if (nominal != null && nominal.compareTo(BigDecimal.ZERO) > 0) {
                     String keterangan = outcome.getDeskripsi() != null ? outcome.getDeskripsi() : "";
-                    allDetails.add(new OutcomeFinancialDetailItemDto(outcome.getOutcomeDate(), capitalize(category), nominal, keterangan, outcome.getNama()));
+                    allDetails.add(new OutcomeFinancialDetailItemDto(outcome.getOutcomeDate(), capitalize(requestDto.getCategory()), nominal, keterangan, outcome.getNama()));
                 }
             }
         }
 
-        // Pagination secara manual karena pakai List
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), allDetails.size());
 
@@ -216,7 +197,6 @@ public class FinancialService {
         PaginationUtil<OutcomeFinancialDetailItemDto, OutcomeFinancialDetailItemDto> pagination =
                 new PaginationUtil<>(pageResult, OutcomeFinancialDetailItemDto.class);
 
-        // Jangan set result.setDetails(...) jika pagination terpisah
         return Pair.of(result, pagination);
     }
 
