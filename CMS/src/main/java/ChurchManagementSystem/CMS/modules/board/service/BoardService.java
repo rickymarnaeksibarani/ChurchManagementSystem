@@ -11,9 +11,7 @@ import ChurchManagementSystem.CMS.modules.board.repository.BoardRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -73,8 +72,20 @@ public class BoardService {
                 .and(BoardPredicateDto.filterByStatus(searchRequest.getFilterByStatus()));
 
         Pageable paging = PageRequest.of(searchRequest.getPage()-1, searchRequest.getSize());
-        Page<BoardEntity> pagedResult = boardRepository.findAll(spec, paging);
-        return new PaginationUtil<>(pagedResult, BoardEntity.class);
+        List<BoardEntity> all = boardRepository.findAll(spec);
+        List<BoardEntity> sorted = all.stream()
+                .sorted(Comparator.comparingInt(b -> b.getFungsi().ordinal()))
+                .toList();
+
+        int start = (searchRequest.getPage() - 1) * searchRequest.getSize();
+        int end = Math.min(start + searchRequest.getSize(), sorted.size());
+
+        List<BoardEntity> pageContent = sorted.subList(start, end);
+
+        return new PaginationUtil<>(
+                new PageImpl<>(pageContent, paging, sorted.size()),
+                BoardEntity.class
+        );
 
     }
 //    Getting by Id

@@ -7,6 +7,7 @@ import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityRequestDt
 import ChurchManagementSystem.CMS.modules.scheduleActivity.entities.ActivityEntity;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.repository.ActivityRepository;
 import jakarta.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,9 +24,11 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ActivityService {
-    @Autowired
-    private ActivityRepository activityRepository;
+
+    private final ActivityRepository activityRepository;
+
     public PaginationUtil<ActivityEntity, ActivityEntity> getUpcomingActivities(Date currentDate, int page, int size) {
         Specification<ActivityEntity> spec = (root, query, builder) ->
                 builder.greaterThanOrEqualTo(root.get("activityDate"), currentDate);

@@ -1,0 +1,55 @@
+CREATE MATERIALIZED VIEW materialized_view_birthdate_coming
+AS
+WITH mb_up AS (
+  SELECT
+    mb.id,
+    mb.name,
+    mb.age,
+    mb.birth_date,
+    'MAJELIS' AS tipe,
+    (
+      (make_date(EXTRACT(YEAR FROM current_date)::int,
+                 EXTRACT(MONTH FROM mb.birth_date)::int,
+                 EXTRACT(DAY FROM mb.birth_date)::int)
+       + CASE
+           WHEN make_date(EXTRACT(YEAR FROM current_date)::int,
+                          EXTRACT(MONTH FROM mb.birth_date)::int,
+                          EXTRACT(DAY FROM mb.birth_date)::int) < current_date
+           THEN INTERVAL '1 year'
+           ELSE INTERVAL '0'
+         END)
+    )::date AS next_birthday
+  FROM master_board mb
+  WHERE mb.birth_date IS NOT NULL
+),
+mc_up AS (
+  SELECT
+    mc.id,
+    mc.name,
+    mc.age,
+    mc.birth_date,
+    'JEMAAT' AS tipe,
+    (
+      (make_date(EXTRACT(YEAR FROM current_date)::int,
+                 EXTRACT(MONTH FROM mc.birth_date)::int,
+                 EXTRACT(DAY FROM mc.birth_date)::int)
+       + CASE
+           WHEN make_date(EXTRACT(YEAR FROM current_date)::int,
+                          EXTRACT(MONTH FROM mc.birth_date)::int,
+                          EXTRACT(DAY FROM mc.birth_date)::int) < current_date
+           THEN INTERVAL '1 year'
+           ELSE INTERVAL '0'
+         END)
+    )::date AS next_birthday
+  FROM master_congregation mc
+  WHERE mc.birth_date IS NOT NULL
+)
+SELECT id, name, age, birth_date, tipe, next_birthday
+FROM (
+  SELECT * FROM mb_up
+  UNION ALL
+  SELECT * FROM mc_up
+) t
+WHERE next_birthday BETWEEN current_date AND (current_date + INTERVAL '7 day')
+ORDER BY next_birthday, name
+WITH DATA;

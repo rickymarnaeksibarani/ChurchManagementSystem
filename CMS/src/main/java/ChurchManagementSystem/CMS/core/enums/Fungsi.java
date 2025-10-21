@@ -4,10 +4,10 @@ public enum Fungsi {
     PENDETA,
     CALON_PENDETA,
     SINTUA,
-    CALON_SINTUA,
+    GURU_HURIA,
+    BIBELVROUW,
     DIAGONES,
     CALON_DIAGONES,
-    BIBLEVROUW,
-    GURU_HURIA,
+    CALON_SINTUA,
     STAFF
 }
