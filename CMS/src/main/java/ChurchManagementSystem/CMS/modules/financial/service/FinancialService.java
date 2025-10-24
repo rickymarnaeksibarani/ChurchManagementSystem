@@ -208,12 +208,21 @@ public class FinancialService {
 
 
     //Total income by query paramater year, month and all month
-    public BigDecimal getTotalIncomeByYearAndMonth(int year, String month) {
-        if (month == null || month.isBlank()) {
-            return incomeRepository.sumTotalIncomeByYear(year);
-        }
+    public BigDecimal getTotalIncomeByYearAndMonth(String year, String month) {
 
         try {
+            if ("all".equalsIgnoreCase(year)) {
+                if (month == null || month.isBlank()) {
+                    return incomeRepository.sumTotalIncomeAllTime();
+                } else {
+                    int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+                    return incomeRepository.sumTotalIncomeByMonth(monthNumber);
+                }
+            }
+
+            if (month == null || month.isBlank()) {
+                return incomeRepository.sumTotalIncomeByYear(year);
+            }
             int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
             return incomeRepository.sumTotalIncomeByYearAndMonth(year, monthNumber);
         } catch (IllegalArgumentException e) {
@@ -226,12 +235,22 @@ public class FinancialService {
 
 
     //Total outcome by query paramater year, month and all month
-    public BigDecimal getTotalOutcomeByYearAndMonth(int year, String month) {
-        if (month == null || month.isBlank()) {
-            return outcomeRepository.sumTotalOutcomeByYear(year);
-        }
+    public BigDecimal getTotalOutcomeByYearAndMonth(String year, String month) {
 
         try {
+            if ("all".equalsIgnoreCase(year)) {
+                if (month == null || month.isBlank()) {
+                    return outcomeRepository.sumTotalOutcomeAllTime();
+                } else {
+                    int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+                    return outcomeRepository.sumTotalOutcomeByMonth(monthNumber);
+                }
+            }
+
+            if (month == null || month.isBlank()) {
+                return outcomeRepository.sumTotalOutcomeByYear(year);
+            }
+
             int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
             return outcomeRepository.sumTotalOutcomeByYearAndMonth(year, monthNumber);
         } catch (IllegalArgumentException e) {

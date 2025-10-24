@@ -16,21 +16,16 @@ public interface IncomeRepository extends JpaRepository<IncomeEntity, Long>, Jpa
 
     List<IncomeEntity>findByIncomeDateBetween(LocalDateTime start, LocalDateTime end);
 
-    @Query("SELECT " +
-            "COALESCE(SUM(i.persembahan), 0), " +
-            "COALESCE(SUM(i.perpuluhan), 0), " +
-            "COALESCE(SUM(i.pembangunan), 0), " +
-            "COALESCE(SUM(i.service), 0), " +
-            "COALESCE(SUM(i.donasi), 0), " +
-            "COALESCE(SUM(i.lainnya), 0) " +
-            "FROM IncomeEntity i")
-    Object[] findTotalFinancialDetail();
-
     @Query("SELECT COALESCE(SUM(i.totalIncome), 0) FROM IncomeEntity i WHERE EXTRACT(YEAR FROM i.incomeDate) = :year")
-    BigDecimal sumTotalIncomeByYear(@Param("year") int year);
+    BigDecimal sumTotalIncomeByYear(@Param("year") String year);
 
     @Query("SELECT COALESCE(SUM(i.totalIncome), 0) FROM IncomeEntity i WHERE EXTRACT(YEAR FROM i.incomeDate) = :year AND EXTRACT(MONTH FROM i.incomeDate) = :month")
-    BigDecimal sumTotalIncomeByYearAndMonth(@Param("year") int year, @Param("month") int month);
+    BigDecimal sumTotalIncomeByYearAndMonth(@Param("year") String year, @Param("month") int month);
 
+    @Query("SELECT COALESCE(SUM(i.totalIncome), 0) FROM IncomeEntity i")
+    BigDecimal sumTotalIncomeAllTime();
+
+    @Query("SELECT COALESCE(SUM(i.totalIncome), 0) FROM IncomeEntity i WHERE EXTRACT(MONTH FROM i.incomeDate) = :month")
+    BigDecimal sumTotalIncomeByMonth(@Param("month") int month);
 
 }

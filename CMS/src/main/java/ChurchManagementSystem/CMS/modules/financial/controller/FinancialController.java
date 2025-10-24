@@ -109,7 +109,7 @@ public class FinancialController {
 
     @GetMapping("/income/total")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getTotalIncome(
-            @RequestParam int year,
+            @RequestParam (required = false) String year,
             @RequestParam(required = false) String month) {
 
         BigDecimal totalIncome = financialService.getTotalIncomeByYearAndMonth(year, month);
@@ -129,7 +129,7 @@ public class FinancialController {
 
     @GetMapping("/outcome/total")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getTotalOutcome(
-            @RequestParam int year,
+            @RequestParam (required = false) String year,
             @RequestParam(required = false) String month) {
 
         BigDecimal totalOutcome = financialService.getTotalOutcomeByYearAndMonth(year, month);
