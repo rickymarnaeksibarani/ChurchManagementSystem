@@ -155,7 +155,6 @@ public class NewsService {
         return news;
     }
 
-    //todo: solve news all feature
     private String saveImage(MultipartFile image){
         try {
             String contentType = image.getContentType();

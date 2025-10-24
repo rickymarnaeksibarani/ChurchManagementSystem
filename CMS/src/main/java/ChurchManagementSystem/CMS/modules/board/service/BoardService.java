@@ -9,7 +9,6 @@ import ChurchManagementSystem.CMS.modules.board.dto.BoardResponDto;
 import ChurchManagementSystem.CMS.modules.board.entity.BoardEntity;
 import ChurchManagementSystem.CMS.modules.board.repository.BoardRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -106,8 +104,6 @@ public class BoardService {
     private BoardEntity boardPayload(BoardDto request, BoardEntity boards) {
         boards.setName(request.getName());
         boards.setBirthDate(request.getBirthDate());
-        boards.setAge(request.getAge());
-        boards.setAddress(request.getAddress());
         boards.setAddress(request.getAddress());
         boards.setPhoneNumber(request.getPhoneNumber());
         boards.setFungsi(request.getFungsi());

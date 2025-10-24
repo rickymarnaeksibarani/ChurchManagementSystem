@@ -59,7 +59,6 @@ public class CongregationService {
             CongregationEntity data = CongregationEntity.builder()
                     .name(request.getName())
                     .birthDate(request.getBirthDate())
-                    .age(request.getAge())
                     .phoneNumber(request.getPhoneNumber())
                     .address(request.getAddress())
                     .build();
@@ -74,7 +73,6 @@ public class CongregationService {
         try {
             CongregationEntity congregration = congregationRepository.findById(idCongregration).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "ID " +idCongregration + " not found"));
             congregration.setName(request.getName());
-            congregration.setAge(request.getAge());
             congregration.setBirthDate(request.getBirthDate());
             congregration.setPhoneNumber(request.getPhoneNumber());
             congregration.setAddress(request.getAddress());

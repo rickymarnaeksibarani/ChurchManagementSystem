@@ -5,9 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -15,7 +13,7 @@ import java.time.LocalDate;
 @Table(name = "materialized_view_birthdate_coming", schema = "public")
 @Entity
 @Immutable
-public class BirthdateCoomingEntity {
+public class BirthdateComingEntity {
     @Id
     @Column(name = "id")
     private Long id;
@@ -34,5 +32,4 @@ public class BirthdateCoomingEntity {
 
     @Column(name = "next_birthday")
     private LocalDate nextBirthday;
-
 }

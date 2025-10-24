@@ -26,7 +26,7 @@ public class AssetEntity {
     private AssetStatus status;
 
     @Nullable
-    @Column(name = "brand") //merk
+    @Column(name = "brand")
     private String brand;
 
     @Column(name = "description", columnDefinition = "text")

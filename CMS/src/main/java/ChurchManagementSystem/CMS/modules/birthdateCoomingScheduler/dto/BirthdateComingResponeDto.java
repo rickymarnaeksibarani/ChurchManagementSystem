@@ -1,15 +1,14 @@
 package ChurchManagementSystem.CMS.modules.birthdateCoomingScheduler.dto;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class BirthdateCoomingResponeDto {
+public class BirthdateComingResponeDto {
     private String name;
     private Integer age;
     private LocalDate birthDate;
-    private String tipe; // "MAJELIS" atau "JEMAAT"
+    private String tipe;
     private LocalDate nextBirthday;
 }
