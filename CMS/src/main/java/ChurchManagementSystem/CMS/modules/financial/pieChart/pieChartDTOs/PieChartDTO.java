@@ -1,4 +1,4 @@
-package ChurchManagementSystem.CMS.modules.financial.pieChart.pieChartDTO;
+package ChurchManagementSystem.CMS.modules.financial.pieChart.pieChartDTOs;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

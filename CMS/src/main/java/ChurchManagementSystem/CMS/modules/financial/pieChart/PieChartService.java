@@ -1,7 +1,7 @@
 package ChurchManagementSystem.CMS.modules.financial.pieChart;
 
 import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
-import ChurchManagementSystem.CMS.modules.financial.pieChart.pieChartDTO.PieChartDTO;
+import ChurchManagementSystem.CMS.modules.financial.pieChart.pieChartDTOs.PieChartDTO;
 import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeRequestDto;
 import ChurchManagementSystem.CMS.modules.financial.repository.IncomeRepository;
 import ChurchManagementSystem.CMS.modules.financial.repository.OutcomeRepository;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,46 +20,40 @@ public class PieChartService {
     private final OutcomeRepository outcomeRepository;
 
     public List<PieChartDTO> pieChart (IncomeRequestDto request){
-
         try {
-            BigDecimal totalIncome = BigDecimal.ZERO;
-            BigDecimal totalOutcome = BigDecimal.ZERO;
-//            BigDecimal totalIncome = incomeRepository.sumTotalIncomeAllTime();
-//            BigDecimal totalOutcome = outcomeRepository.sumTotalOutcomeAllTime();
-//
-//            List<PieChartDTO> series = new ArrayList<>();
-//            series.add(new PieChartDTO(totalIncome, "income"));
-//            series.add(new PieChartDTO(totalOutcome, "outcome"));
-//
-//            return series;
-            if ("all".equalsIgnoreCase(request.getYear())) {
-                if (request.getMonth() == null || request.getMonth().isBlank()) {
-                    totalIncome = incomeRepository.sumTotalIncomeAllTime();
-                    totalOutcome = outcomeRepository.sumTotalOutcomeAllTime();
-                } else {
-                    int monthNumber = Month.valueOf(request.getMonth().toUpperCase()).getValue();
-                    totalIncome = incomeRepository.sumTotalIncomeByMonth(monthNumber);
-                    totalOutcome = outcomeRepository.sumTotalOutcomeByMonth(monthNumber);
-                }
-            }
-            else {
-                if (request.getMonth() == null || request.getMonth().isBlank()) {
-                    totalIncome = incomeRepository.sumTotalIncomeByYear(request.getYear());
-                    totalOutcome = outcomeRepository.sumTotalOutcomeByYear(request.getYear());
-                } else {
-                    int monthNumber = Month.valueOf(request.getMonth().toUpperCase()).getValue();
-                    totalIncome = incomeRepository.sumTotalIncomeByYearAndMonth(request.getYear(), monthNumber);
-                    totalOutcome = outcomeRepository.sumTotalOutcomeByYearAndMonth(request.getYear(), monthNumber);
-                }
-            }
 
-            List<PieChartDTO> series = new ArrayList<>();
-            series.add(new PieChartDTO(totalIncome, "income"));
-            series.add(new PieChartDTO(totalOutcome, "outcome"));
-            return series;
+            BigDecimal totalIncome = getTotalIncome(request);
+            BigDecimal totalOutcome = getTotalOutcome(request);
 
+            return List.of(
+                    new PieChartDTO(totalIncome, "income"),
+                    new PieChartDTO(totalOutcome, "outcome")
+            );
         }catch (IllegalArgumentException e){throw new CustomRequestException("Failed to calculate total income & outcome " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);}
     }
+
+    private BigDecimal getTotalIncome(IncomeRequestDto requestIncome) {
+        if ("all".equalsIgnoreCase(requestIncome.getYear())) {
+            return (requestIncome.getMonth() == null || requestIncome.getMonth().isBlank())
+                    ? incomeRepository.sumTotalIncomeAllTime()
+                    : incomeRepository.sumTotalIncomeByMonth(Month.valueOf(requestIncome.getMonth().toUpperCase()).getValue());
+        }
+        return (requestIncome.getMonth() == null || requestIncome.getMonth().isBlank())
+                ? incomeRepository.sumTotalIncomeByYear(requestIncome.getYear())
+                : incomeRepository.sumTotalIncomeByYearAndMonth(requestIncome.getYear(), Month.valueOf(requestIncome.getMonth().toUpperCase()).getValue());
+    }
+
+    private BigDecimal getTotalOutcome(IncomeRequestDto requestOutcome) {
+        if ("all".equalsIgnoreCase(requestOutcome.getYear())) {
+            return (requestOutcome.getMonth() == null || requestOutcome.getMonth().isBlank())
+                    ? outcomeRepository.sumTotalOutcomeAllTime()
+                    : outcomeRepository.sumTotalOutcomeByMonth(Month.valueOf(requestOutcome.getMonth().toUpperCase()).getValue());
+        }
+        return (requestOutcome.getMonth() == null || requestOutcome.getMonth().isBlank())
+                ? outcomeRepository.sumTotalOutcomeByYear(requestOutcome.getYear())
+                : outcomeRepository.sumTotalOutcomeByYearAndMonth(requestOutcome.getYear(), Month.valueOf(requestOutcome.getMonth().toUpperCase()).getValue());
+    }
+
 
 
 }

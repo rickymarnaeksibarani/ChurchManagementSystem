@@ -1,4 +1,4 @@
-package ChurchManagementSystem.CMS.modules.financial.pieChart;
+package ChurchManagementSystem.CMS.modules.financial.pieChart.pieChartDTOs;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatusCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponePieChart<T> {
     private HttpStatusCode status;
-    private String message; //status
-    private T series; //respon
+    private String message;
+    private T series;
 
     public ApiResponePieChart(HttpStatusCode status, String message, T series) {
         this.status = status;

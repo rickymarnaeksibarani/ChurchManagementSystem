@@ -1,8 +1,8 @@
 package ChurchManagementSystem.CMS.modules.financial.pieChart;
 
-import ChurchManagementSystem.CMS.core.CustomResponse.ApiResponse;
 import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
-import ChurchManagementSystem.CMS.modules.financial.pieChart.pieChartDTO.PieChartDTO;
+import ChurchManagementSystem.CMS.modules.financial.pieChart.pieChartDTOs.ApiResponePieChart;
+import ChurchManagementSystem.CMS.modules.financial.pieChart.pieChartDTOs.PieChartDTO;
 import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
