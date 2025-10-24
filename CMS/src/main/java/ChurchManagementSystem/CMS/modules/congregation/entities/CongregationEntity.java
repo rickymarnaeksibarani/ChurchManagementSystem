@@ -48,9 +48,12 @@ public class CongregationEntity {
     @Column(name = "update_at" )
     private LocalDateTime updateAt;
 
-    public Integer getAge(){
-        if (birthDate == null)return null;
-        LocalDate birthDateLocalDate = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return Period.between(birthDateLocalDate, LocalDate.now()).getYears();
+    @PrePersist
+    @PreUpdate
+    public void calculatedAge(){
+        if (birthDate != null){
+            LocalDate birthLocalDate = birthDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            this.age = Period.between(birthLocalDate, LocalDate.now()).getYears();
+        }
     }
 }
