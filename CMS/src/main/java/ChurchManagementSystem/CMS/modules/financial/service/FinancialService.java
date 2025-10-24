@@ -208,25 +208,25 @@ public class FinancialService {
 
 
     //Total income by query paramater year, month and all month
-    public BigDecimal getTotalIncomeByYearAndMonth(String year, String month) {
+    public BigDecimal getTotalIncomeByYearAndMonth(IncomeRequestDto requestDto) {
 
         try {
-            if ("all".equalsIgnoreCase(year)) {
-                if (month == null || month.isBlank()) {
+            if ("all".equalsIgnoreCase(requestDto.getYear())) {
+                if (requestDto.getMonth() == null || requestDto.getMonth().isBlank()) {
                     return incomeRepository.sumTotalIncomeAllTime();
                 } else {
-                    int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+                    int monthNumber = Month.valueOf(requestDto.getMonth().toUpperCase()).getValue();
                     return incomeRepository.sumTotalIncomeByMonth(monthNumber);
                 }
             }
 
-            if (month == null || month.isBlank()) {
-                return incomeRepository.sumTotalIncomeByYear(year);
+            if (requestDto.getMonth() == null || requestDto.getMonth().isBlank()) {
+                return incomeRepository.sumTotalIncomeByYear(requestDto.getYear());
             }
-            int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
-            return incomeRepository.sumTotalIncomeByYearAndMonth(year, monthNumber);
+            int monthNumber = Month.valueOf(requestDto.getMonth().toUpperCase()).getValue();
+            return incomeRepository.sumTotalIncomeByYearAndMonth(requestDto.getYear(), monthNumber);
         } catch (IllegalArgumentException e) {
-            throw new CustomRequestException("Invalid month name: " + month, HttpStatus.BAD_REQUEST);
+            throw new CustomRequestException("Invalid month name: " + requestDto.getMonth(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             throw new CustomRequestException("Failed to calculate total income: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -235,26 +235,26 @@ public class FinancialService {
 
 
     //Total outcome by query paramater year, month and all month
-    public BigDecimal getTotalOutcomeByYearAndMonth(String year, String month) {
+    public BigDecimal getTotalOutcomeByYearAndMonth(OutcomeRequestDto requestDto) {
 
         try {
-            if ("all".equalsIgnoreCase(year)) {
-                if (month == null || month.isBlank()) {
+            if ("all".equalsIgnoreCase(requestDto.getYear())) {
+                if (requestDto.getMonth() == null || requestDto.getMonth().isBlank()) {
                     return outcomeRepository.sumTotalOutcomeAllTime();
                 } else {
-                    int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
+                    int monthNumber = Month.valueOf(requestDto.getMonth().toUpperCase()).getValue();
                     return outcomeRepository.sumTotalOutcomeByMonth(monthNumber);
                 }
             }
 
-            if (month == null || month.isBlank()) {
-                return outcomeRepository.sumTotalOutcomeByYear(year);
+            if (requestDto.getMonth() == null || requestDto.getMonth().isBlank()) {
+                return outcomeRepository.sumTotalOutcomeByYear(requestDto.getYear());
             }
 
-            int monthNumber = Month.valueOf(month.toUpperCase()).getValue();
-            return outcomeRepository.sumTotalOutcomeByYearAndMonth(year, monthNumber);
+            int monthNumber = Month.valueOf(requestDto.getMonth().toUpperCase()).getValue();
+            return outcomeRepository.sumTotalOutcomeByYearAndMonth(requestDto.getYear(), monthNumber);
         } catch (IllegalArgumentException e) {
-            throw new CustomRequestException("Invalid month name: " + month, HttpStatus.BAD_REQUEST);
+            throw new CustomRequestException("Invalid month name: " + requestDto.getMonth(), HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             throw new CustomRequestException("Failed to calculate total income: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

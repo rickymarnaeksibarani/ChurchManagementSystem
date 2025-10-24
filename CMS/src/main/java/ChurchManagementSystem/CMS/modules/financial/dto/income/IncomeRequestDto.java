@@ -15,6 +15,8 @@ public class IncomeRequestDto {
     private Integer page;
     private Integer size;
     private String category;
+    private String year;
+    private String month;
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime periodStartTime;
