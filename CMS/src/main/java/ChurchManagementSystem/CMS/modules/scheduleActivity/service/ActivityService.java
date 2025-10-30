@@ -1,14 +1,11 @@
 package ChurchManagementSystem.CMS.modules.scheduleActivity.service;
 
-import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityDto;
-import ChurchManagementSystem.CMS.modules.scheduleActivity.dto.ActivityRequestDto;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.entities.ActivityEntity;
 import ChurchManagementSystem.CMS.modules.scheduleActivity.repository.ActivityRepository;
-import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,9 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

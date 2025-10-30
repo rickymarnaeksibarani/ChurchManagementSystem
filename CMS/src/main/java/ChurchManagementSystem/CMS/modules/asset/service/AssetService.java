@@ -1,6 +1,6 @@
 package ChurchManagementSystem.CMS.modules.asset.service;
 
-import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.asset.dto.AssetRequestDto;
 import ChurchManagementSystem.CMS.modules.asset.dto.AssetsDto;
@@ -9,7 +9,6 @@ import ChurchManagementSystem.CMS.modules.asset.repository.AssetRepository;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

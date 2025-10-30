@@ -1,6 +1,6 @@
 package ChurchManagementSystem.CMS.core;
 
-import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 @ControllerAdvice

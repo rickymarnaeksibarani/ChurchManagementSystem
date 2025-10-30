@@ -1,0 +1,51 @@
+# untuk front-end si tukang ngeluh aku sediain env buat dia, karna pasti nanti ada terus perubahan env, hmm
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_hkbpCMS?stringtype=unspecified  #ubah sesuai punya mu sebelumnya
+    username: postgres #ini juga
+    password: HKBP_CMS #ini juga, tapi yang lainnya ga usah keong
+  application:
+    name: CMS
+    version: 1.0.0
+  frontend: "*"
+  devtools:
+    add-properties: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+        id:
+          uuid:
+            generator: org.hibernate.id.UUIDGenerator
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+baseUrl: https://localhost:8080/
+jwt:
+  secret: QqXn3TjZ8vM2eKc1sP9aR6wYtF4bL7jU0gN5hD2oC8rE3mV6pA1xS5yT9zU2bW4
+  expiration: 86400000  # 1 day in milliseconds
+logging:
+  file:
+    name: logs/app.log
+  level:
+    root: info
+    org.springframework.web: ERROR
+
+
+

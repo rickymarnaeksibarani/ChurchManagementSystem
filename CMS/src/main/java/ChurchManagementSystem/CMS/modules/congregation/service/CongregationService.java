@@ -5,7 +5,7 @@ import ChurchManagementSystem.CMS.modules.congregation.dto.CongregationDTO;
 import ChurchManagementSystem.CMS.modules.congregation.dto.CongregationRequestDto;
 import ChurchManagementSystem.CMS.modules.congregation.entities.CongregationEntity;
 import ChurchManagementSystem.CMS.modules.congregation.repository.CongregationRepository;
-import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;

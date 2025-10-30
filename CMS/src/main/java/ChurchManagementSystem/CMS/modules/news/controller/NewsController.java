@@ -1,6 +1,6 @@
 package ChurchManagementSystem.CMS.modules.news.controller;
 
-import ChurchManagementSystem.CMS.core.CustomResponse.ApiResponse;
+import ChurchManagementSystem.CMS.core.customResponse.ApiResponse;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsRequestDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsResponDto;

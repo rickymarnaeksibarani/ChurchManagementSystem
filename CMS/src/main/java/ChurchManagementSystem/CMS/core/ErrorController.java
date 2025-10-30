@@ -1,6 +1,6 @@
 package ChurchManagementSystem.CMS.core;
 
-import ChurchManagementSystem.CMS.core.CustomResponse.ApiResponse;
+import ChurchManagementSystem.CMS.core.customResponse.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

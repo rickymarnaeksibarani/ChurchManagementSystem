@@ -1,6 +1,6 @@
 package ChurchManagementSystem.CMS.modules.birthdateCoomingScheduler.controller;
 
-import ChurchManagementSystem.CMS.core.CustomResponse.HttpResponseDTO;
+import ChurchManagementSystem.CMS.core.customResponse.HttpResponseDTO;
 import ChurchManagementSystem.CMS.modules.birthdateCoomingScheduler.service.BirthdateComingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

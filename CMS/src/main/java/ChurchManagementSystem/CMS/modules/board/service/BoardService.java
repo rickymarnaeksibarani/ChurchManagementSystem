@@ -1,6 +1,6 @@
 package ChurchManagementSystem.CMS.modules.board.service;
 
-import ChurchManagementSystem.CMS.core.Exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.board.dto.BoardDto;
 import ChurchManagementSystem.CMS.modules.board.dto.BoardPredicateDto;
@@ -17,9 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 
