@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MultipartException;
 
 @RestControllerAdvice
 public class GlobalExceptionHendler {
@@ -13,6 +14,13 @@ public class GlobalExceptionHendler {
         return ResponseEntity
                 .status(ex.getStatus())
                 .body(new ExceptionResponse(ex.getStatus(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(MultipartException.class)
+    public ResponseEntity<String> handleMultipartException(MultipartException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Invalid multipart request: " + ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

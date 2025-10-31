@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.modules.authentication;
 
+import ChurchManagementSystem.CMS.modules.authentication.dto.AuthDto;
 import ChurchManagementSystem.CMS.modules.authentication.dto.LogoutResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.handler.ApiResponseLogin;
 import ChurchManagementSystem.CMS.modules.authentication.handler.BlackListToken;
@@ -23,9 +24,9 @@ public class AuthController {
     private final BlackListToken blackListToken;
     private final User userRepository;
 
-    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> register(@RequestParam String email, @RequestParam String password) {
-        return ResponseEntity.ok(authService.register(email, password));
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> register(@RequestBody AuthDto authDto) {
+        return ResponseEntity.ok(authService.register(authDto.getEmail(), authDto.getPassword()));
     }
 
     @GetMapping(value = "/verify", produces = MediaType.APPLICATION_JSON_VALUE)
