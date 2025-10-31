@@ -11,38 +11,36 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
+@EnableTransactionManagement
 public class SecurityConfig {
 
     private final CorsProperties corsProperties;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CorsCustomConfiguration corsCustomConfiguration;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(cors -> cors.configurationSource(corsCustomConfiguration))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-
-                        //todo: setelah proses development selesai uncoment api dibawah ini
-//                        .requestMatchers(
-//                                "/api/auth/register", "/api/auth/login",
-//                                "/api/auth/verify",
-//                                "/api/auth/forgot",
-//                                "/api/auth/reset",
-//                                "/api/auth/resend",
-//                                "/api/auth/logout",
-//                                "/api/v1/*").permitAll()
-//                        .anyRequest().authenticated()
-                        //todo: setelah proses development selesai atau endpoint login selesai, delete row ini
-                                .anyRequest().permitAll()
+                        .requestMatchers(
+                                "/api/auth/register", "/api/auth/login",
+                                "/api/auth/verify",
+                                "/api/auth/forgot",
+                                "/api/auth/reset",
+                                "/api/auth/resend",
+                                "/api/auth/logout").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                //todo: uncoment setelah selesai semua fitur kecuali fitur login
-//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

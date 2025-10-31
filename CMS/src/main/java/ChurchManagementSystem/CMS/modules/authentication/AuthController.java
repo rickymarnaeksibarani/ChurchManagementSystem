@@ -3,6 +3,7 @@ package ChurchManagementSystem.CMS.modules.authentication;
 import ChurchManagementSystem.CMS.modules.authentication.dto.LogoutResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.handler.ApiResponseLogin;
 import ChurchManagementSystem.CMS.modules.authentication.handler.BlackListToken;
+import ChurchManagementSystem.CMS.modules.authentication.repository.User;
 import ChurchManagementSystem.CMS.modules.authentication.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.Map;
 public class AuthController {
     private final AuthService authService;
     private final BlackListToken blackListToken;
+    private final User userRepository;
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> register(@RequestParam String email, @RequestParam String password) {

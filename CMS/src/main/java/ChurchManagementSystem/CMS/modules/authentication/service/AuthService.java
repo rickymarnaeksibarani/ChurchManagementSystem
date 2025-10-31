@@ -1,6 +1,7 @@
 package ChurchManagementSystem.CMS.modules.authentication.service;
 
 import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.mail.EmailService;
 import ChurchManagementSystem.CMS.core.utils.JwtUtil;
 import ChurchManagementSystem.CMS.modules.authentication.entity.UserEntity;
 import ChurchManagementSystem.CMS.modules.authentication.repository.User;
@@ -20,6 +21,7 @@ public class AuthService {
     private final User userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public String register(String email, String password) {
         if (userRepository.findByEmail(email).isPresent())
@@ -33,6 +35,8 @@ public class AuthService {
         user.setEnabled(false);
         userRepository.save(user);
 
+        emailService.sendVerificationEmail(email, token);
+
         log.info("ini link verify register: http://localhost:8080/api/auth/verify?token=" + token);
 
         return "User registered successfully. Please check your email for verification link.";
@@ -40,11 +44,11 @@ public class AuthService {
 
     public String verifyEmail(String token) {
         UserEntity user = userRepository.findByVerificationToken(token)
-                .orElseThrow(() -> new CustomRequestException("Invalid token", HttpStatus.BAD_REQUEST));
+                .orElseThrow(() -> new CustomRequestException("Invalid verification token", HttpStatus.BAD_REQUEST)) ;
         user.setEnabled(true);
         user.setVerificationToken(null);
         userRepository.save(user);
-        return "Email verified successfully.";
+        return "EMAIL BERHASIL DI VERIFIKASI, SILAHKAN LOGIN KEMBALI";
     }
 
     public String login(String email, String password) {
@@ -69,6 +73,7 @@ public class AuthService {
         String newToken = UUID.randomUUID().toString();
         user.setVerificationToken(newToken);
         userRepository.save(user);
+        emailService.sendVerificationEmail(email, newToken);
         log.info("ini link resend verify: http://localhost:8080/api/auth/verify?token=" + newToken);
 
         return "Verification email resent.";
@@ -77,9 +82,13 @@ public class AuthService {
     public String forgotPassword(String email) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
+        if(!user.isEnabled()){
+            throw new CustomRequestException("Akun belum diverifikasi. Silahkan verifikasi email anda terlebih dahulu", HttpStatus.FORBIDDEN);
+        }
         String resetToken = UUID.randomUUID().toString();
         user.setResetToken(resetToken);
         userRepository.save(user);
+        emailService.sendResetPasswordEmail(email, resetToken);
         log.info("ini link token forgot password: "+ resetToken);
         return "Password reset email sent.";
     }
