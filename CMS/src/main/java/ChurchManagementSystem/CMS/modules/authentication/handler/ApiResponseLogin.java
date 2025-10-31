@@ -13,10 +13,13 @@ public class ApiResponseLogin <T>{
     private HttpStatusCode status;
     private String message;
     private T result;
+    private boolean success;
 
-    public ApiResponseLogin(HttpStatusCode status, String message, T result) {
+
+    public ApiResponseLogin(HttpStatusCode status, String message, T result, boolean success) {
         this.status = status;
         this.message = message;
         this.result = result;
+        this.success = success;
     }
 }
