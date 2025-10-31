@@ -24,9 +24,14 @@ public class AuthController {
     private final BlackListToken blackListToken;
     private final User userRepository;
 
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> register(@RequestBody AuthDto authDto) {
-        return ResponseEntity.ok(authService.register(authDto.getEmail(), authDto.getPassword()));
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, String>> register(@RequestBody AuthDto authDto) {
+        String message = authService.register(authDto.getEmail(), authDto.getPassword());
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", message);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(value = "/verify", produces = MediaType.APPLICATION_JSON_VALUE)
