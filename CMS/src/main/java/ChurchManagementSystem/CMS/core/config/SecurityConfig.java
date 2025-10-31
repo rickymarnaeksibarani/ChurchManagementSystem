@@ -25,18 +25,24 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/register", "/api/auth/login",
-                                "/api/auth/verify",
-                                "/api/auth/forgot",
-                                "/api/auth/reset",
-                                "/api/auth/resend",
-                                "/api/auth/logout").permitAll()
-                        .anyRequest().authenticated()
+
+                        //todo: setelah proses development selesai uncoment api dibawah ini
+//                        .requestMatchers(
+//                                "/api/auth/register", "/api/auth/login",
+//                                "/api/auth/verify",
+//                                "/api/auth/forgot",
+//                                "/api/auth/reset",
+//                                "/api/auth/resend",
+//                                "/api/auth/logout",
+//                                "/api/v1/*").permitAll()
+//                        .anyRequest().authenticated()
+                        //todo: setelah proses development selesai atau endpoint login selesai, delete row ini
+                                .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                //todo: uncoment setelah selesai semua fitur kecuali fitur login
+//                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
