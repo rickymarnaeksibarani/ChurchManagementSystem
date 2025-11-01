@@ -52,7 +52,6 @@ public class AuthService {
     }
 
     public String login(String email, String password) {
-        List<UserEntity> all = userRepository.findAll();
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
 

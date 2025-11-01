@@ -107,12 +107,14 @@ public class AuthController {
                     .success(true)
                     .message(message)
                     .build());
-        } catch (Exception e) {
-            return ResponseEntity.ok(ApiResponseLogin.builder()
-                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-                    .success(false)
-                    .message(e.getMessage())
-                    .build());
+        } catch (CustomRequestException e) {
+            return ResponseEntity.status(e.getStatus()).body(
+                    ApiResponseLogin.builder()
+                            .status(e.getStatus())
+                            .success(false)
+                            .message(e.getMessage())
+                            .build()
+            );
         }
     }
 
@@ -126,12 +128,14 @@ public class AuthController {
                     .success(true)
                     .message(message)
                     .build());
-        } catch (Exception e) {
-            return ResponseEntity.ok(ApiResponseLogin.builder()
-                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-                    .success(false)
-                    .message(e.getMessage())
-                    .build());
+        } catch (CustomRequestException e) {
+            return ResponseEntity.status(e.getStatus()).body(
+                    ApiResponseLogin.builder()
+                            .status(e.getStatus())
+                            .success(false)
+                            .message(e.getMessage())
+                            .build()
+            );
         }
     }
 
@@ -147,12 +151,14 @@ public class AuthController {
                     .success(true)
                     .message(message)
                     .build());
-        } catch (Exception e) {
-            return ResponseEntity.ok(ApiResponseLogin.builder()
-                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-                    .success(false)
-                    .message(e.getMessage())
-                    .build());
+        } catch (CustomRequestException e) {
+            return ResponseEntity.status(e.getStatus()).body(
+                    ApiResponseLogin.builder()
+                            .status(e.getStatus())
+                            .success(false)
+                            .message(e.getMessage())
+                            .build()
+            );
         }
     }
 
