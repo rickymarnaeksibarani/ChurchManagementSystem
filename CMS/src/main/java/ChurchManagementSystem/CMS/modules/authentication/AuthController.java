@@ -1,15 +1,13 @@
 package ChurchManagementSystem.CMS.modules.authentication;
 
-import ChurchManagementSystem.CMS.core.customResponse.ApiResponse;
+import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.modules.authentication.dto.AuthDto;
 import ChurchManagementSystem.CMS.modules.authentication.dto.LogoutResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.handler.ApiResponseLogin;
 import ChurchManagementSystem.CMS.modules.authentication.handler.BlackListToken;
-import ChurchManagementSystem.CMS.modules.authentication.repository.User;
 import ChurchManagementSystem.CMS.modules.authentication.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
@@ -25,38 +23,52 @@ import java.util.Map;
 public class AuthController {
     private final AuthService authService;
     private final BlackListToken blackListToken;
-    private final User userRepository;
 
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, String>> register(@RequestBody AuthDto authDto) {
-        String message = authService.register(authDto.getEmail(), authDto.getPassword());
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", message);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping(value = "/verify", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponseLogin<Object>> verifyEmail(@RequestParam String token) {
+    @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponseLogin<Map<String, String>>> register(@ModelAttribute AuthDto authDto) {
         try {
-            String message = authService.verifyEmail(token);
-            return ResponseEntity.ok(ApiResponseLogin.builder()
-                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-                    .success(true)
-                    .message(message)
-                    .build());
+            String message = authService.register(authDto.getEmail(), authDto.getPassword());
+
+            Map<String, String> result = new HashMap<>();
+            result.put("email", authDto.getEmail());
+
+            return ResponseEntity.ok(
+                    ApiResponseLogin.<Map<String, String>>builder()
+                            .status(HttpStatus.OK)
+                            .success(true)
+                            .message(message)
+                            .result(result)
+                            .build()
+            );
+
+        } catch (CustomRequestException e) {
+            return ResponseEntity.status(e.getStatus()).body(
+                    ApiResponseLogin.<Map<String, String>>builder()
+                            .status(e.getStatus())
+                            .success(false)
+                            .message(e.getMessage())
+                            .build()
+            );
+
         } catch (Exception e) {
-            return ResponseEntity.ok(ApiResponseLogin.builder()
-                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-                    .success(false)
-                    .message(e.getMessage())
-                    .build());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    ApiResponseLogin.<Map<String, String>>builder()
+                            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                            .success(false)
+                            .message("Internal server error: " + e.getMessage())
+                            .build()
+            );
         }
     }
 
+
+    @GetMapping(value = "/verify", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+       return ResponseEntity.ok(authService.verifyEmail(token));
+    }
+
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponseLogin<Map<String, String>>> login(
+    public ResponseEntity<ApiResponseLogin<Object>> login(
             @RequestParam("email") String email,
             @RequestParam("password") String password) {
 
@@ -66,18 +78,21 @@ public class AuthController {
             Map<String, String> result = new HashMap<>();
             result.put("bearer_token", token);
 
-            return ResponseEntity.ok(ApiResponseLogin.<Map<String, String>>builder()
-                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-                    .success(true)
-                    .message("Login successful")
-                    .result(result)
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.ok(ApiResponseLogin.<Map<String, String>>builder()
-                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-                    .success(false)
-                    .message(e.getMessage())
-                    .build());
+            return ResponseEntity.ok(ApiResponseLogin.builder()
+                            .status(HttpStatus.OK)
+                            .success(true)
+                            .message("User Login Successfully")
+                            .result(result)
+                            .build()
+                    );
+            }catch (CustomRequestException e){
+                return ResponseEntity.status(e.getStatus()).body(
+                        ApiResponseLogin.builder()
+                                .status(e.getStatus())
+                                .success(false)
+                                .message(e.getMessage())
+                                .build()
+                );
         }
     }
 
