@@ -25,8 +25,6 @@ public class UserEntity {
     @NotNull
     private String password;
     private boolean enabled = false;
-    @NotNull
     private String verificationToken;
-    @NotNull
     private String resetToken;
 }

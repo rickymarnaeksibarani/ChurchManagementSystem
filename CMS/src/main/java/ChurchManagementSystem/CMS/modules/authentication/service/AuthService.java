@@ -3,9 +3,10 @@ package ChurchManagementSystem.CMS.modules.authentication.service;
 import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.mail.EmailService;
 import ChurchManagementSystem.CMS.core.utils.JwtUtil;
+import ChurchManagementSystem.CMS.modules.authentication.dto.LogoutResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.entity.UserEntity;
+import ChurchManagementSystem.CMS.modules.authentication.handler.BlackListToken;
 import ChurchManagementSystem.CMS.modules.authentication.repository.User;
-import ch.qos.logback.core.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,6 +24,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final BlackListToken blackListToken;
 
     public String register(String email, String password) {
         if (userRepository.findByEmail(email).isPresent())
@@ -51,9 +52,6 @@ public class AuthService {
     }
 
     public String verifyEmail(String token) {
-        if (!StringUtils.hasText(token)){
-            throw new CustomRequestException("Token cannot be blank", HttpStatus.BAD_REQUEST);
-        }
         UserEntity user = userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> new CustomRequestException("Invalid verification token", HttpStatus.BAD_REQUEST)) ;
         user.setEnabled(true);
@@ -116,9 +114,7 @@ public class AuthService {
     }
 
     public String resetPassword(String token, String newPassword) {
-        if (!StringUtils.hasText(token)){
-            throw new CustomRequestException("Token cannot be blank", HttpStatus.BAD_REQUEST);
-        }
+
         if (!StringUtils.hasText(newPassword)){
             throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
         }
@@ -128,6 +124,21 @@ public class AuthService {
         user.setResetToken(null);
         userRepository.save(user);
         return "Password successfully reset.";
+    }
+
+    public LogoutResponseDto logout(String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new CustomRequestException("Missing or invalid Authorization header", HttpStatus.FORBIDDEN);
+        }
+
+        String token = authHeader.substring(7);
+
+        if (!jwtUtil.validateToken(token)) {
+            throw new CustomRequestException("Invalid or expired token", HttpStatus.BAD_REQUEST);
+        }
+
+        blackListToken.add(token);
+        return new LogoutResponseDto(token);
     }
 
 }

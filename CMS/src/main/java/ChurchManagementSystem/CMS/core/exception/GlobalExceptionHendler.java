@@ -1,6 +1,7 @@
 package ChurchManagementSystem.CMS.core.exception;
 
 import ChurchManagementSystem.CMS.core.customResponse.ExceptionResponse;
+import ChurchManagementSystem.CMS.modules.authentication.handler.ApiResponseLogin;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -108,9 +109,6 @@ public class GlobalExceptionHendler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ExceptionResponse(HttpStatus.NOT_FOUND, ex.getMessage()));
     }
-
-
-
 
 
 }

@@ -1,19 +1,26 @@
 package ChurchManagementSystem.CMS.core.mail;
 
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
 
+    private final SpringTemplateEngine springTemplateEngine;
     private final JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
     private String fromEmail;
+    @Value("${baseUrl}")
+    private String baseUrl;
 
     private void sendEmail(String toEmail, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -26,44 +33,39 @@ public class EmailService {
 
     public void sendVerificationEmail(String toEmail, String token) {
         String subject = "Verify your email address";
-        String verificationUrl = "http://localhost:8080/api/auth/verify?token=" + token;
+        String verificationUrl = baseUrl + "api/auth/verify?token=" + token;
 
-        String body = """
-                Shalom,
-                
-                Terima kasih telah mendaftar di Sistem Informasi Gereja.
-                Untuk menyelesaikan proses pendaftaran dan mengaktifkan akun Anda,
-                silakan verifikasi alamat email Anda dengan mengklik tautan berikut:
+        Context context = new Context();
+        context.setVariable("verificationUrl", verificationUrl);
 
-                %s
+        String body = springTemplateEngine.process("email-verification", context);
 
-                Jika Anda tidak merasa melakukan pendaftaran ini, abaikan pesan ini.
-
-                Hormat kami,
-                Tim Sistem Informasi Gereja
-                """.formatted(verificationUrl);
-
-       sendEmail(toEmail, subject, body);
+        sendHtmlEmail(toEmail, subject, body);
     }
 
     public void sendResetPasswordEmail(String toEmail, String token) {
-        String resetUrl = "http://localhost:8080/api/auth/reset-password?token=" + token;
-        String subject = "🔒 Reset Password Akun Anda";
-        String body = """
-                Shalom,
-                
-                Kami menerima permintaan untuk mengatur ulang kata sandi akun Anda.
-                Silakan klik tautan di bawah ini untuk membuat kata sandi baru:
+        String subject = "Reset Password Akun Anda";
+        String resetUrl = baseUrl + "api/auth/reset-password?token=" + token;
+        Context context = new Context();
+        context.setVariable("resetUrl", resetUrl);
+        String body = springTemplateEngine.process("password-reset", context);
 
-                %s
+        sendHtmlEmail(toEmail, subject, body);
+    }
 
-                Jika Anda tidak merasa melakukan permintaan ini, abaikan pesan ini, atau hubungi staff kami.
+    private void sendHtmlEmail(String to, String subject, String htmlBody) {
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-                Hormat kami,
-                Tim Sistem Informasi Gereja
-                """.formatted(resetUrl);
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(htmlBody, true);
 
-        sendEmail(toEmail, subject, body);
+            javaMailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send email", e);
+        }
     }
 
 }

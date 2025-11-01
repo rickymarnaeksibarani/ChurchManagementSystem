@@ -166,19 +166,18 @@ public class AuthController {
     @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponseLogin<LogoutResponseDto>> logout(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
-
-
-        String token = authHeader.substring(7);
-        blackListToken.add(token);
+        LogoutResponseDto response = authService.logout(authHeader);
 
         return ResponseEntity.ok(
                 ApiResponseLogin.<LogoutResponseDto>builder()
                         .status(HttpStatus.OK)
+                        .success(true)
                         .message("User logged out successfully")
-                        .result(new LogoutResponseDto(token))
+                        .result(response)
                         .build()
         );
     }
+
 
 
 }
