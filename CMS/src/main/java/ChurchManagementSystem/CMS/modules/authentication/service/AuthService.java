@@ -5,11 +5,13 @@ import ChurchManagementSystem.CMS.core.mail.EmailService;
 import ChurchManagementSystem.CMS.core.utils.JwtUtil;
 import ChurchManagementSystem.CMS.modules.authentication.entity.UserEntity;
 import ChurchManagementSystem.CMS.modules.authentication.repository.User;
+import ch.qos.logback.core.util.StringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,6 +28,12 @@ public class AuthService {
     public String register(String email, String password) {
         if (userRepository.findByEmail(email).isPresent())
             throw new CustomRequestException("Email already registered", HttpStatus.CONFLICT);
+        if (!StringUtils.hasText(email)){
+            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
+        }
+        if (!StringUtils.hasText(password)){
+            throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
+        }
 
         String token = UUID.randomUUID().toString();
         UserEntity user = new UserEntity();
@@ -43,6 +51,9 @@ public class AuthService {
     }
 
     public String verifyEmail(String token) {
+        if (!StringUtils.hasText(token)){
+            throw new CustomRequestException("Token cannot be blank", HttpStatus.BAD_REQUEST);
+        }
         UserEntity user = userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> new CustomRequestException("Invalid verification token", HttpStatus.BAD_REQUEST)) ;
         user.setEnabled(true);
@@ -52,6 +63,12 @@ public class AuthService {
     }
 
     public String login(String email, String password) {
+        if (!StringUtils.hasText(email)){
+            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
+        }
+        if (!StringUtils.hasText(password)){
+            throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
+        }
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
 
@@ -64,6 +81,9 @@ public class AuthService {
     }
 
     public String resendVerification(String email) {
+        if (!StringUtils.hasText(email)){
+            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
+        }
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
         if (user.isEnabled()){
@@ -79,6 +99,9 @@ public class AuthService {
     }
 
     public String forgotPassword(String email) {
+        if (!StringUtils.hasText(email)){
+            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
+        }
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
         if(!user.isEnabled()){
@@ -93,6 +116,12 @@ public class AuthService {
     }
 
     public String resetPassword(String token, String newPassword) {
+        if (!StringUtils.hasText(token)){
+            throw new CustomRequestException("Token cannot be blank", HttpStatus.BAD_REQUEST);
+        }
+        if (!StringUtils.hasText(newPassword)){
+            throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
+        }
         UserEntity user = userRepository.findByResetToken(token)
                 .orElseThrow(() -> new CustomRequestException("Invalid token", HttpStatus.BAD_REQUEST));
         user.setPassword(passwordEncoder.encode(newPassword));
