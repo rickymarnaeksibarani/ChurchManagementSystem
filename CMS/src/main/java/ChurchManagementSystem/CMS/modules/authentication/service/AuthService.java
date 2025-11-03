@@ -57,7 +57,7 @@ public class AuthService {
         user.setEnabled(true);
         user.setVerificationToken(null);
         userRepository.save(user);
-        return "EMAIL BERHASIL DI VERIFIKASI, SILAHKAN LOGIN KEMBALI";
+        return "Email successfully verified, please log in again";
     }
 
     public String login(String email, String password) {
@@ -103,14 +103,14 @@ public class AuthService {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
         if(!user.isEnabled()){
-            throw new CustomRequestException("Akun belum diverifikasi. Silahkan verifikasi email anda terlebih dahulu", HttpStatus.FORBIDDEN);
+            throw new CustomRequestException("Your account has not been verified. Please verify your email first.", HttpStatus.FORBIDDEN);
         }
         String resetToken = UUID.randomUUID().toString();
         user.setResetToken(resetToken);
         userRepository.save(user);
         emailService.sendResetPasswordEmail(email, resetToken);
         log.info("ini link token forgot password: "+ resetToken);
-        return "Password reset email sent.";
+        return "Email sent, please check";
     }
 
     public String resetPassword(String token, String newPassword) {

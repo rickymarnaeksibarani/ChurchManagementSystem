@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi Email Berhasil</title>
+    <style>
+        body {
+          font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          background-color: #f9fafb;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          margin: 0;
+          color: #333;
+        }
+
+        .container {
+          background: #ffffff;
+          padding: 40px 50px;
+          border-radius: 16px;
+          box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+          text-align: center;
+          max-width: 400px;
+          width: 90%;
+        }
+
+        h1 {
+          font-size: 22px;
+          font-weight: 600;
+          margin-bottom: 15px;
+          color: #222;
+        }
+
+        p {
+          font-size: 15px;
+          line-height: 1.6;
+          color: #555;
+          margin-bottom: 25px;
+        }
+
+        a {
+          display: inline-block;
+          background-color: #2563eb;
+          color: white;
+          text-decoration: none;
+          padding: 10px 22px;
+          border-radius: 8px;
+          font-weight: 500;
+          transition: background 0.25s ease;
+        }
+
+        a:hover {
+          background-color: #1e4ed8;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Email Berhasil Diverifikasi</h1>
+    <p>Terima kasih! Email Anda telah berhasil diverifikasi.<br>Silakan login kembali untuk melanjutkan.</p>
+    <a id="loginLink">Kembali ke Halaman Login</a>
+</div>
+
+<script>
+    // Deteksi asal environment
+    const origin = window.location.origin;
+
+    // Atur base URL tergantung environment
+    let loginUrl;
+    if (origin.includes("localhost") || origin.includes("127.0.0.1")) {
+      loginUrl = "http://localhost:4200/login"; // DEV
+    } else if (origin.includes("qa.") || origin.includes("staging")) {
+      loginUrl = "https://qa.yourdomain.com/login"; // QA
+    } else {
+      loginUrl = "https://yourdomain.com/login"; // PROD
+    }
+
+    document.getElementById("loginLink").href = loginUrl;
+</script>
+</body>
+</html>

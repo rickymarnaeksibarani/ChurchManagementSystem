@@ -29,14 +29,15 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsCustomConfiguration))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers(
-//                                "/api/auth/register", "/api/auth/login",
-//                                "/api/auth/verify",
-//                                "/api/auth/forgot",
-//                                "/api/auth/reset",
-//                                "/api/auth/resend",
-//                                "/api/auth/logout").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers(
+                                "/api/auth/register", "/api/auth/login",
+                                "/api/auth/verify",
+                                "/api/auth/forgot",
+                                "/api/auth/reset",
+                                "/api/auth/resend",
+                                "/api/auth/logout").permitAll()
+                                .anyRequest().authenticated() //comment this line when permit all endpoint for development proses
+//                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
