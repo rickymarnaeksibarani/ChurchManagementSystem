@@ -45,7 +45,7 @@ public class EmailService {
 
     public void sendResetPasswordEmail(String toEmail, String token) {
         String subject = "Reset Password Akun Anda";
-        String resetUrl = baseUrl + "api/auth/reset-password?token=" + token;
+        String resetUrl = baseUrl + "api/auth/reset?token=" + token;
         Context context = new Context();
         context.setVariable("resetUrl", resetUrl);
         String body = springTemplateEngine.process("password-reset", context);
