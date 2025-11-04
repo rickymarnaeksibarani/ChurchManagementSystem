@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.core.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -65,6 +66,30 @@ public class JwtUtil {
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
+        }
+    }
+
+    public String generateTokenWithRole(String email, String role) {
+        return Jwts.builder()
+                .setSubject(email)
+                .claim("role", "ROLE_" + role.toUpperCase())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 jam
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+
+    public String extractRole(String token){
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return claims.get("role", String.class);
+        }catch (Exception e){
+            return null;
         }
     }
 }

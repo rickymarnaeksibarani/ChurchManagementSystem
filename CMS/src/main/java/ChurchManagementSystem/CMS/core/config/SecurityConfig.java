@@ -3,6 +3,7 @@ package ChurchManagementSystem.CMS.core.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class SecurityConfig {
 
-    private final CorsProperties corsProperties;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CorsCustomConfiguration corsCustomConfiguration;
 
@@ -29,19 +29,33 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsCustomConfiguration))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+            /*
+                please use only one
+                .anyRequest().authenticated() -> all endpoint request must be hit WITH the authentication before
+                .anyRequest().permitAll() -> all endpoint request can hit WITHOUT authentication
+             */
+//                                .anyRequest().permitAll()
                         .requestMatchers(
-                                "/api/auth/register", "/api/auth/login",
+                                "/api/auth/register/main", "/api/auth/login",
                                 "/api/auth/verify",
                                 "/api/auth/forgot",
                                 "/api/auth/reset",
                                 "/api/auth/resend",
-                                "/api/auth/logout").permitAll()
-                                .anyRequest().authenticated() //comment this line when permit all endpoint for development proses
-//                        .anyRequest().permitAll()
+                                "/api/auth/logout",
+                                "/api/auth/login/user",
+                                "/api/auth/register/view")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/**").hasAnyRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasAnyRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/**").hasAnyRole("ADMIN")
+                                .anyRequest().authenticated()
+
                 )
+                // disable this filter jwt if all endpoint request can hit WITHOUT authentication
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

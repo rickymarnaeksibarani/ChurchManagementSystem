@@ -10,13 +10,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
-        // skip JWT check for public endpoints
+
+        // --- Skip JWT validation for public endpoints ---
         if (path.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response);
             return;
@@ -47,26 +50,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
 
+            // Cek apakah token sudah di-blacklist
             if (blackListToken.isBlacklisted(token)) {
-                System.out.println("Token is blacklisted");
-            }else {
-                try {
-                    email = jwtUtil.extractEmail(token);
-                } catch (Exception e) {
-                    log.debug("Invalid JWT: {}", e.getMessage());
-                }
+                log.warn("Token is blacklisted, rejecting request");
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                response.getWriter().write("Token is blacklisted");
+                return;
             }
 
-        }
+            try {
+                // Ekstrak email dan role dari token
+                email = jwtUtil.extractEmail(token);
+                String role = jwtUtil.extractRole(token);
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = customUserDetailService.loadUserByUsername(email);
-            if (userDetails != null) {
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    // Buat authority dari role
+                    List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+
+                    // Set authentication di Spring Security context
+                    UsernamePasswordAuthenticationToken authToken =
+                            new UsernamePasswordAuthenticationToken(email, null, authorities);
+
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+
+            } catch (Exception e) {
+                log.debug("Invalid JWT: {}", e.getMessage());
             }
         }
 

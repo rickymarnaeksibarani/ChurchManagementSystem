@@ -1,8 +1,10 @@
 package ChurchManagementSystem.CMS.modules.authentication.service;
 
+import ChurchManagementSystem.CMS.core.enums.Role;
 import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.mail.EmailService;
 import ChurchManagementSystem.CMS.core.utils.JwtUtil;
+import ChurchManagementSystem.CMS.modules.authentication.dto.LoginResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.dto.LogoutResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.entity.UserEntity;
 import ChurchManagementSystem.CMS.modules.authentication.handler.BlackListToken;
@@ -42,6 +44,7 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(password));
         user.setVerificationToken(token);
         user.setEnabled(false);
+        user.setRole(Role.ADMIN);
         userRepository.save(user);
 
         emailService.sendVerificationEmail(email, token);
@@ -50,6 +53,39 @@ public class AuthService {
 
         return "User registered successfully. Please check your email for verification link.";
     }
+
+    public String registerUser(String email, String password, String role) {
+        if (userRepository.findByEmail(email).isPresent())
+            throw new CustomRequestException("Email already registered", HttpStatus.CONFLICT);
+
+        if (!StringUtils.hasText(email))
+            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
+
+        if (!StringUtils.hasText(password))
+            throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
+
+        String token = UUID.randomUUID().toString();
+
+        UserEntity user = new UserEntity();
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        user.setVerificationToken(token);
+        user.setEnabled(false);
+
+//        Role selectedRole = Role.USER;
+//        if ("ADMIN".equalsIgnoreCase(role)){
+//            selectedRole = Role.ADMIN;
+//        }
+        user.setRole(Role.USER);
+
+        userRepository.save(user);
+        emailService.sendVerificationEmail(email, token);
+
+        log.info("ini link verify register: http://localhost:8080/api/auth/verify?token=" + token);
+
+        return "User registered successfully. Please check your email for verification link.";
+    }
+
 
     public String verifyEmail(String token) {
         UserEntity user = userRepository.findByVerificationToken(token)
@@ -60,23 +96,53 @@ public class AuthService {
         return "Email successfully verified, please log in again";
     }
 
-    public String login(String email, String password) {
-        if (!StringUtils.hasText(email)){
-            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
-        }
-        if (!StringUtils.hasText(password)){
-            throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
-        }
+    public LoginResponseDto login(String email, String password) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
 
-        if (!user.isEnabled()) throw new CustomRequestException("Account not verified", HttpStatus.FORBIDDEN);
+        if (!user.isEnabled())
+            throw new CustomRequestException("Account not verified", HttpStatus.FORBIDDEN);
 
         if (!passwordEncoder.matches(password, user.getPassword()))
             throw new CustomRequestException("Invalid password", HttpStatus.BAD_REQUEST);
 
-        return jwtUtil.generateToken(email);
+//        if (!user.getRole().equals(Role.ADMIN)){
+//            throw new CustomRequestException("Access denied: only ADMIN role can login here", HttpStatus.FORBIDDEN);
+//        }
+        String token =  jwtUtil.generateTokenWithRole(email, user.getRole().name());
+        return new LoginResponseDto(token, user.getRole().name());
+
+
     }
+
+    //todo: login as user (view only)
+//    public LoginResponseDto loginAsUser(String email, String password){
+//        if (!StringUtils.hasText(email)){
+//            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
+//
+//        }
+//        if (!StringUtils.hasText(password)){
+//            throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
+//
+//        }
+//
+//        UserEntity user = userRepository.findByEmail(email)
+//                .orElseThrow(()-> new CustomRequestException("Email not found", HttpStatus.NOT_FOUND));
+//
+//        if (!user.isEnabled()){
+//            throw new CustomRequestException("Account not verified", HttpStatus.FORBIDDEN);
+//        }
+//
+//        if (!passwordEncoder.matches(password, user.getPassword())){
+//            throw new CustomRequestException("Invalid Password", HttpStatus.BAD_REQUEST);
+//        }
+//
+//        if (!user.getRole().equals(Role.USER)){
+//            throw new CustomRequestException("Access denied: only USER role can login here", HttpStatus.FORBIDDEN);
+//        }
+//        String token =  jwtUtil.generateTokenWithRole(email, user.getRole().name());
+//        return new  LoginResponseDto(token, user.getRole().name());
+//    }
 
     public String resendVerification(String email) {
         if (!StringUtils.hasText(email)){
@@ -140,6 +206,8 @@ public class AuthService {
         blackListToken.add(token);
         return new LogoutResponseDto(token);
     }
+
+
 
 }
 

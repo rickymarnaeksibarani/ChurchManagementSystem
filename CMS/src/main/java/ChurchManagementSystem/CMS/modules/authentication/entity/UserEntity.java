@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.modules.authentication.entity;
 
+import ChurchManagementSystem.CMS.core.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -27,4 +28,7 @@ public class UserEntity {
     private boolean enabled = false;
     private String verificationToken;
     private String resetToken;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
