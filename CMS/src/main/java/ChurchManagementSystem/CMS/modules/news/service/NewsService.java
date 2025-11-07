@@ -34,7 +34,7 @@ import java.util.Random;
 public class NewsService {
     @Autowired
     private NewsRepository newsRepository;
-    private final String UPLOAD_DIR = "CMS/src/main/resources/upload/images";
+    private final String UPLOAD_DIR = "/src/main/resources/upload/images";
 
     @PostConstruct
     private void init(){

@@ -229,3 +229,4 @@
 2025-11-07T13:09:12.298+07:00  INFO 8508 --- [CMS] [http-nio-8080-exec-3] C.CMS.modules.news.service.NewsService   : content type: image/png
 2025-11-07T13:09:24.579+07:00  INFO 8508 --- [CMS] [http-nio-8080-exec-5] C.CMS.modules.news.service.NewsService   : content type: image/png
 2025-11-07T13:24:19.627+07:00  INFO 8508 --- [CMS] [http-nio-8080-exec-7] C.CMS.modules.news.service.NewsService   : content type: image/png
+2025-11-07T13:30:09.841+07:00  INFO 8508 --- [CMS] [http-nio-8080-exec-1] C.CMS.modules.news.service.NewsService   : content type: image/jpeg
