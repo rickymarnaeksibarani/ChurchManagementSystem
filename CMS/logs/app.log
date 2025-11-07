@@ -1,0 +1,21 @@
+2025-10-31T07:56:41.622+07:00  INFO 11364 --- [CMS] [main] C.CMS.CmsApplicationTests                : Starting CmsApplicationTests using Java 21.0.7 with PID 11364 (started by User in C:\Users\User\cms\ChurchManagementSystem\CMS)
+2025-10-31T07:56:41.632+07:00  INFO 11364 --- [CMS] [main] C.CMS.CmsApplicationTests                : The following 1 profile is active: "local"
+2025-10-31T07:56:43.197+07:00  INFO 11364 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-10-31T07:56:43.372+07:00  INFO 11364 --- [CMS] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 166 ms. Found 9 JPA repository interfaces.
+2025-10-31T07:56:44.254+07:00  INFO 11364 --- [CMS] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-10-31T07:56:44.371+07:00  INFO 11364 --- [CMS] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-10-31T07:56:44.423+07:00  INFO 11364 --- [CMS] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-10-31T07:56:44.676+07:00  INFO 11364 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-10-31T07:56:44.857+07:00  INFO 11364 --- [CMS] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@44b9c7c4
+2025-10-31T07:56:44.860+07:00  INFO 11364 --- [CMS] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-10-31T07:56:44.910+07:00  WARN 11364 --- [CMS] [main] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-10-31T07:56:45.357+07:00  INFO 11364 --- [CMS] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-10-31T07:56:46.688+07:00  INFO 11364 --- [CMS] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-10-31T07:56:46.943+07:00  INFO 11364 --- [CMS] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31T07:56:47.664+07:00  INFO 11364 --- [CMS] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-10-31T07:56:48.759+07:00  WARN 11364 --- [CMS] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-10-31T07:56:48.796+07:00  INFO 11364 --- [CMS] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailService
+2025-10-31T07:56:50.008+07:00  INFO 11364 --- [CMS] [main] C.CMS.CmsApplicationTests                : Started CmsApplicationTests in 8.845 seconds (process running for 10.436)
+2025-10-31T07:56:50.769+07:00  INFO 11364 --- [CMS] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-10-31T07:56:50.828+07:00  INFO 11364 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-10-31T07:56:50.835+07:00  INFO 11364 --- [CMS] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

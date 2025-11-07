@@ -8,6 +8,7 @@ import ChurchManagementSystem.CMS.modules.news.entity.NewsEntity;
 import ChurchManagementSystem.CMS.modules.news.repository.NewsRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.criteria.Predicate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+@Slf4j
 @Service
 public class NewsService {
     @Autowired
@@ -158,6 +160,7 @@ public class NewsService {
     private String saveImage(MultipartFile image){
         try {
             String contentType = image.getContentType();
+            log.info("content type: {}", contentType);
             if (contentType == null || !isValidImageType(contentType)) {
                 throw new IllegalArgumentException("Only JPG and PNG files are allowed");
             }
@@ -174,8 +177,14 @@ public class NewsService {
     }
 
     private boolean isValidImageType(String contentType) {
-        return "image/png".equals(contentType) || "image/jpeg".equals(contentType) || "image/jpg".equals(contentType);
+        if (contentType == null) return false;
+        return contentType.equalsIgnoreCase("image/png")
+                || contentType.equalsIgnoreCase("image/jpeg")
+                || contentType.equalsIgnoreCase("image/jpg")
+                || contentType.equalsIgnoreCase("image/x-png")
+                || contentType.equalsIgnoreCase("image/pjpeg");
     }
+
 
     private String generateRandomString() {
         Random random = new Random();
