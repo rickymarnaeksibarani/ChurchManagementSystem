@@ -8,6 +8,7 @@ import ChurchManagementSystem.CMS.modules.news.entity.NewsEntity;
 import ChurchManagementSystem.CMS.modules.news.repository.NewsRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.criteria.Predicate;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,9 +32,10 @@ import java.util.Random;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class NewsService {
-    @Autowired
-    private NewsRepository newsRepository;
+
+    private final NewsRepository newsRepository;
     private final String UPLOAD_DIR = "/src/main/resources/upload/images";
 
     @PostConstruct

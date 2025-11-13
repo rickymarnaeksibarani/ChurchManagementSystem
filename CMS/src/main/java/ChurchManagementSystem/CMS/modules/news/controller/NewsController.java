@@ -6,6 +6,7 @@ import ChurchManagementSystem.CMS.modules.news.dto.NewsRequestDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsResponDto;
 import ChurchManagementSystem.CMS.modules.news.service.NewsService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,9 +19,10 @@ import java.security.NoSuchAlgorithmException;
 
 @RestController
 @RequestMapping("/api/v1/news")
+@RequiredArgsConstructor
 public class NewsController {
-    @Autowired
-    private NewsService newsService;
+
+    private final NewsService newsService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<Object> getAllNews(
