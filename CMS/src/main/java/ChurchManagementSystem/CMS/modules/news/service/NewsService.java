@@ -36,19 +36,20 @@ import java.util.Random;
 public class NewsService {
 
     private final NewsRepository newsRepository;
-    private final String UPLOAD_DIR = "/src/main/resources/upload/images";
+    private final String UPLOAD_DIR = System.getProperty("user.dir") + "/CMS/src/main/resources/upload/images";
+
 
     @PostConstruct
-    private void init(){
+    private void init() {
         Path uploadPath = Paths.get(UPLOAD_DIR);
-        if (!Files.exists(uploadPath)){
-            try {
-                Files.createDirectories(uploadPath);
-            }catch (Exception e){
-                throw new RuntimeException("Could not initialize upload directory", e);
-            }
+        try {
+            Files.createDirectories(uploadPath);
+            log.info("UPLOAD DIR READY: {}", uploadPath.toAbsolutePath());
+        } catch (Exception e) {
+            throw new RuntimeException("Could not initialize upload directory", e);
         }
     }
+
 
     private NewsResponDto toNewsRespone(NewsEntity newsEntity) {
         String imagePath = newsEntity.getImagePath();
