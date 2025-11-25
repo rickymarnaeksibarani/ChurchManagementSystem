@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Enumerated;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,10 @@ public class NewsDto {
     private LocalDateTime createdAt;
 
     @CreationTimestamp
+    @JsonProperty("publishDate")
+    private LocalDateTime publishDate;
+
+    @UpdateTimestamp
     @JsonProperty("updatedAt")
     private LocalDateTime updatedAt;
 }

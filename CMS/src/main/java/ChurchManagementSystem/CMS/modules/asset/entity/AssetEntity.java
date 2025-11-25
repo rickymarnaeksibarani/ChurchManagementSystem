@@ -4,6 +4,10 @@ import ChurchManagementSystem.CMS.core.enums.AssetStatus;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -35,5 +39,11 @@ public class AssetEntity {
     @Column(name = "quantity")
     private Integer quantity;
 
-    //todo: added created and update-at
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "update_at" )
+    private LocalDateTime updateAt;
 }

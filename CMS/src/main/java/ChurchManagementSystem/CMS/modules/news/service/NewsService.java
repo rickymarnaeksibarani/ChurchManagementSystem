@@ -4,6 +4,7 @@ import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsRequestDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsResponDto;
+import ChurchManagementSystem.CMS.modules.news.dto.SendDataDto;
 import ChurchManagementSystem.CMS.modules.news.entity.NewsEntity;
 import ChurchManagementSystem.CMS.modules.news.repository.NewsRepository;
 import jakarta.annotation.PostConstruct;
@@ -78,13 +79,16 @@ public class NewsService {
                 .fileType(fileType)
                 .fileSize(fileSize)
                 .filePath(imagePath != null ? imagePath.replace("\\", "/") : null) // normalize
+                .publishDate(newsEntity.getPublishDate())
+                .createdAt(newsEntity.getCreatedAt())
+                .updatedAt(newsEntity.getUpdateAt())
                 .build();
     }
 
 
 
     @Transactional(readOnly = true)
-    public PaginationUtil<NewsEntity, NewsEntity> getAllNews(Integer page, Integer perPage, NewsRequestDto searchRequest) {
+    public PaginationUtil<NewsEntity, SendDataDto> getAllNews(NewsRequestDto searchRequest) {
         try {
             Specification<NewsEntity> specification = (root, query, builder) -> {
                 List<Predicate> predicates = new ArrayList<>();
@@ -97,9 +101,9 @@ public class NewsService {
                 return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
             };
 
-            PageRequest pageRequest = PageRequest.of(page - 1, perPage, Sort.by(Sort.Order.desc("createdAt")));
+            PageRequest pageRequest = PageRequest.of(searchRequest.getPage()-1 , searchRequest.getPerPage(), Sort.by(Sort.Order.desc("createdAt")));
             Page<NewsEntity> pagedResult = newsRepository.findAll(specification, pageRequest);
-            return new PaginationUtil<>(pagedResult, NewsEntity.class);
+            return new PaginationUtil<>(pagedResult, SendDataDto.class);
         }catch (Exception e){
             throw new RuntimeException(e);
         }

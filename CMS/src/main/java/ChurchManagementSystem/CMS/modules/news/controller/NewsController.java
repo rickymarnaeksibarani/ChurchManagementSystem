@@ -26,10 +26,8 @@ public class NewsController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ApiResponse<Object> getAllNews(
-            @RequestParam(defaultValue = "1") Integer page,
-            @RequestParam(defaultValue = "10") Integer size,
-            NewsRequestDto requestDto) {
-        Object allNews = newsService.getAllNews(page, size, requestDto);
+           @ModelAttribute NewsRequestDto requestDto) {
+        Object allNews = newsService.getAllNews(requestDto);
 
         return ApiResponse.builder()
                 .result(allNews)

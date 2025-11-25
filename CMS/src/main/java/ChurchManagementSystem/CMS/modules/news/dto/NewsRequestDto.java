@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class NewsRequestDto {
     private Integer page;
+    private Integer perPage = 10;
     private Integer size;
     private String searchTerm;
     private List<Category> category;
