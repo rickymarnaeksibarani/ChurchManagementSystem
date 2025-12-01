@@ -1,15 +1,19 @@
 package ChurchManagementSystem.CMS.modules.news.controller;
 
 import ChurchManagementSystem.CMS.core.customResponse.ApiResponse;
+import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
+import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsRequestDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsResponDto;
+import ChurchManagementSystem.CMS.modules.news.dto.SendDataDto;
+import ChurchManagementSystem.CMS.modules.news.entity.NewsEntity;
 import ChurchManagementSystem.CMS.modules.news.service.NewsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,15 +29,14 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ApiResponse<Object> getAllNews(
-           @ModelAttribute NewsRequestDto requestDto) {
-        Object allNews = newsService.getAllNews(requestDto);
-
-        return ApiResponse.builder()
-                .result(allNews)
-                .status(HttpStatus.OK)
-                .message("Get All Data")
-                .build();
+    public ResponseEntity<?> getAllNews(
+           NewsRequestDto requestDto) {
+        try {
+            PaginationUtil<NewsEntity, SendDataDto> result = newsService.getAllNews(requestDto);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success retrieved data board", result), HttpStatus.OK);
+        }catch (CustomRequestException er){
+            return er.GlobalCustomRequestException(er.getMessage(), er.getStatus());
+        }
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -11,7 +11,6 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -101,7 +100,7 @@ public class NewsService {
                 return query.where(predicates.toArray(new Predicate[]{})).getRestriction();
             };
 
-            PageRequest pageRequest = PageRequest.of(searchRequest.getPage()-1 , searchRequest.getPerPage(), Sort.by(Sort.Order.desc("createdAt")));
+            PageRequest pageRequest = PageRequest.of(searchRequest.getPage()-1 , searchRequest.getSize(), Sort.by(Sort.Order.desc("createdAt")));
             Page<NewsEntity> pagedResult = newsRepository.findAll(specification, pageRequest);
             return new PaginationUtil<>(pagedResult, SendDataDto.class);
         }catch (Exception e){

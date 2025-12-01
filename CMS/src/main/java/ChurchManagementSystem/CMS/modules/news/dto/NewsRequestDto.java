@@ -8,9 +8,16 @@ import java.util.List;
 @Data
 public class NewsRequestDto {
     private Integer page;
-    private Integer perPage = 10;
     private Integer size;
     private String searchTerm;
     private List<Category> category;
 
+    NewsRequestDto(){
+        if (this.getPage()==null){
+            this.page = 1;
+        }
+        if (this.getSize()==null){
+            this.size = 10;
+        }
+    }
 }
