@@ -87,4 +87,10 @@ public class NewsController {
                 .message("Success delete data")
                 .build();
     }
+
+    @GetMapping("/image/{filename}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String filename) {
+        return newsService.getImageFile(filename);
+    }
+
 }

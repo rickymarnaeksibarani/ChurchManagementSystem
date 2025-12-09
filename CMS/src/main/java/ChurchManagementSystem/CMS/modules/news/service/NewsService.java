@@ -1,5 +1,6 @@
 package ChurchManagementSystem.CMS.modules.news.service;
 
+import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsDto;
 import ChurchManagementSystem.CMS.modules.news.dto.NewsRequestDto;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -206,6 +209,27 @@ public class NewsService {
             Files.deleteIfExists(path);
         } catch (IOException e) {
             System.err.println("Could not delete file: " + imagePath + " - " + e.getMessage());
+        }
+    }
+
+    public ResponseEntity<byte[]>getImageFile(String fileName){
+        try {
+            Path filePath = Paths.get(UPLOAD_DIR, fileName);
+
+            if (!Files.exists(filePath)){
+                throw new CustomRequestException("Image not found!", HttpStatus.NOT_FOUND);
+            }
+
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) contentType = "application/octet-stream";
+
+            byte [] fileBytes = Files.readAllBytes(filePath);
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(fileBytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
