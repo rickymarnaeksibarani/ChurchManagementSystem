@@ -18,8 +18,8 @@ public class NewsDto {
     @JsonProperty("title")
     private String title;
 
-    @JsonProperty("image")
-    private MultipartFile image; // Add this line
+//    @JsonProperty("image")
+//    private MultipartFile image; // Add this line
 
     @JsonProperty("content")
     private String content;
