@@ -172,25 +172,6 @@ public class AuthController {
 //    }
 
 
-//    @PostMapping(value = "/resend", produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<ApiResponseLogin<Object>> resendVerification(@RequestParam String email) {
-//        try {
-//            String message = authService.resendVerification(email);
-//            return ResponseEntity.ok(ApiResponseLogin.builder()
-//                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-//                    .success(true)
-//                    .message(message)
-//                    .build());
-//        } catch (CustomRequestException e) {
-//            return ResponseEntity.status(e.getStatus()).body(
-//                    ApiResponseLogin.builder()
-//                            .status(e.getStatus())
-//                            .success(false)
-//                            .message(e.getMessage())
-//                            .build()
-//            );
-//        }
-//    }
 
 
 //    @PostMapping(value = "/forgot", produces = MediaType.APPLICATION_JSON_VALUE)
