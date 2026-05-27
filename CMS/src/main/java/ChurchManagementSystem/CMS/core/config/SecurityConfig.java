@@ -43,7 +43,9 @@ public class SecurityConfig {
                                 "/api/auth/resend",
                                 "/api/auth/logout",
                                 "/api/auth/login/user",
-                                "/api/auth/register/view")
+                                "/api/auth/register/view",
+                                "/api/v1/news",
+                                "/api/v1/activity/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/**").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers(HttpMethod.POST, "/api/v1/**").hasAnyRole("ADMIN")
