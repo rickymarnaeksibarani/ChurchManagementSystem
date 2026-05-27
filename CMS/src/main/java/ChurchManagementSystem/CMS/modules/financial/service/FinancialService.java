@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -81,7 +82,7 @@ public class FinancialService {
     getFinancialDetailByIncome(IncomeRequestDto requestDto) {
 
         int zeroBasedPage = Math.max(0, requestDto.getPage() - 1);
-        Pageable pageable = PageRequest.of(zeroBasedPage, requestDto.getSize());
+        Pageable pageable = PageRequest.of(zeroBasedPage, requestDto.getSize(), Sort.by(Sort.Direction.DESC, "incomeDate"));
 
         Specification<IncomeEntity> spec = Specification.where(IncomePredicate.category(requestDto.getCategory()))
                 .and(IncomePredicate.betweenDates(requestDto.getPeriodStartTime(), requestDto.getPeriodEndTime()))
@@ -125,6 +126,7 @@ public class FinancialService {
             }
         }
 
+//        allDetails.sort(Comparator.comparing(IncomeFinancialDetailItemDto::getIncomeDate, Comparator.nullsLast(Comparator.reverseOrder())));
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), allDetails.size());
 

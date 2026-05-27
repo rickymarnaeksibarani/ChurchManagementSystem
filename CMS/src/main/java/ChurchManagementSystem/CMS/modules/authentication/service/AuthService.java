@@ -2,7 +2,7 @@ package ChurchManagementSystem.CMS.modules.authentication.service;
 
 import ChurchManagementSystem.CMS.core.enums.Role;
 import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
-import ChurchManagementSystem.CMS.core.mail.EmailService;
+//import ChurchManagementSystem.CMS.core.mail.EmailService;
 import ChurchManagementSystem.CMS.core.utils.JwtUtil;
 import ChurchManagementSystem.CMS.modules.authentication.dto.LoginResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.dto.LogoutResponseDto;
@@ -25,7 +25,7 @@ public class AuthService {
     private final User userRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
+//    private final EmailService emailService;
     private final BlackListToken blackListToken;
 
     public String register(String email, String password) {
@@ -38,20 +38,20 @@ public class AuthService {
             throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
         }
 
-        String token = UUID.randomUUID().toString();
+//        String token = UUID.randomUUID().toString();
         UserEntity user = new UserEntity();
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        user.setVerificationToken(token);
-        user.setEnabled(false);
+//        user.setVerificationToken(token);
+        user.setEnabled(true);
         user.setRole(Role.ADMIN);
         userRepository.save(user);
 
-        emailService.sendVerificationEmail(email, token);
+//        emailService.sendVerificationEmail(email, token);
 
-        log.info("ini link verify register: http://localhost:8080/api/auth/verify?token=" + token);
+//        log.info("ini link verify register: http://localhost:8080/api/auth/verify?token=" + token);
 
-        return "User registered successfully. Please check your email for verification link.";
+        return "User registered successfully";
     }
 
     public String registerUser(String email, String password, String role) {
@@ -64,13 +64,13 @@ public class AuthService {
         if (!StringUtils.hasText(password))
             throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
 
-        String token = UUID.randomUUID().toString();
+//        String token = UUID.randomUUID().toString();
 
         UserEntity user = new UserEntity();
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        user.setVerificationToken(token);
-        user.setEnabled(false);
+//        user.setVerificationToken(token);
+        user.setEnabled(true);
 
 //        Role selectedRole = Role.USER;
 //        if ("ADMIN".equalsIgnoreCase(role)){
@@ -79,29 +79,29 @@ public class AuthService {
         user.setRole(Role.USER);
 
         userRepository.save(user);
-        emailService.sendVerificationEmail(email, token);
+//        emailService.sendVerificationEmail(email, token);
 
-        log.info("ini link verify register: http://localhost:8080/api/auth/verify?token=" + token);
+//        log.info("ini link verify register: http://localhost:8080/api/auth/verify?token=" + token);
 
-        return "User registered successfully. Please check your email for verification link.";
+        return "User registered successfully";
     }
 
 
-    public String verifyEmail(String token) {
-        UserEntity user = userRepository.findByVerificationToken(token)
-                .orElseThrow(() -> new CustomRequestException("Invalid verification token", HttpStatus.BAD_REQUEST)) ;
-        user.setEnabled(true);
-        user.setVerificationToken(null);
-        userRepository.save(user);
-        return "Email successfully verified, please log in again";
-    }
+//    public String verifyEmail(String token) {
+//        UserEntity user = userRepository.findByVerificationToken(token)
+//                .orElseThrow(() -> new CustomRequestException("Invalid verification token", HttpStatus.BAD_REQUEST)) ;
+//        user.setEnabled(true);
+//        user.setVerificationToken(null);
+//        userRepository.save(user);
+//        return "Email successfully verified, please log in again";
+//    }
 
     public LoginResponseDto login(String email, String password) {
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
 
-        if (!user.isEnabled())
-            throw new CustomRequestException("Account not verified", HttpStatus.FORBIDDEN);
+//        if (!user.isEnabled())
+//            throw new CustomRequestException("Account not verified", HttpStatus.FORBIDDEN);
 
         if (!passwordEncoder.matches(password, user.getPassword()))
             throw new CustomRequestException("Invalid password", HttpStatus.BAD_REQUEST);
@@ -144,40 +144,40 @@ public class AuthService {
 //        return new  LoginResponseDto(token, user.getRole().name());
 //    }
 
-    public String resendVerification(String email) {
-        if (!StringUtils.hasText(email)){
-            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
-        }
-        UserEntity user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
-        if (user.isEnabled()){
-            throw new CustomRequestException("Already verified", HttpStatus.CONFLICT);
-        }
-        String newToken = UUID.randomUUID().toString();
-        user.setVerificationToken(newToken);
-        userRepository.save(user);
-        emailService.sendVerificationEmail(email, newToken);
-        log.info("ini link resend verify: http://localhost:8080/api/auth/verify?token=" + newToken);
+//    public String resendVerification(String email) {
+//        if (!StringUtils.hasText(email)){
+//            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
+//        }
+//        UserEntity user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
+//        if (user.isEnabled()){
+//            throw new CustomRequestException("Already verified", HttpStatus.CONFLICT);
+//        }
+//        String newToken = UUID.randomUUID().toString();
+//        user.setVerificationToken(newToken);
+//        userRepository.save(user);
+//        emailService.sendVerificationEmail(email, newToken);
+//        log.info("ini link resend verify: http://localhost:8080/api/auth/verify?token=" + newToken);
+//
+//        return "Verification email resent.";
+//    }
 
-        return "Verification email resent.";
-    }
-
-    public String forgotPassword(String email) {
-        if (!StringUtils.hasText(email)){
-            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
-        }
-        UserEntity user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
-        if(!user.isEnabled()){
-            throw new CustomRequestException("Your account has not been verified. Please verify your email first.", HttpStatus.FORBIDDEN);
-        }
-        String resetToken = UUID.randomUUID().toString();
-        user.setResetToken(resetToken);
-        userRepository.save(user);
-        emailService.sendResetPasswordEmail(email, resetToken);
-        log.info("ini link token forgot password: "+ resetToken);
-        return "Email sent, please check";
-    }
+//    public String forgotPassword(String email) {
+//        if (!StringUtils.hasText(email)){
+//            throw new CustomRequestException("Email cannot be blank", HttpStatus.BAD_REQUEST);
+//        }
+//        UserEntity user = userRepository.findByEmail(email)
+//                .orElseThrow(() -> new CustomRequestException("User not found", HttpStatus.NOT_FOUND));
+//        if(!user.isEnabled()){
+//            throw new CustomRequestException("Your account has not been verified. Please verify your email first.", HttpStatus.FORBIDDEN);
+//        }
+//        String resetToken = UUID.randomUUID().toString();
+//        user.setResetToken(resetToken);
+//        userRepository.save(user);
+//        emailService.sendResetPasswordEmail(email, resetToken);
+//        log.info("ini link token forgot password: "+ resetToken);
+//        return "Email sent, please check";
+//    }
 
     public String resetPassword(String token, String newPassword) {
 
