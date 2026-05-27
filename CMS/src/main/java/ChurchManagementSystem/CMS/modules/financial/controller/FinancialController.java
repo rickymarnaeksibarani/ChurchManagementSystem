@@ -3,14 +3,8 @@ package ChurchManagementSystem.CMS.modules.financial.controller;
 import ChurchManagementSystem.CMS.core.customResponse.ApiResponse;
 import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 import ChurchManagementSystem.CMS.core.utils.PaginationUtil;
-import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeFinancialDetailDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeFinancialDetailItemDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeRequestDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.income.IncomeResponeDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeFinancialDetailDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeFinancialDetailItemDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeRequestDto;
-import ChurchManagementSystem.CMS.modules.financial.dto.outcome.OutcomeResponeDto;
+import ChurchManagementSystem.CMS.modules.financial.dto.income.*;
+import ChurchManagementSystem.CMS.modules.financial.dto.outcome.*;
 import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.service.FinancialService;
@@ -142,5 +136,64 @@ public class FinancialController {
         data.put("totalOutcome", totalOutcome);
 
         return ResponseEntity.ok(new ApiResponse<>(HttpStatus.OK, message, data));
+    }
+
+
+    @PutMapping( value = "/income/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateIncome(@PathVariable Long id,@RequestBody UpdateIncomeRequestDto request ) {
+        try {
+            IncomeEntity result = financialService.updateIncome(id, request);
+
+            return new ResponseEntity<>(new ApiResponse<>( HttpStatus.OK,"Success update income",result),HttpStatus.OK);
+
+        } catch (CustomRequestException error) {
+
+            return error.GlobalCustomRequestException(
+                    error.getMessage(),
+                    error.getStatus()
+            );
+        }
+    }
+
+    @PutMapping( value = "/outcome/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateOutcome(@PathVariable Long id,@RequestBody UpdateOutcomeRequestDto request ) {
+        try {
+            OutcomeEntity result = financialService.updateOutcome(id, request);
+
+            return new ResponseEntity<>(new ApiResponse<>( HttpStatus.OK,"Success update outcome",result),HttpStatus.OK);
+
+        } catch (CustomRequestException error) {
+
+            return error.GlobalCustomRequestException(
+                    error.getMessage(),
+                    error.getStatus()
+            );
+        }
+    }
+
+    @DeleteMapping(value = "/income/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteIncome(@PathVariable Long id){
+        try{
+             financialService.deleteIncome(id);
+             return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success delete income", null), HttpStatus.OK);
+        }catch (CustomRequestException err){
+            return err.GlobalCustomRequestException(
+                    err.getMessage(),
+                    err.getStatus()
+            );
+        }
+    }
+
+    @DeleteMapping(value = "/outcome/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> deleteOutcome(@PathVariable Long id){
+        try{
+            financialService.deleteOutcome(id);
+            return new ResponseEntity<>(new ApiResponse<>(HttpStatus.OK, "Success delete outcome", null), HttpStatus.OK);
+        }catch (CustomRequestException err){
+            return err.GlobalCustomRequestException(
+                    err.getMessage(),
+                    err.getStatus()
+            );
+        }
     }
 }

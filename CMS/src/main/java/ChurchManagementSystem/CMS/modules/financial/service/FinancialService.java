@@ -9,6 +9,7 @@ import ChurchManagementSystem.CMS.modules.financial.entities.IncomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.entities.OutcomeEntity;
 import ChurchManagementSystem.CMS.modules.financial.repository.IncomeRepository;
 import ChurchManagementSystem.CMS.modules.financial.repository.OutcomeRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.Pair;
 import org.springframework.data.domain.*;
@@ -263,6 +264,62 @@ public class FinancialService {
 
     }
 
+    @Transactional
+    public IncomeEntity updateIncome(Long id, UpdateIncomeRequestDto request) {
+
+        IncomeEntity income = incomeRepository.findById(id)
+                .orElseThrow(() ->
+                        new CustomRequestException("Income not found", HttpStatus.NOT_FOUND)
+                );
+
+        income.setIncomeDate(request.getIncomeDate());
+
+        income.setPersembahan( request.getIncomeGive() != null ? request.getIncomeGive() : BigDecimal.ZERO);
+        income.setPerpuluhan(request.getIncomeTenth() != null ? request.getIncomeTenth() : BigDecimal.ZERO);
+        income.setPembangunan(request.getIncomeBuilding() != null ? request.getIncomeBuilding() : BigDecimal.ZERO);
+        income.setService(request.getIncomeService() != null ? request.getIncomeService() : BigDecimal.ZERO);
+        income.setDonasi(request.getIncomeDonate() != null ? request.getIncomeDonate() : BigDecimal.ZERO);
+        income.setLainnya(request.getIncomeOther() != null ? request.getIncomeOther() : BigDecimal.ZERO);
+        income.setDeskripsi(request.getDescription());
+
+        return incomeRepository.save(income);
+    }
+
+    @Transactional
+    public OutcomeEntity updateOutcome(Long id, UpdateOutcomeRequestDto request) {
+
+        OutcomeEntity outcome = outcomeRepository.findById(id)
+                .orElseThrow(() ->
+                        new CustomRequestException("Outcome not found", HttpStatus.NOT_FOUND)
+                );
+
+        outcome.setOutcomeDate(request.getOutcomeDate());
+
+        outcome.setDeposit( request.getOutcomeDeposit() != null ? request.getOutcomeDeposit() : BigDecimal.ZERO);
+        outcome.setPembangunan(request.getOutcomeBuilding() != null ? request.getOutcomeBuilding() : BigDecimal.ZERO);
+        outcome.setDiakonia(request.getOutcomeDiakonia() != null ? request.getOutcomeDiakonia() : BigDecimal.ZERO);
+        outcome.setOperasional(request.getOutcomeOperational() != null ? request.getOutcomeOperational() : BigDecimal.ZERO);
+        outcome.setAcara(request.getOutcomeEvent() != null ? request.getOutcomeEvent() : BigDecimal.ZERO);
+        outcome.setLainnya(request.getOutcomeOther() != null ? request.getOutcomeOther() : BigDecimal.ZERO);
+        outcome.setDeskripsi(request.getDescription());
+
+        return outcomeRepository.save(outcome);
+    }
+
+    @Transactional
+    public void deleteIncome(Long id){
+        IncomeEntity income = incomeRepository.findById(id)
+                .orElseThrow(()->new CustomRequestException("Id Income not found", HttpStatus.NOT_FOUND));
+
+        incomeRepository.delete(income);
+    }
+
+    @Transactional
+    public void deleteOutcome (Long id) {
+        OutcomeEntity outcome = outcomeRepository.findById(id)
+                .orElseThrow(()->new CustomRequestException("Id Outcome not found", HttpStatus.NOT_FOUND));
+        outcomeRepository.delete(outcome);
+    }
 
 }
 
