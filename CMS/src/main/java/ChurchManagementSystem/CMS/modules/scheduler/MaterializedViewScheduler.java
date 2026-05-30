@@ -16,7 +16,7 @@ public class MaterializedViewScheduler {
     private EntityManager entityManager;
 
     @Transactional
-    @Scheduled(cron = "* * 4 * * *")
+    @Scheduled(cron = "0 0 4 * * *")
     public void refreshBirthdateComing() {
         try {
             entityManager.createNativeQuery("REFRESH MATERIALIZED VIEW CONCURRENTLY public.materialized_view_birthdate_coming").executeUpdate();

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableWebSecurity
+@EnableMethodSecurity
 @Configuration
 @RequiredArgsConstructor
 @EnableTransactionManagement
@@ -37,17 +39,22 @@ public class SecurityConfig {
 //                                .anyRequest().permitAll()
                         .requestMatchers(
                                 "/api/auth/register/main", "/api/auth/login",
+                                "/api/auth/register/users",
                                 "/api/auth/verify",
                                 "/api/auth/forgot",
-                                "/api/auth/reset",
+//                                "/api/auth/reset",
                                 "/api/auth/resend",
+//                                "/api/auth/change-password",
                                 "/api/auth/logout",
                                 "/api/auth/login/user",
                                 "/api/auth/register/view",
-                                "/api/v1/news",
+                                "/api/v1/news/**",
+                                "/api/v1/news/{id}",
                                 "/api/v1/activity/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/**").hasAnyRole("ADMIN", "USER")
+                                .requestMatchers(HttpMethod.POST, "/api/auth/admin/change-password").hasAnyRole("ADMIN")
+                                    .requestMatchers(HttpMethod.POST, "/api/auth/change-password").hasAnyRole("ADMIN", "USER")
                                 .requestMatchers(HttpMethod.POST, "/api/v1/**").hasAnyRole("ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/**").hasAnyRole("ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/**").hasAnyRole("ADMIN")

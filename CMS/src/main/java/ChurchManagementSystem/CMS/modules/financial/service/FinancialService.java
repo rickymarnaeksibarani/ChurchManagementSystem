@@ -122,12 +122,12 @@ public class FinancialService {
 
                 if (nominal != null && nominal.compareTo(BigDecimal.ZERO) > 0) {
                     String keterangan = income.getDeskripsi() != null ? income.getDeskripsi() : "";
-                    allDetails.add(new IncomeFinancialDetailItemDto(income.getIncomeDate(), capitalize(requestDto.getCategory()), nominal, keterangan, income.getNama()));
+                    allDetails.add(new IncomeFinancialDetailItemDto(income.getIdIncome(), income.getIncomeDate(), capitalize(requestDto.getCategory()), nominal, keterangan, income.getNama()));
                 }
             }
         }
 
-//        allDetails.sort(Comparator.comparing(IncomeFinancialDetailItemDto::getIncomeDate, Comparator.nullsLast(Comparator.reverseOrder())));
+        allDetails.sort(Comparator.comparing(IncomeFinancialDetailItemDto::getIncomeDate, Comparator.nullsLast(Comparator.reverseOrder())));
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), allDetails.size());
 
@@ -186,11 +186,12 @@ public class FinancialService {
 
                 if (nominal != null && nominal.compareTo(BigDecimal.ZERO) > 0) {
                     String keterangan = outcome.getDeskripsi() != null ? outcome.getDeskripsi() : "";
-                    allDetails.add(new OutcomeFinancialDetailItemDto(outcome.getOutcomeDate(), capitalize(requestDto.getCategory()), nominal, keterangan, outcome.getNama()));
+                    allDetails.add(new OutcomeFinancialDetailItemDto(outcome.getIdOutcome(), outcome.getOutcomeDate(), capitalize(requestDto.getCategory()), nominal, keterangan, outcome.getNama()));
                 }
             }
         }
 
+        allDetails.sort(Comparator.comparing(OutcomeFinancialDetailItemDto::getOutcomeDate, Comparator.nullsLast(Comparator.reverseOrder())));
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), allDetails.size());
 

@@ -1,9 +1,7 @@
 package ChurchManagementSystem.CMS.modules.authentication;
 
 import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
-import ChurchManagementSystem.CMS.modules.authentication.dto.AuthDto;
-import ChurchManagementSystem.CMS.modules.authentication.dto.LoginResponseDto;
-import ChurchManagementSystem.CMS.modules.authentication.dto.LogoutResponseDto;
+import ChurchManagementSystem.CMS.modules.authentication.dto.*;
 import ChurchManagementSystem.CMS.modules.authentication.handler.ApiResponseLogin;
 import ChurchManagementSystem.CMS.modules.authentication.handler.BlackListToken;
 import ChurchManagementSystem.CMS.modules.authentication.service.AuthService;
@@ -13,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -65,7 +65,7 @@ public class AuthController {
     }
 
     //login USER
-    @PostMapping(value = "/register/view", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/register/users", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiResponseLogin<Map<String, String>>> registerUsers(@ModelAttribute AuthDto authDto) {
         try {
             String message = authService.registerUser(authDto.getEmail(), authDto.getPassword(), authDto.getRole());
@@ -195,27 +195,27 @@ public class AuthController {
 //    }
 
 
-    @PostMapping(value = "/reset", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponseLogin<Object>> resetPassword(
-            @RequestParam String token,
-            @RequestParam String newPassword) {
-        try {
-            String message = authService.resetPassword(token, newPassword);
-            return ResponseEntity.ok(ApiResponseLogin.builder()
-                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
-                    .success(true)
-                    .message(message)
-                    .build());
-        } catch (CustomRequestException e) {
-            return ResponseEntity.status(e.getStatus()).body(
-                    ApiResponseLogin.builder()
-                            .status(e.getStatus())
-                            .success(false)
-                            .message(e.getMessage())
-                            .build()
-            );
-        }
-    }
+//    @PostMapping(value = "/reset", produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<ApiResponseLogin<Object>> resetPassword(
+//            @RequestParam String token,
+//            @RequestParam String newPassword) {
+//        try {
+//            String message = authService.resetPassword(token, newPassword);
+//            return ResponseEntity.ok(ApiResponseLogin.builder()
+//                    .status(HttpStatusCode.valueOf(HttpStatus.OK.value()))
+//                    .success(true)
+//                    .message(message)
+//                    .build());
+//        } catch (CustomRequestException e) {
+//            return ResponseEntity.status(e.getStatus()).body(
+//                    ApiResponseLogin.builder()
+//                            .status(e.getStatus())
+//                            .success(false)
+//                            .message(e.getMessage())
+//                            .build()
+//            );
+//        }
+//    }
 
 
     @PostMapping(value = "/logout", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -233,7 +233,65 @@ public class AuthController {
         );
     }
 
+    @PostMapping( value = "/change-password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiResponseLogin<Object>> resetPassword(
+            @RequestBody ChangePasswordDto request) {
 
+        try {
 
+            String message = authService.resetPassword(request);
+
+            return ResponseEntity.ok(
+                    ApiResponseLogin.builder()
+                            .status(HttpStatus.OK)
+                            .success(true)
+                            .message(message)
+                            .build()
+            );
+
+        } catch (CustomRequestException e) {
+
+            return ResponseEntity.status(e.getStatus())
+                    .body(
+                            ApiResponseLogin.builder()
+                                    .status(e.getStatus())
+                                    .success(false)
+                                    .message(e.getMessage())
+                                    .build()
+                    );
+        }
+    }
+
+    @PostMapping(
+            value = "/admin/change-password",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ApiResponseLogin<Object>> adminChangePassword(
+            @RequestBody AdminChangePasswordDto request) {
+
+        try {
+            String message = authService.adminChangeUserPassword(request);
+
+            return ResponseEntity.ok(
+                    ApiResponseLogin.builder()
+                            .status(HttpStatus.OK)
+                            .success(true)
+                            .message(message)
+                            .build()
+            );
+
+        } catch (CustomRequestException e) {
+
+            return ResponseEntity.status(e.getStatus())
+                    .body(
+                            ApiResponseLogin.builder()
+                                    .status(e.getStatus())
+                                    .success(false)
+                                    .message(e.getMessage())
+                                    .build()
+                    );
+        }
+    }
 
 }

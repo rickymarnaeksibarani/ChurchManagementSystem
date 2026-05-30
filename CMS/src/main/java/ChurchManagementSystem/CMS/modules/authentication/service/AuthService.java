@@ -4,6 +4,8 @@ import ChurchManagementSystem.CMS.core.enums.Role;
 import ChurchManagementSystem.CMS.core.exception.CustomRequestException;
 //import ChurchManagementSystem.CMS.core.mail.EmailService;
 import ChurchManagementSystem.CMS.core.utils.JwtUtil;
+import ChurchManagementSystem.CMS.modules.authentication.dto.AdminChangePasswordDto;
+import ChurchManagementSystem.CMS.modules.authentication.dto.ChangePasswordDto;
 import ChurchManagementSystem.CMS.modules.authentication.dto.LoginResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.dto.LogoutResponseDto;
 import ChurchManagementSystem.CMS.modules.authentication.entity.UserEntity;
@@ -12,6 +14,7 @@ import ChurchManagementSystem.CMS.modules.authentication.repository.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -179,18 +182,18 @@ public class AuthService {
 //        return "Email sent, please check";
 //    }
 
-    public String resetPassword(String token, String newPassword) {
-
-        if (!StringUtils.hasText(newPassword)){
-            throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
-        }
-        UserEntity user = userRepository.findByResetToken(token)
-                .orElseThrow(() -> new CustomRequestException("Invalid token", HttpStatus.BAD_REQUEST));
-        user.setPassword(passwordEncoder.encode(newPassword));
-        user.setResetToken(null);
-        userRepository.save(user);
-        return "Password successfully reset.";
-    }
+//    public String resetPassword(String token, String newPassword) {
+//
+//        if (!StringUtils.hasText(newPassword)){
+//            throw new CustomRequestException("Password cannot be blank", HttpStatus.BAD_REQUEST);
+//        }
+//        UserEntity user = userRepository.findByResetToken(token)
+//                .orElseThrow(() -> new CustomRequestException("Invalid token", HttpStatus.BAD_REQUEST));
+//        user.setPassword(passwordEncoder.encode(newPassword));
+//        user.setResetToken(null);
+//        userRepository.save(user);
+//        return "Password successfully reset.";
+//    }
 
     public LogoutResponseDto logout(String authHeader) {
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -207,7 +210,81 @@ public class AuthService {
         return new LogoutResponseDto(token);
     }
 
+//    todo: reset password (admin & user): token nya di hilangin, pakai email aja penanda nya (admin boleh ubah password si user)
 
+    public String resetPassword( ChangePasswordDto changePasswordDto) {
+
+        String loggedInEmail = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        UserEntity user = userRepository.findByEmail(loggedInEmail)
+                .orElseThrow(() ->
+                        new CustomRequestException(
+                                "User not found",
+                                HttpStatus.NOT_FOUND));
+
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+
+            throw new CustomRequestException("Old password is incorrect", HttpStatus.BAD_REQUEST);
+        }
+
+        if (passwordEncoder.matches(changePasswordDto.getNewPassword(), user.getPassword())) {
+
+            throw new CustomRequestException("New password must be different from old password", HttpStatus.BAD_REQUEST);
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+
+        userRepository.save(user);
+
+        return "Password successfully changed";
+    }
+
+    public String adminChangeUserPassword(AdminChangePasswordDto dto) {
+
+        // ambil admin yang login
+        String loggedInEmail = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        UserEntity admin = userRepository.findByEmail(loggedInEmail)
+                .orElseThrow(() ->
+                        new CustomRequestException(
+                                "Admin not found",
+                                HttpStatus.NOT_FOUND));
+
+        // pastikan yang login benar ADMIN
+        if (admin.getRole() != Role.ADMIN) {
+            throw new CustomRequestException(
+                    "Access denied: only ADMIN can change other user password",
+                    HttpStatus.FORBIDDEN);
+        }
+
+        // cari user target
+        UserEntity targetUser = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() ->
+                        new CustomRequestException(
+                                "User not found",
+                                HttpStatus.NOT_FOUND));
+
+        // optional: admin tidak boleh ubah password admin lain (kalau mau dibatasi)
+         if (targetUser.getRole() == Role.ADMIN) {
+             throw new CustomRequestException("Cannot change another admin password", HttpStatus.FORBIDDEN);
+         }
+
+        targetUser.setPassword(
+                passwordEncoder.encode(dto.getNewPassword())
+        );
+
+        userRepository.save(targetUser);
+
+        return "User password changed successfully by admin";
+    }
 
 }
 
+// alurnya: endpoint untuk change password USER & ADMIN adalah: /api/auth/change-password (dapat dilakukan ketika si USER atau si ADMIN login)
+// kemudian kalo ADMIN ingin ubah password si user gunakan endpoint: /admin/change-password

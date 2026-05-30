@@ -11,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OutcomeFinancialDetailItemDto {
+    private long idOutcome;
     private Date outcomeDate;
     private String category;
     private BigDecimal nominal;
