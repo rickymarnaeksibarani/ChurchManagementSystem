@@ -273,15 +273,33 @@ public class FinancialService {
                         new CustomRequestException("Income not found", HttpStatus.NOT_FOUND)
                 );
 
-        income.setIncomeDate(request.getIncomeDate());
-
-        income.setPersembahan( request.getIncomeGive() != null ? request.getIncomeGive() : BigDecimal.ZERO);
-        income.setPerpuluhan(request.getIncomeTenth() != null ? request.getIncomeTenth() : BigDecimal.ZERO);
-        income.setPembangunan(request.getIncomeBuilding() != null ? request.getIncomeBuilding() : BigDecimal.ZERO);
-        income.setService(request.getIncomeService() != null ? request.getIncomeService() : BigDecimal.ZERO);
-        income.setDonasi(request.getIncomeDonate() != null ? request.getIncomeDonate() : BigDecimal.ZERO);
-        income.setLainnya(request.getIncomeOther() != null ? request.getIncomeOther() : BigDecimal.ZERO);
-        income.setDeskripsi(request.getDescription());
+        if (request.getIncomeDate() != null) {
+            income.setIncomeDate(request.getIncomeDate());
+        }
+        if (request.getIncomeGive() != null) {
+            income.setPersembahan(request.getIncomeGive());
+        }
+        if (request.getIncomeTenth() != null) {
+            income.setPerpuluhan(request.getIncomeTenth());
+        }
+        if (request.getIncomeBuilding() != null) {
+            income.setPembangunan(request.getIncomeBuilding());
+        }
+        if (request.getIncomeService() != null) {
+            income.setService(request.getIncomeService());
+        }
+        if (request.getIncomeDonate() != null) {
+            income.setDonasi(request.getIncomeDonate());
+        }
+        if (request.getIncomeOther() != null) {
+            income.setLainnya(request.getIncomeOther());
+        }
+        if (request.getDescription() != null) {
+            income.setDeskripsi(request.getDescription());
+        }
+        if (request.getNama() != null) {
+            income.setNama(request.getNama());
+        }
 
         return incomeRepository.save(income);
     }
@@ -294,15 +312,36 @@ public class FinancialService {
                         new CustomRequestException("Outcome not found", HttpStatus.NOT_FOUND)
                 );
 
-        outcome.setOutcomeDate(request.getOutcomeDate());
-
-        outcome.setDeposit( request.getOutcomeDeposit() != null ? request.getOutcomeDeposit() : BigDecimal.ZERO);
-        outcome.setPembangunan(request.getOutcomeBuilding() != null ? request.getOutcomeBuilding() : BigDecimal.ZERO);
-        outcome.setDiakonia(request.getOutcomeDiakonia() != null ? request.getOutcomeDiakonia() : BigDecimal.ZERO);
-        outcome.setOperasional(request.getOutcomeOperational() != null ? request.getOutcomeOperational() : BigDecimal.ZERO);
-        outcome.setAcara(request.getOutcomeEvent() != null ? request.getOutcomeEvent() : BigDecimal.ZERO);
-        outcome.setLainnya(request.getOutcomeOther() != null ? request.getOutcomeOther() : BigDecimal.ZERO);
-        outcome.setDeskripsi(request.getDescription());
+        if (request.getOutcomeDate() != null) {
+            outcome.setOutcomeDate(request.getOutcomeDate());
+        }
+        if (request.getOutcomeDeposit() != null) {
+            outcome.setDeposit(request.getOutcomeDeposit());
+        }
+        if (request.getOutcomeBuilding() != null) {
+            outcome.setPembangunan(request.getOutcomeBuilding());
+        }
+        if (request.getOutcomeDiakonia() != null) {
+            outcome.setDiakonia(request.getOutcomeDiakonia());
+        }
+        if (request.getOutcomeOperational() != null) {
+            outcome.setOperasional(request.getOutcomeOperational());
+        }
+        if (request.getOutcomeOperational() != null) {
+            outcome.setOperasional(request.getOutcomeOperational());
+        }
+        if (request.getOutcomeEvent() != null) {
+            outcome.setAcara(request.getOutcomeEvent());
+        }
+        if (request.getOutcomeOther() != null) {
+            outcome.setLainnya(request.getOutcomeOther());
+        }
+        if (request.getDescription() != null) {
+            outcome.setDeskripsi(request.getDescription());
+        }
+        if (request.getNama() != null) {
+            outcome.setNama(request.getNama());
+        }
 
         return outcomeRepository.save(outcome);
     }
